@@ -1,0 +1,41 @@
+<div class="sidenav">
+  <div class="sidenav-item">
+    <div class="logo">
+      SoundOfGothic
+    </div>
+  </div>
+
+  <div class="sidenav-item sidenav-item-selected">
+      <form (ngSubmit)="search()">
+        <input [(ngModel)]="value" name="value" class="sound_search" type="text">
+      </form>
+      <span (click)="search()" class="icon-item"> <i class="fa fa-search"></i> </span>
+  </div>
+
+  <div class="sidenav-item centered">
+    <span *ngIf="backDisplay" (click)="back()" class="icon-item-left"> <i class="fa fa-arrow-left"></i> </span>
+    <span>{{recordCount}} - {{upTo}} / {{totalRecordCount}}</span>
+    <span *ngIf="forwardDisplay" (click)="forward()" class="icon-item-right"> <i class="fa fa-arrow-right"></i> </span>
+  </div>
+
+</div>
+
+
+<div class="main">
+  <div class="loader" [ngClass]="(loading) ? 'loading' : ''">
+
+    <div class="loading-gif">
+      G
+    </div>
+
+  </div>
+  <router-outlet></router-outlet>
+</div>
+
+<div class="sidenav mobile">
+  <div class="sidenav-item centered">
+    <span *ngIf="backDisplay" (click)="back()" class="icon-item-left"> <i class="fa fa-arrow-left"></i> </span>
+    <span>{{recordCount}} - {{upTo}} / {{totalRecordCount}}</span>
+    <span *ngIf="forwardDisplay" (click)="forward()" class="icon-item-right"> <i class="fa fa-arrow-right"></i> </span>
+  </div>
+</div>
