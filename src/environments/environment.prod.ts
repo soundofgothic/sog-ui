@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://api.soundofgothic.pl'
+  apiUrl: 'http://api.soundofgothic.pl',
+  soundsAssetsUrl: 'http://soundofgothic.pl'
 };

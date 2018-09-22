@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {environment} from '../../environments/environment';
 
 @Component({
   selector: 'app-item',
@@ -10,17 +11,17 @@ export class ItemComponent implements OnInit {
   @Input() filename: String;
   @Input() text: String;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
 
   }
 
   parseFilename(filename: String): String {
-    filename = filename.toUpperCase() + ".WAV";
-    return "assets/gsounds/" + filename;
+    filename = filename.toUpperCase() + '.WAV';
+    return environment.soundsAssetsUrl + '/assets/gsounds/' + filename;
   }
-
 
 
 }
