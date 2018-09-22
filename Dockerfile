@@ -5,6 +5,6 @@ RUN npm install
 RUN npm run-script build -- --prod
 RUN ls /
 FROM nginx:1.15
-COPY --from=node /app/dist/siz-ui /usr/share/nginx/html
+COPY --from=node /app/dist/soundofgothic /usr/share/nginx/html
 COPY nginx-custom.conf /etc/nginx/conf.d/ui.conf
 EXPOSE 8080 80
