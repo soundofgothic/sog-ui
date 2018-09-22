@@ -41,14 +41,14 @@ jobs:
     - run:
         name: Docker build and push
         command: |
-          docker build -t ${PROJECT_NAME} .
+          docker build -t ${PROJECT_NAME} .circleci
           docker tag ${PROJECT_NAME} ${DOCKERHUB_REPO_NAME}
           echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_LOGIN --password-stdin
           docker push ${DOCKERHUB_REPO_NAME}
     - run:
         name: Deploy to Kubernetes
         command: |
-          envsubst < ${HOME}/project/k8s.yml > ${HOME}/patched_k8s.yml
+          envsubst < ${HOME}/project/.circleci/k8s.yml > ${HOME}/patched_k8s.yml
           kubectl apply -f ${HOME}/patched_k8s.yml
           kubectl rollout status deployment/${PROJECT_NAME}
 
@@ -63,4 +63,4 @@ workflows:
         - build
         filters:
           branches:
-            only: develop
+            only: master
