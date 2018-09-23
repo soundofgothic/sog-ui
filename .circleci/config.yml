@@ -42,9 +42,9 @@ jobs:
         name: Docker build and push
         command: |
           docker build -t ${PROJECT_NAME} .
-          docker tag ${PROJECT_NAME} ${DOCKERHUB_REPO_NAME}
+          docker tag ${PROJECT_NAME} ${DOCKERHUB_REPO_NAME}:${CIRCLE_SHA1}
           echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_LOGIN --password-stdin
-          docker push ${DOCKERHUB_REPO_NAME}
+          docker push ${DOCKERHUB_REPO_NAME}:${CIRCLE_SHA1}
     - run:
         name: Deploy to Kubernetes
         command: |
