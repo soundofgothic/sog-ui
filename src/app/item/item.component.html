@@ -7,7 +7,15 @@
   <div class="text-item">
     <span>
     {{text}}
-  </span>
+    </span>
+    <div class="meta-info">
+      <a routerLink="/source/{{filesource}}" class="filesource">
+       Plik: {{filesource}}
+      </a>
+      <span class="version">
+        {{version == 2 ? "Gothic II" : "Gothic I"}}
+      </span>
+    </div>
   </div>
 </div>
 

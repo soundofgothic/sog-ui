@@ -10,6 +10,8 @@ export class ItemComponent implements OnInit {
 
   @Input() filename: String;
   @Input() text: String;
+  @Input() filesource: String;
+  @Input() version: String;
 
   constructor() {
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CollectorService} from '../../collector.service';
 
 
@@ -10,7 +10,8 @@ import {CollectorService} from '../../collector.service';
 })
 export class BasicLayoutComponent implements OnInit {
 
-  constructor(private collectionService: CollectorService) { }
+  constructor(private collectionService: CollectorService,
+              private route: ActivatedRoute) { }
 
   public recordCount: number;
   public totalRecordCount: number;
@@ -22,8 +23,10 @@ export class BasicLayoutComponent implements OnInit {
   public forwardDisplay: boolean = false;
   public value: string;
   public loading: boolean = false;
+  public filesource: any = false;
 
   ngOnInit() {
+
     this.collectionService.observedRecords.subscribe((data)=>{
       this.recordCount = (data.recordsOnPage > 0) ? data.pageNumber * data.defaultPageSize + 1 : 0;
       this.totalRecordCount = data.recordCountTotal;
@@ -35,6 +38,8 @@ export class BasicLayoutComponent implements OnInit {
       this.forwardDisplay = (this.upTo < this.totalRecordCount);
       this.loading = false;
     });
+
+
   }
 
   search() {
@@ -43,12 +48,22 @@ export class BasicLayoutComponent implements OnInit {
   }
 
   back() {
-    this.collectionService.getFilteredRecords(this.value, this.pageNumber - 1);
+    this.loading = true;
+    if(this.collectionService.isSourceFiltered()) {
+      this.collectionService.getRecordsFromSource(this.collectionService.getLastSourceSearch(), this.pageNumber - 1);
+    } else {
+      this.collectionService.getFilteredRecords(this.value, this.pageNumber - 1);
+    }
     window.scrollTo(0,0);
   }
 
   forward() {
-    this.collectionService.getFilteredRecords(this.value, this.pageNumber + 1);
+    this.loading = true;
+    if(this.collectionService.isSourceFiltered()) {
+      this.collectionService.getRecordsFromSource(this.collectionService.getLastSourceSearch(), this.pageNumber + 1);
+    } else {
+      this.collectionService.getFilteredRecords(this.value, this.pageNumber + 1);
+    }
     window.scrollTo(0,0);
   }
 

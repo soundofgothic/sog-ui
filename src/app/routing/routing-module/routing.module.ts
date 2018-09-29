@@ -6,8 +6,11 @@ import {CollectorComponent} from '../../collector/collector.component';
 
 const routes: Routes = [
   { path: '', component: BasicLayoutComponent, children: [
-      {path: '', component: CollectorComponent}
-      ]}
+      {path: '', component: CollectorComponent},
+      {path: 'source/:source', component: CollectorComponent}
+      ]
+  },
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
 

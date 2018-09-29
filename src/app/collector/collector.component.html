@@ -1,3 +1,7 @@
 <div class="records" *ngFor="let record of records">
-  <app-item [text]="record.text" [filename]="record.filename"></app-item>
+  <app-item [text]="record.text"
+            [filename]="record.filename"
+            [filesource]="record.source"
+            [version]="record.g"
+  ></app-item>
 </div>
