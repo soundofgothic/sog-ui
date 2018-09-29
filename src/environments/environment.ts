@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:3000',
-  soundsAssetsUrl: 'http://soundofgothic.pl'
+  soundsAssetsUrl: 'http://sounds.soundofgothic.pl'
 };
 
 /*
