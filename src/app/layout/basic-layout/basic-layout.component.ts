@@ -27,17 +27,28 @@ export class BasicLayoutComponent implements OnInit {
 
   ngOnInit() {
 
-    this.collectionService.observedRecords.subscribe((data)=>{
-      this.recordCount = (data.recordsOnPage > 0) ? data.pageNumber * data.defaultPageSize + 1 : 0;
-      this.totalRecordCount = data.recordCountTotal;
-      this.pageSize = data.defaultPageSize;
-      this.upTo = Math.max(this.recordCount - 1 + data.recordsOnPage, 0);
+    this.collectionService.observedMetadata.subscribe((data)=>{
+      this.recordCount = data.recordCount;
+      this.totalRecordCount = data.totalRecordCount;
+      this.pageSize = data.pageSize;
+      this.upTo = data.upToIndex;
       this.pageNumber = data.pageNumber;
-
-      this.backDisplay = (this.recordCount > 1);
-      this.forwardDisplay = (this.upTo < this.totalRecordCount);
+      this.backDisplay = data.backOption;
+      this.forwardDisplay = data.forwardOption;
       this.loading = false;
     });
+
+    // this.collectionService.observedRecords.subscribe((data)=>{
+    //   this.recordCount = (data.recordsOnPage > 0) ? data.pageNumber * data.defaultPageSize + 1 : 0;
+    //   this.totalRecordCount = data.recordCountTotal;
+    //   this.pageSize = data.defaultPageSize;
+    //   this.upTo = Math.max(this.recordCount - 1 + data.recordsOnPage, 0);
+    //   this.pageNumber = data.pageNumber;
+    //
+    //   this.backDisplay = (this.recordCount > 1);
+    //   this.forwardDisplay = (this.upTo < this.totalRecordCount);
+    //   this.loading = false;
+    // });
 
 
   }
@@ -49,21 +60,23 @@ export class BasicLayoutComponent implements OnInit {
 
   back() {
     this.loading = true;
-    if(this.collectionService.isSourceFiltered()) {
-      this.collectionService.getRecordsFromSource(this.collectionService.getLastSourceSearch(), this.pageNumber - 1);
-    } else {
-      this.collectionService.getFilteredRecords(this.value, this.pageNumber - 1);
-    }
+    this.collectionService.previousPage();
+    // if(this.collectionService.isSourceFiltered()) {
+    //   this.collectionService.getRecordsFromSource(this.collectionService.getLastSourceSearch(), this.pageNumber - 1);
+    // } else {
+    //   this.collectionService.getFilteredRecords(this.value, this.pageNumber - 1);
+    // }
     window.scrollTo(0,0);
   }
 
   forward() {
     this.loading = true;
-    if(this.collectionService.isSourceFiltered()) {
-      this.collectionService.getRecordsFromSource(this.collectionService.getLastSourceSearch(), this.pageNumber + 1);
-    } else {
-      this.collectionService.getFilteredRecords(this.value, this.pageNumber + 1);
-    }
+    this.collectionService.nextPage();
+    // if(this.collectionService.isSourceFiltered()) {
+    //   this.collectionService.getRecordsFromSource(this.collectionService.getLastSourceSearch(), this.pageNumber + 1);
+    // } else {
+    //   this.collectionService.getFilteredRecords(this.value, this.pageNumber + 1);
+    // }
     window.scrollTo(0,0);
   }
 
