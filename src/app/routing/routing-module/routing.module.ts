@@ -7,7 +7,7 @@ import {CollectorComponent} from '../../collector/collector.component';
 const routes: Routes = [
   { path: '', component: BasicLayoutComponent, children: [
       {path: '', component: CollectorComponent},
-      {path: 'source/:source', component: CollectorComponent}
+      {path: 'text', component: CollectorComponent}
       ]
   },
   { path: '**', redirectTo: '', pathMatch: 'full' }

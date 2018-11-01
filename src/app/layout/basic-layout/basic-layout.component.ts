@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CollectorService} from '../../collector.service';
-
 
 @Component({
   selector: 'app-basic-layout',
@@ -11,7 +10,9 @@ import {CollectorService} from '../../collector.service';
 export class BasicLayoutComponent implements OnInit {
 
   constructor(private collectionService: CollectorService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private router: Router) {
+  }
 
   public recordCount: number;
   public totalRecordCount: number;
@@ -23,50 +24,45 @@ export class BasicLayoutComponent implements OnInit {
   public forwardDisplay: boolean = false;
   public value: string;
   public loading: boolean = false;
-  public filesource: any = false;
 
   ngOnInit() {
+    this.collectionService.loading.subscribe(status => this.loading = status);
 
-    this.collectionService.observedRecords.subscribe((data)=>{
-      this.recordCount = (data.recordsOnPage > 0) ? data.pageNumber * data.defaultPageSize + 1 : 0;
-      this.totalRecordCount = data.recordCountTotal;
-      this.pageSize = data.defaultPageSize;
-      this.upTo = Math.max(this.recordCount - 1 + data.recordsOnPage, 0);
+    this.collectionService.observedMetadata.subscribe((data) => {
+      this.recordCount = data.recordCount;
+      this.totalRecordCount = data.totalRecordCount;
+      this.pageSize = data.pageSize;
+      this.upTo = data.upToIndex;
       this.pageNumber = data.pageNumber;
+      this.backDisplay = data.backOption;
+      this.forwardDisplay = data.forwardOption;
 
-      this.backDisplay = (this.recordCount > 1);
-      this.forwardDisplay = (this.upTo < this.totalRecordCount);
-      this.loading = false;
+      const url = this.router.createUrlTree(['text'], {
+        queryParams: {
+          filter: data.filter,
+          page: data.pageNumber,
+          pageSize: data.pageSize,
+          type: data.lastSearchType
+        }
+      }).toString();
+
+      window.history.replaceState({}, '', url);
     });
-
-
   }
 
   search() {
     this.collectionService.getFilteredRecords(this.value);
-    this.loading = true;
   }
 
   back() {
-    this.loading = true;
-    if(this.collectionService.isSourceFiltered()) {
-      this.collectionService.getRecordsFromSource(this.collectionService.getLastSourceSearch(), this.pageNumber - 1);
-    } else {
-      this.collectionService.getFilteredRecords(this.value, this.pageNumber - 1);
-    }
-    window.scrollTo(0,0);
+    this.collectionService.previousPage();
+    window.scrollTo(0, 0);
   }
 
   forward() {
-    this.loading = true;
-    if(this.collectionService.isSourceFiltered()) {
-      this.collectionService.getRecordsFromSource(this.collectionService.getLastSourceSearch(), this.pageNumber + 1);
-    } else {
-      this.collectionService.getFilteredRecords(this.value, this.pageNumber + 1);
-    }
-    window.scrollTo(0,0);
+    this.collectionService.nextPage();
+    window.scrollTo(0, 0);
   }
-
 
 
 }

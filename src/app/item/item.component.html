@@ -9,7 +9,7 @@
     {{text}}
     </span>
     <div class="meta-info">
-      <a routerLink="/source/{{filesource}}" class="filesource">
+      <a (click)="searchBySource()"  class="filesource">
        Plik: {{filesource}}
       </a>
       <span class="version">

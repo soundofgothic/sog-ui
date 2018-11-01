@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {environment} from '../../environments/environment';
+import {CollectorService, SearchType} from '../collector.service';
 
 @Component({
   selector: 'app-item',
@@ -8,12 +9,12 @@ import {environment} from '../../environments/environment';
 })
 export class ItemComponent implements OnInit {
 
-  @Input() filename: String;
-  @Input() text: String;
-  @Input() filesource: String;
+  @Input() filename: string;
+  @Input() text: string;
+  @Input() filesource: string;
   @Input() version: any;
 
-  constructor() {
+  constructor(private collectorService: CollectorService) {
   }
 
   ngOnInit() {
@@ -23,6 +24,10 @@ export class ItemComponent implements OnInit {
   parseFilename(filename: String): String {
     filename = filename.toUpperCase() + '.WAV';
     return environment.soundsAssetsUrl + '/assets/gsounds/' + filename;
+  }
+
+  searchBySource() {
+    this.collectorService.getFilteredRecords(this.filesource, 0, SearchType.SOURCE);
   }
 
 

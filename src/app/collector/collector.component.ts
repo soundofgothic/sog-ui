@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { CollectorService } from '../collector.service';
-import { ActivatedRoute } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {CollectorService, SearchType} from '../collector.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-collector',
@@ -9,21 +9,25 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class CollectorComponent implements OnInit {
   constructor(private service: CollectorService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute) {
+  }
 
   public records: any;
-  public filesource: any;
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params: any) => {
-      console.log(params);
-      this.filesource = params.params.source ? params.params.source : false;
-      if (this.filesource) {
-        this.service.getRecordsFromSource(this.filesource);
-      } else {
-        this.service.getFilteredRecords("");
-      }
+    this.route.queryParamMap.subscribe((params: any) => {
+      let filter = params.params.filter;
+      let pageSize = params.params.pageSize;
+      let page = params.params.page;
+      let type = params.params.type;
+
+      filter = filter ? filter : '';
+      page = page ? parseInt(page) : 0;
+      type = type ? parseInt(type) : SearchType.TEXT;
+
+      this.service.getFilteredRecords(filter, page, type, pageSize);
     });
+
     this.service.observedRecords.subscribe((data) => {
       this.records = data.records;
     });
