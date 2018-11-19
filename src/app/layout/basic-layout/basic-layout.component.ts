@@ -1,17 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CollectorService} from '../../collector.service';
+import {CollectorService, SearchType} from '../../collector.service';
 
 @Component({
   selector: 'app-basic-layout',
   templateUrl: './basic-layout.component.html',
   styleUrls: ['./basic-layout.component.css']
 })
-export class BasicLayoutComponent implements OnInit {
+export class BasicLayoutComponent implements OnInit, AfterViewChecked {
 
   constructor(private collectionService: CollectorService,
               private route: ActivatedRoute,
-              private router: Router) {
+              private router: Router,
+              private cdRef: ChangeDetectorRef) {
   }
 
   public recordCount: number;
@@ -26,8 +27,6 @@ export class BasicLayoutComponent implements OnInit {
   public loading: boolean = false;
 
   ngOnInit() {
-    this.collectionService.loading.subscribe(status => this.loading = status);
-
     this.collectionService.observedMetadata.subscribe((data) => {
       this.recordCount = data.recordCount;
       this.totalRecordCount = data.totalRecordCount;
@@ -36,22 +35,21 @@ export class BasicLayoutComponent implements OnInit {
       this.pageNumber = data.pageNumber;
       this.backDisplay = data.backOption;
       this.forwardDisplay = data.forwardOption;
-
-      const url = this.router.createUrlTree(['text'], {
-        queryParams: {
-          filter: data.filter,
-          page: data.pageNumber,
-          pageSize: data.pageSize,
-          type: data.lastSearchType
-        }
-      }).toString();
-
-      window.history.replaceState({}, '', url);
+    });
+  }
+  search() {
+    this.router.navigate(['text'], {
+      queryParams: {
+        filter: this.value,
+        page: 0,
+        type: SearchType.TEXT
+      }
     });
   }
 
-  search() {
-    this.collectionService.getFilteredRecords(this.value);
+  ngAfterViewChecked(): void {
+    this.collectionService.loading.subscribe(status => this.loading = status);
+    this.cdRef.detectChanges();
   }
 
   back() {
@@ -63,6 +61,8 @@ export class BasicLayoutComponent implements OnInit {
     this.collectionService.nextPage();
     window.scrollTo(0, 0);
   }
+
+
 
 
 }

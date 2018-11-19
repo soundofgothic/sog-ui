@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
+import {Router} from '@angular/router';
 
 export enum SearchType {TEXT, SOURCE}
 
@@ -11,7 +12,7 @@ export class CollectorService {
 
   public observedRecords: Subject<any> = new BehaviorSubject<any>({});
   public observedMetadata: Subject<any> = new Subject();
-  public loading: Subject<boolean> = new BehaviorSubject<any>(true);
+  public loading: Subject<boolean> = new BehaviorSubject<any>(false);
 
   private lastSearchType: SearchType = SearchType.TEXT;
   private lastFilter: string = '';
@@ -24,7 +25,7 @@ export class CollectorService {
   private backOption: boolean = false;
   private forwardOption: boolean = false;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private router: Router) {
   }
 
   getFilteredRecords(filter: string, page: number = 0, type: SearchType = SearchType.TEXT, pageSize?): any {
@@ -88,14 +89,30 @@ export class CollectorService {
   }
 
   nextPage() {
-    if (this.forwardOption) {
-      this.getFilteredRecords(this.lastFilter, this.pageNumber + 1, this.lastSearchType);
-    }
+    if (this.forwardOption)
+      this.router.navigate(['text'], {
+        queryParams: {
+          filter: this.lastFilter,
+          page: this.pageNumber + 1,
+          pageSize: this.pageSize,
+          type: this.lastSearchType
+        }
+      });
+
+    // if (this.forwardOption) {
+    //   this.getFilteredRecords(this.lastFilter, this.pageNumber + 1, this.lastSearchType);
+    // }
   }
 
   previousPage() {
-    if (this.backOption) {
-      this.getFilteredRecords(this.lastFilter, this.pageNumber - 1, this.lastSearchType);
-    }
+    if (this.backOption)
+      this.router.navigate(['text'], {
+        queryParams: {
+          filter: this.lastFilter,
+          page: this.pageNumber - 1,
+          pageSize: this.pageSize,
+          type: this.lastSearchType
+        }
+      });
   }
 }

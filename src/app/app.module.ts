@@ -9,13 +9,15 @@ import { ItemComponent } from './item/item.component';
 import { HttpClientModule } from '@angular/common/http';
 import { interceptorProvider } from './interceptor';
 import { FormsModule } from '@angular/forms';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BasicLayoutComponent,
     CollectorComponent,
-    ItemComponent
+    ItemComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

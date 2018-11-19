@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {CollectorService, SearchType} from '../collector.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-item',
@@ -14,7 +15,7 @@ export class ItemComponent implements OnInit {
   @Input() filesource: string;
   @Input() version: any;
 
-  constructor(private collectorService: CollectorService) {
+  constructor(private collectorService: CollectorService, private router: Router) {
   }
 
   ngOnInit() {
@@ -27,7 +28,15 @@ export class ItemComponent implements OnInit {
   }
 
   searchBySource() {
-    this.collectorService.getFilteredRecords(this.filesource, 0, SearchType.SOURCE);
+    this.router.navigate(['text'], {
+      queryParams: {
+        filter: this.filesource,
+        page: 0,
+        type: SearchType.SOURCE
+      }
+    });
+
+    // this.collectorService.getFilteredRecords(this.filesource, 0, SearchType.SOURCE);
   }
 
 
