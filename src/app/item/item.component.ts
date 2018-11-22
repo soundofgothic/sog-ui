@@ -3,6 +3,7 @@ import {environment} from '../../environments/environment';
 import {CollectorService, SearchType} from '../collector.service';
 import {Router} from '@angular/router';
 
+
 @Component({
   selector: 'app-item',
   templateUrl: './item.component.html',
@@ -38,6 +39,5 @@ export class ItemComponent implements OnInit {
 
     // this.collectorService.getFilteredRecords(this.filesource, 0, SearchType.SOURCE);
   }
-
 
 }

@@ -14,6 +14,7 @@ export class CollectorService {
   public observedMetadata: Subject<any> = new Subject();
   public loading: Subject<boolean> = new BehaviorSubject<any>(false);
 
+
   private lastSearchType: SearchType = SearchType.TEXT;
   private lastFilter: string = '';
 
@@ -26,6 +27,7 @@ export class CollectorService {
   private forwardOption: boolean = false;
 
   constructor(private httpClient: HttpClient, private router: Router) {
+
   }
 
   getFilteredRecords(filter: string, page: number = 0, type: SearchType = SearchType.TEXT, pageSize?): any {
@@ -89,6 +91,7 @@ export class CollectorService {
   }
 
   nextPage() {
+
     if (this.forwardOption)
       this.router.navigate(['text'], {
         queryParams: {

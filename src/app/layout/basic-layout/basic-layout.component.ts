@@ -2,6 +2,7 @@ import {AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit} f
 import {ActivatedRoute, Router} from '@angular/router';
 import {CollectorService, SearchType} from '../../collector.service';
 
+
 @Component({
   selector: 'app-basic-layout',
   templateUrl: './basic-layout.component.html',
@@ -50,6 +51,7 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   ngAfterViewChecked(): void {
     this.collectionService.loading.subscribe(status => this.loading = status);
     this.cdRef.detectChanges();
+
   }
 
   back() {
@@ -61,8 +63,4 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
     this.collectionService.nextPage();
     window.scrollTo(0, 0);
   }
-
-
-
-
 }
