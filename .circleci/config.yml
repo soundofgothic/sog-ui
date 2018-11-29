@@ -23,9 +23,9 @@ jobs:
     - image: google/cloud-sdk
     environment:
     - PROJECT_NAME: "sog-ui"
-    - GOOGLE_PROJECT_ID: "cogent-sweep-213212"
-    - GOOGLE_COMPUTE_ZONE: "europe-west1-d"
-    - GOOGLE_CLUSTER_NAME: "cluster-1"
+    - GOOGLE_PROJECT_ID: "enhanced-cable-224019"
+    - GOOGLE_COMPUTE_ZONE: "europe-west1-b"
+    - GOOGLE_CLUSTER_NAME: "soundofgothic-claster"
     steps:
     - checkout
     - run:
