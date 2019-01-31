@@ -65,11 +65,11 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
 
   }
 
-  ngAfterViewChecked(): void {
-    this.collectionService.loading.subscribe(status => this.loading = status);
-    this.cdRef.detectChanges();
-
-  }
+  // ngAfterViewChecked(): void {
+  //   this.collectionService.loading.subscribe(status => this.loading = status);
+  //   this.cdRef.detectChanges();
+  //
+  // }
 
   back() {
     this.collectionService.previousPage();

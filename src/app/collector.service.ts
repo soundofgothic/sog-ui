@@ -1,8 +1,10 @@
-import { WINDOW } from '@ng-toolkit/universal';
-import {Inject, Injectable} from '@angular/core';
+import { WINDOW, NGT_DOCUMENT } from '@ng-toolkit/universal';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Router} from '@angular/router';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+
 
 export enum SearchType {TEXT, SOURCE}
 
@@ -27,7 +29,7 @@ export class CollectorService {
   private backOption: boolean = false;
   private forwardOption: boolean = false;
 
-  constructor(@Inject(WINDOW) private window: Window, private httpClient: HttpClient, private router: Router) {
+  constructor(@Inject(WINDOW) private window: Window, @Inject(PLATFORM_ID) private platformId: Object, private httpClient: HttpClient, private router: Router) {
 
   }
 
@@ -69,9 +71,13 @@ export class CollectorService {
   }
 
   deviceDependsPageSize(): number {
-    const width = this.window.innerWidth
-      || document.documentElement.clientWidth
-      || document.body.clientWidth;
+    let width;
+
+    if(isPlatformBrowser(this.platformId)) {
+      width = this.window.innerWidth
+        || document.documentElement.clientWidth
+        || document.body.clientWidth;
+    }
 
     return (width <= 600) ? 10 : 50;
   }
