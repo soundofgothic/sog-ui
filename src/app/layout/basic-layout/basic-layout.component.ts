@@ -1,4 +1,5 @@
-import {AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { WINDOW } from '@ng-toolkit/universal';
+import {AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, Inject} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CollectorService, SearchType} from '../../collector.service';
 
@@ -10,7 +11,7 @@ import {CollectorService, SearchType} from '../../collector.service';
 })
 export class BasicLayoutComponent implements OnInit, AfterViewChecked {
 
-  constructor(private collectionService: CollectorService,
+  constructor(@Inject(WINDOW) private window: Window, private collectionService: CollectorService,
               private route: ActivatedRoute,
               private router: Router,
               private cdRef: ChangeDetectorRef) {
@@ -26,6 +27,10 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   public forwardDisplay: boolean = false;
   public value: string;
   public loading: boolean = false;
+  public filter: string;
+
+  public pageSizeOptions: number[] = [10, 50, 100];
+  public pageSizeSelected: number;
 
   ngOnInit() {
     this.collectionService.observedMetadata.subscribe((data) => {
@@ -36,15 +41,21 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
       this.pageNumber = data.pageNumber;
       this.backDisplay = data.backOption;
       this.forwardDisplay = data.forwardOption;
+      this.pageSizeSelected = data.pageSize;
+      this.filter = data.filter;
     });
   }
   search() {
+    let queryParams: any = {
+      filter: this.value,
+      page: 0,
+      type: SearchType.TEXT
+    };
+
+    if(this.pageSizeSelected) queryParams.pageSize = this.pageSizeSelected;
+
     this.router.navigate(['text'], {
-      queryParams: {
-        filter: this.value,
-        page: 0,
-        type: SearchType.TEXT
-      }
+      queryParams: queryParams
     });
   }
 
@@ -56,11 +67,25 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
 
   back() {
     this.collectionService.previousPage();
-    window.scrollTo(0, 0);
+    this.window.scrollTo(0, 0);
   }
 
   forward() {
     this.collectionService.nextPage();
-    window.scrollTo(0, 0);
+    this.window.scrollTo(0, 0);
+  }
+
+  onPageSizeChange($event) {
+    let newPageNumber = Math.floor(this.pageNumber * this.pageSize / $event);
+    let queryParams: any = {
+      filter: this.filter,
+      page: newPageNumber,
+      type: SearchType.TEXT,
+      pageSize: $event
+    };
+    this.router.navigate(['text'], {
+      queryParams: queryParams
+    });
+
   }
 }

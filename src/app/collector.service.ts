@@ -1,4 +1,5 @@
-import {Injectable} from '@angular/core';
+import { WINDOW } from '@ng-toolkit/universal';
+import {Inject, Injectable} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Router} from '@angular/router';
@@ -26,13 +27,12 @@ export class CollectorService {
   private backOption: boolean = false;
   private forwardOption: boolean = false;
 
-  constructor(private httpClient: HttpClient, private router: Router) {
+  constructor(@Inject(WINDOW) private window: Window, private httpClient: HttpClient, private router: Router) {
 
   }
 
   getFilteredRecords(filter: string, page: number = 0, type: SearchType = SearchType.TEXT, pageSize?): any {
 
-    pageSize = filter !== this.lastFilter && !pageSize ? this.deviceDependsPageSize() : pageSize || this.pageSize;
 
     let queryParams = new HttpParams()
       .set('pageSize', pageSize + '')
@@ -69,7 +69,7 @@ export class CollectorService {
   }
 
   deviceDependsPageSize(): number {
-    const width = window.innerWidth
+    const width = this.window.innerWidth
       || document.documentElement.clientWidth
       || document.body.clientWidth;
 
@@ -91,7 +91,6 @@ export class CollectorService {
   }
 
   nextPage() {
-
     if (this.forwardOption)
       this.router.navigate(['text'], {
         queryParams: {
@@ -101,10 +100,6 @@ export class CollectorService {
           type: this.lastSearchType
         }
       });
-
-    // if (this.forwardOption) {
-    //   this.getFilteredRecords(this.lastFilter, this.pageNumber + 1, this.lastSearchType);
-    // }
   }
 
   previousPage() {

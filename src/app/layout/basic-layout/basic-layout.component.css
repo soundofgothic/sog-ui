@@ -162,6 +162,22 @@ form {
   animation-timing-function: linear;
 }
 
+select {
+  background-color: transparent;
+  color: white;
+  border: 0;
+  margin-left: 10px;
+  font-size: 16px;
+  font-family: DefaultFont;
+  outline: 0;
+}
+
+option {
+  outline: 0;
+  color: white;
+  background-color: #614a4e;
+}
+
 @media only screen and (max-width: 600px) {
   .sidenav {
     display: block;

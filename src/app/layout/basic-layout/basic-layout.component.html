@@ -16,6 +16,9 @@
     <span *ngIf="backDisplay" (click)="back()" class="icon-item-left"> <i class="fa fa-arrow-left"></i> </span>
     <span>{{recordCount}} - {{upTo}} / {{totalRecordCount}}</span>
     <span *ngIf="forwardDisplay" (click)="forward()" class="icon-item-right"> <i class="fa fa-arrow-right"></i> </span>
+    <select (ngModelChange)="onPageSizeChange($event)" [(ngModel)]="pageSizeSelected">
+      <option *ngFor="let option of pageSizeOptions" value="{{option}}">{{option}}</option>
+    </select>
   </div>
 
 </div>

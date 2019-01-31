@@ -1,3 +1,6 @@
+import { NgtUniversalModule } from '@ng-toolkit/universal';
+import { CommonModule } from '@angular/common';
+import { TransferHttpCacheModule } from '@nguniversal/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -19,8 +22,14 @@ import { AboutComponent } from './about/about.component';
     ItemComponent,
     AboutComponent
   ],
-  imports: [
-    BrowserModule,
+  imports:[
+ CommonModule,
+NgtUniversalModule,
+ 
+ TransferHttpCacheModule,
+HttpClientModule,
+ 
+    
     RoutingModule,
     HttpClientModule,
     FormsModule
@@ -28,6 +37,5 @@ import { AboutComponent } from './about/about.component';
   providers: [
     interceptorProvider
   ],
-  bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CollectorService, SearchType} from '../collector.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, UrlSegment} from '@angular/router';
 
 @Component({
   selector: 'app-collector',
@@ -16,12 +16,14 @@ export class CollectorComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParamMap.subscribe((params: any) => {
+
       let filter = params.params.filter;
       let pageSize = params.params.pageSize;
       let page = params.params.page;
       let type = params.params.type;
 
       filter = filter ? filter : '';
+      pageSize = pageSize ? pageSize : this.service.deviceDependsPageSize();
       page = page ? parseInt(page) : 0;
       type = type ? parseInt(type) : SearchType.TEXT;
 

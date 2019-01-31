@@ -1,0 +1,8 @@
+{
+  "universal": {
+    "skipInstall": false,
+    "directory": ".",
+    "http": true,
+    "project": "soundofgothic"
+  }
+}
