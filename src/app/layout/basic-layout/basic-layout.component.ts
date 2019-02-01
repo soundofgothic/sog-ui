@@ -28,6 +28,7 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   public value: string;
   public loading: boolean = false;
   public filter: string;
+  public lastSearchType: string;
 
   public pageSizeOptions: number[] = [10, 50, 100];
   public pageSizeSelected: number;
@@ -43,6 +44,7 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
       this.forwardDisplay = data.forwardOption;
       this.pageSizeSelected = data.pageSize;
       this.filter = data.filter;
+      this.lastSearchType = data.lastSearchType;
     });
   }
   search() {
@@ -62,14 +64,7 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   ngAfterViewChecked(): void {
     this.collectionService.loading.subscribe(status => this.loading = status);
     this.cdRef.detectChanges();
-
   }
-
-  // ngAfterViewChecked(): void {
-  //   this.collectionService.loading.subscribe(status => this.loading = status);
-  //   this.cdRef.detectChanges();
-  //
-  // }
 
   back() {
     this.collectionService.previousPage();
@@ -82,16 +77,6 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   }
 
   onPageSizeChange($event) {
-    let newPageNumber = Math.floor(this.pageNumber * this.pageSize / $event);
-    let queryParams: any = {
-      filter: this.filter,
-      page: newPageNumber,
-      type: SearchType.TEXT,
-      pageSize: $event
-    };
-    this.router.navigate(['text'], {
-      queryParams: queryParams
-    });
-
+    this.collectionService.updatePageSize($event);
   }
 }

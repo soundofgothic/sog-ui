@@ -29,15 +29,7 @@ export class ItemComponent implements OnInit {
   }
 
   searchBySource() {
-    this.router.navigate(['text'], {
-      queryParams: {
-        filter: this.filesource,
-        page: 0,
-        type: SearchType.SOURCE
-      }
-    });
-
-    // this.collectorService.getFilteredRecords(this.filesource, 0, SearchType.SOURCE);
+    this.collectorService.searchBySource(this.filesource);
   }
 
 }

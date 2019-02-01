@@ -82,6 +82,30 @@ export class CollectorService {
     return (width <= 600) ? 10 : 50;
   }
 
+  searchBySource(filesource) {
+    this.router.navigate(['text'], {
+      queryParams: {
+        filter: filesource,
+        page: 0,
+        pageSize: this.pageSize,
+        type: SearchType.SOURCE
+      }
+    });
+  }
+
+  updatePageSize(pageSize) {
+    let newPageNumber = Math.floor(this.pageNumber * this.pageSize / pageSize);
+    let queryParams: any = {
+      filter: this.lastFilter,
+      page: newPageNumber,
+      type: this.lastSearchType,
+      pageSize: pageSize
+    };
+    this.router.navigate(['text'], {
+      queryParams: queryParams
+    });
+  }
+
   updateMetadata() {
     this.observedMetadata.next({
       recordCount: this.recordCount,
