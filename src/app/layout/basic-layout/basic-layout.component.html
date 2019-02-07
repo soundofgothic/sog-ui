@@ -6,7 +6,7 @@
   </div>
 
   <div class="sidenav-item sidenav-item-selected">
-      <form (ngSubmit)="search()">
+      <form class="sound_form" (ngSubmit)="search()">
         <input [(ngModel)]="value" name="value" class="sound_search" type="text">
       </form>
       <span (click)="search()" class="icon-item"> <i class="fa fa-search"></i> </span>

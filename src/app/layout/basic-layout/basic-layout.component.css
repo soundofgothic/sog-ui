@@ -113,6 +113,10 @@
   background-color: inherit;
 }
 
+.sound_form {
+  width: 75%;
+}
+
 form {
   display: inline-block;
 }
@@ -168,6 +172,7 @@ select {
   border: 0;
   margin-left: 10px;
   font-size: 16px;
+  -moz-appearance: menuarrow;
   font-family: DefaultFont;
   outline: 0;
 }
