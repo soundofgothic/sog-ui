@@ -1,10 +1,10 @@
-import { WINDOW, NGT_DOCUMENT } from '@ng-toolkit/universal';
+import {WINDOW, NGT_DOCUMENT} from '@ng-toolkit/universal';
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Router} from '@angular/router';
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-
+import {isPlatformBrowser, isPlatformServer} from '@angular/common';
+declare var Pizzicato: any;
 
 export enum SearchType {TEXT, SOURCE}
 
@@ -26,10 +26,12 @@ export class CollectorService {
   private pageSize: number;
   private upToIndex: number;
   private pageNumber: number;
-  private backOption: boolean = false;
-  private forwardOption: boolean = false;
+  private backOption = false;
+  private forwardOption = false;
 
-  constructor(@Inject(WINDOW) private window: Window, @Inject(PLATFORM_ID) private platformId: Object, private httpClient: HttpClient, private router: Router) {
+  constructor(@Inject(WINDOW) private window: Window,
+              @Inject(PLATFORM_ID) private platformId: Object,
+              private httpClient: HttpClient, private router: Router) {
 
   }
 
@@ -73,7 +75,7 @@ export class CollectorService {
   deviceDependsPageSize(): number {
     let width;
 
-    if(isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId)) {
       width = this.window.innerWidth
         || document.documentElement.clientWidth
         || document.body.clientWidth;
@@ -121,7 +123,7 @@ export class CollectorService {
   }
 
   nextPage() {
-    if (this.forwardOption)
+    if (this.forwardOption) {
       this.router.navigate(['text'], {
         queryParams: {
           filter: this.lastFilter,
@@ -130,10 +132,17 @@ export class CollectorService {
           type: this.lastSearchType
         }
       });
+    }
+
+    // let acousticGuitar = new Pizzicato.Sound('https://sounds.soundofgothic.pl/assets/gsounds/INFO_SLD_8_WICHTIGEPERSONEN_15_00.WAV', function() {
+    //   // Sound loaded!
+    //   acousticGuitar.play();
+    // });
+
   }
 
   previousPage() {
-    if (this.backOption)
+    if (this.backOption) {
       this.router.navigate(['text'], {
         queryParams: {
           filter: this.lastFilter,
@@ -142,5 +151,13 @@ export class CollectorService {
           type: this.lastSearchType
         }
       });
+    }
+  }
+
+  reportRecord(id, details) {
+    const url =  '/report/' + id;
+    this.httpClient.post(url, {details: details}).subscribe((data: any) => {
+      console.log('reported');
+    });
   }
 }

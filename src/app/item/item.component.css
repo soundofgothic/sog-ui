@@ -3,6 +3,40 @@ audio {
   font-size: 10px;
 }
 
+.report {
+  color: red;
+  font-size: 8px;
+  cursor: pointer;
+}
+
+.report-form {
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+.report-form > input[type=text] {
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  outline: 0;
+  font-size: 20px;
+  font-family: DefaultFont;
+  width: 50%;
+}
+
+.report-form > input[type=submit] {
+  margin-left: 10px;
+  font-family: DefaultFont;
+  border: 0;
+  background-color: transparent;
+}
+
+.report-form .fa-window-close {
+  font-size: 22px;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
 .item {
   position: relative;
   min-height: 55px;
@@ -10,6 +44,7 @@ audio {
 }
 
 .audio-item {
+  position: relative;
   display: table-cell;
   vertical-align: middle;
 }
@@ -38,6 +73,7 @@ audio {
 }
 
 .version {
+  text-align: center;
   float: right;
   font-size: 10px;
 }

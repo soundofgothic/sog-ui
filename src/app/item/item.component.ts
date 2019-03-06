@@ -16,6 +16,9 @@ export class ItemComponent implements OnInit {
   @Input() filesource: string;
   @Input() version: any;
 
+  reportMode = false;
+  reportDetails: string;
+
   constructor(private collectorService: CollectorService, private router: Router) {
   }
 
@@ -30,6 +33,14 @@ export class ItemComponent implements OnInit {
 
   searchBySource() {
     this.collectorService.searchBySource(this.filesource);
+  }
+
+  openReport() {
+    this.reportMode = !this.reportMode;
+  }
+
+  commitReport() {
+    //this.collectorService.reportRecord()
   }
 
 }
