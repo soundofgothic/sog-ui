@@ -24,6 +24,14 @@ audio {
   width: 50%;
 }
 
+.loading {
+  height: auto;
+  max-width: 30px;
+  position: absolute;
+  left: -30px;
+  top: 0;
+}
+
 .report-form > input[type=submit] {
   margin-left: 10px;
   font-family: DefaultFont;
@@ -76,6 +84,7 @@ audio {
   text-align: center;
   float: right;
   font-size: 10px;
+  position: relative;
 }
 
 

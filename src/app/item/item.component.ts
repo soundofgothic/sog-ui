@@ -1,7 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {CollectorService, SearchType} from '../collector.service';
 import {Router} from '@angular/router';
+import {LOCAL_STORAGE} from '@ng-toolkit/universal';
 
 
 @Component({
@@ -15,15 +16,20 @@ export class ItemComponent implements OnInit {
   @Input() text: string;
   @Input() filesource: string;
   @Input() version: any;
+  @Input() id: string;
 
   reportMode = false;
+  loading = false;
   reportDetails: string;
+  reportSent = false;
 
-  constructor(private collectorService: CollectorService, private router: Router) {
+  constructor(private collectorService: CollectorService, @Inject(LOCAL_STORAGE) private local_storage: any, private router: Router) {
   }
 
   ngOnInit() {
-
+    if (this.local_storage[this.id] == 'reported') {
+      this.reportSent = true;
+    }
   }
 
   parseFilename(filename: String): String {
@@ -40,7 +46,12 @@ export class ItemComponent implements OnInit {
   }
 
   commitReport() {
-    //this.collectorService.reportRecord()
+    this.loading = true;
+    this.collectorService.reportRecord(this.id, this.reportDetails).subscribe((data) => {
+      this.reportMode = false;
+      this.loading = false;
+      this.reportSent = true;
+    });
   }
 
 }

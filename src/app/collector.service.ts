@@ -1,9 +1,11 @@
-import {WINDOW, NGT_DOCUMENT} from '@ng-toolkit/universal';
+import {WINDOW, NGT_DOCUMENT, LOCAL_STORAGE} from '@ng-toolkit/universal';
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {isPlatformBrowser, isPlatformServer} from '@angular/common';
+import {tap} from 'rxjs/operators';
+
 declare var Pizzicato: any;
 
 export enum SearchType {TEXT, SOURCE}
@@ -30,6 +32,7 @@ export class CollectorService {
   private forwardOption = false;
 
   constructor(@Inject(WINDOW) private window: Window,
+              @Inject(LOCAL_STORAGE) private local_storage: any,
               @Inject(PLATFORM_ID) private platformId: Object,
               private httpClient: HttpClient, private router: Router) {
 
@@ -154,10 +157,10 @@ export class CollectorService {
     }
   }
 
-  reportRecord(id, details) {
-    const url =  '/report/' + id;
-    this.httpClient.post(url, {details: details}).subscribe((data: any) => {
-      console.log('reported');
-    });
+  reportRecord(id, details): Observable<any> {
+    const url = '/report/' + id;
+    return this.httpClient.post(url, {details: details}).pipe(tap((status)=>{
+      this.local_storage[id] = 'reported';
+    }));
   }
 }
