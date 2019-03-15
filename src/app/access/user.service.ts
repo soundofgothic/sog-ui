@@ -41,7 +41,7 @@ export class UserService {
       try {
         let response: any = await this.http.post('/user/logged', {}).toPromise();
         if (response.logged) {
-          this.userData = JSON.parse(localStorage.getItem('currentUser'));
+          this.userData = JSON.parse(this.local_storage.getItem('currentUser'));
           this.userData.logged = true;
           this.status.next(this.userData);
           return true;
@@ -57,7 +57,7 @@ export class UserService {
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
+    this.local_storage.removeItem('currentUser');
     this.userData = {logged: false};
     this.status.next(this.userData);
     this.router.navigate(['/login']);

@@ -11,7 +11,11 @@ export class ReportItemComponent extends ItemComponent implements OnInit {
   @Input() details: any;
 
   modifyText(text) {
-    console.log([this.id, text]);
+    if(text) {
+      this.collectorService.modifyRecord(this.id, text).subscribe((status)=>{
+        console.log(status);
+      });
+    }
   }
 
 }

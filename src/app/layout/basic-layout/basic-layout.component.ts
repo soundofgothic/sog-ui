@@ -52,7 +52,7 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
 
   search() {
     let activeUrl = this.router.url.split(/[/,\?]+/)[1];
-    let type = activeUrl == 'text' ? SearchType.TEXT : SearchType.REPORT;
+    let type = activeUrl == 'text' || activeUrl === '' ? SearchType.TEXT : SearchType.REPORT;
     let queryParams: any = {
       filter: this.value,
       page: 0,

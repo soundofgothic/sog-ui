@@ -172,4 +172,11 @@ export class CollectorService {
       this.local_storage[id] = 'reported';
     }));
   }
+
+  modifyRecord(id, text): Observable<any> {
+    const url = '/reports/resolve';
+    return this.httpClient.post(url, {id: id, text: text}).pipe(tap((status) => {
+      console.log(status);
+    }));
+  }
 }

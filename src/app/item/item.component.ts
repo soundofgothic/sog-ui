@@ -23,7 +23,7 @@ export class ItemComponent implements OnInit {
   reportDetails: string;
   reportSent = false;
 
-  constructor(private collectorService: CollectorService, @Inject(LOCAL_STORAGE) private local_storage: any, private router: Router) {
+  constructor(protected collectorService: CollectorService, @Inject(LOCAL_STORAGE) private local_storage: any, private router: Router) {
   }
 
   ngOnInit() {
