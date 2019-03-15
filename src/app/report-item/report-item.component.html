@@ -1,0 +1,48 @@
+<div class="item">
+  <div class="audio-item">
+    <audio controls preload="none">
+      <source src="{{parseFilename(filename)}}" type="audio/wav">
+    </audio>
+  </div>
+  <div class="text-item">
+      {{text}}
+    <div class="meta-info">
+      <a (click)="searchBySource()" class="filesource">
+        Plik: {{filesource}}
+      </a>
+      <span class="version">
+        {{version == 2 ? "Gothic II" : "Gothic I"}}
+      </span>
+    </div>
+  </div>
+  <div class="reports">
+    <div class="quantity">
+      Liczba zgłoszeń: {{qty}}
+    </div>
+    <div class="details">
+      <div class="internal-separator"></div>
+      <div class="single-detail own-detail">
+          <form class="report-form" (ngSubmit)="modifyText(reportDetails)">
+            <div class="detail-text">
+              <span>Zaproponuj nowy tekst: </span>
+              <input type="text" [(ngModel)]="reportDetails" name="reportDetails">
+            </div>
+            <div class="detail-options">
+              <i class="far fa-check-square" (click)="modifyText(reportDetails)"></i>
+            </div>
+          </form>
+      </div>
+      <div *ngFor="let detail of details" class="single-detail">
+        <div class="internal-separator"></div>
+        <div class="detail-text">
+          {{detail}}
+        </div>
+        <div class="detail-options">
+          <i class="far fa-check-square" (click)="modifyText(detail)"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="separator"></div>

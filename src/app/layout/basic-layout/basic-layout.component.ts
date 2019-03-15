@@ -1,7 +1,8 @@
-import { WINDOW } from '@ng-toolkit/universal';
-import {AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, Inject} from '@angular/core';
+import {WINDOW} from '@ng-toolkit/universal';
+import {AfterViewChecked, ChangeDetectorRef, Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CollectorService, SearchType} from '../../collector.service';
+import {CollectorService, SearchType, componentTypeResolver} from '../../collector.service';
+import {UserService} from '../../access/user.service';
 
 
 @Component({
@@ -14,7 +15,8 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   constructor(@Inject(WINDOW) private window: Window, private collectionService: CollectorService,
               private route: ActivatedRoute,
               private router: Router,
-              private cdRef: ChangeDetectorRef) {
+              private cdRef: ChangeDetectorRef,
+              private userService: UserService) {
   }
 
   public recordCount: number;
@@ -47,16 +49,21 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
       this.lastSearchType = data.lastSearchType;
     });
   }
+
   search() {
+    let activeUrl = this.router.url.split(/[/,\?]+/)[1];
+    let type = activeUrl == 'text' ? SearchType.TEXT : SearchType.REPORT;
     let queryParams: any = {
       filter: this.value,
       page: 0,
-      type: SearchType.TEXT
+      type: type
     };
 
-    if(this.pageSizeSelected) queryParams.pageSize = this.pageSizeSelected;
+    if (this.pageSizeSelected) {
+      queryParams.pageSize = this.pageSizeSelected;
+    }
 
-    this.router.navigate(['text'], {
+    this.router.navigate([componentTypeResolver[type]], {
       queryParams: queryParams
     });
   }

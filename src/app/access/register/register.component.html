@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="card card-container">
+    <h1 class="title">Dixapp</h1>
+    <form class="form-signin" (submit)="f.form.valid && submit()" #f="ngForm">
+      <input type="email" id="inputEmail" name="email" class="form-control" [(ngModel)]="model.email" #email="ngModel" placeholder="Email address" required autofocus>
+      <input type="password" id="inputPassword" name="password" class="form-control" [(ngModel)]="model.password" #password="ngModel" placeholder="Password" required>
+      <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Register</button>
+    </form>
+    <a class="btn btn-sm btn-white btn-block" [routerLink]="['/login']" href="#">Already have an account? Sign in</a>
+  </div>
+</div>

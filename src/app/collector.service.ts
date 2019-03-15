@@ -8,7 +8,14 @@ import {tap} from 'rxjs/operators';
 
 declare var Pizzicato: any;
 
-export enum SearchType {TEXT, SOURCE}
+export enum SearchType {
+  TEXT,
+  SOURCE,
+  REPORT
+}
+
+const typeResolver = ['/', '/source', '/reports'];
+export const componentTypeResolver = ['text', 'text', 'reports'];
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +27,8 @@ export class CollectorService {
   public loading: Subject<boolean> = new BehaviorSubject<any>(false);
 
 
-  private lastSearchType: SearchType = SearchType.TEXT;
-  private lastFilter: string = '';
+  public lastSearchType: SearchType = SearchType.TEXT;
+  public lastFilter: string = '';
 
   private recordCount: number;
   private totalRecordCount: number;
@@ -39,26 +46,23 @@ export class CollectorService {
   }
 
   getFilteredRecords(filter: string, page: number = 0, type: SearchType = SearchType.TEXT, pageSize?): any {
-
-
     let queryParams = new HttpParams()
       .set('pageSize', pageSize + '')
-      .set('page', page + '');
-
-    queryParams = type === SearchType.TEXT ? queryParams.set('filter', filter) : queryParams.set('source', filter);
+      .set('page', page + '')
+      .set('filter', filter);
 
     const options = {
       params: queryParams
     };
 
-    const url = type === SearchType.TEXT ? '/' : '/source';
+    const url = typeResolver[type];
 
     this.loading.next(true);
 
     this.httpClient.get(url, options).subscribe((data: any) => {
       this.observedRecords.next(data);
       this.lastSearchType = type;
-      this.lastFilter = filter ? filter : this.lastFilter;
+      this.lastFilter = filter;
       this.parseRecords(data);
       this.updateMetadata();
       this.loading.next(false);
@@ -87,6 +91,10 @@ export class CollectorService {
     return (width <= 600) ? 10 : 50;
   }
 
+  resetService(): void {
+
+  }
+
   searchBySource(filesource) {
     this.router.navigate(['text'], {
       queryParams: {
@@ -106,7 +114,7 @@ export class CollectorService {
       type: this.lastSearchType,
       pageSize: pageSize
     };
-    this.router.navigate(['text'], {
+    this.router.navigate([componentTypeResolver[this.lastSearchType]], {
       queryParams: queryParams
     });
   }
@@ -127,6 +135,7 @@ export class CollectorService {
 
   nextPage() {
     if (this.forwardOption) {
+      console.log(this.lastFilter);
       this.router.navigate(['text'], {
         queryParams: {
           filter: this.lastFilter,
@@ -146,7 +155,7 @@ export class CollectorService {
 
   previousPage() {
     if (this.backOption) {
-      this.router.navigate(['text'], {
+      this.router.navigate([componentTypeResolver[this.lastSearchType]], {
         queryParams: {
           filter: this.lastFilter,
           page: this.pageNumber - 1,
@@ -159,7 +168,7 @@ export class CollectorService {
 
   reportRecord(id, details): Observable<any> {
     const url = '/report/' + id;
-    return this.httpClient.post(url, {details: details}).pipe(tap((status)=>{
+    return this.httpClient.post(url, {details: details}).pipe(tap((status) => {
       this.local_storage[id] = 'reported';
     }));
   }
