@@ -29,7 +29,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.us.login(this.model.email, this.model.password)
       .subscribe(async data => {
         const params = await this.route.queryParams.pipe(first()).toPromise();
-        this.router.navigate([params.returnUrl]);
+        if(params.returnUrl) {
+          this.router.navigate([params.returnUrl]);
+        } else {
+          this.router.navigate(['/']);
+        }
       });
   }
 

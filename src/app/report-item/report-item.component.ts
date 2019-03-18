@@ -11,11 +11,19 @@ export class ReportItemComponent extends ItemComponent implements OnInit {
   @Input() details: any;
 
   modifyText(text) {
-    if(text) {
-      this.collectorService.modifyRecord(this.id, text).subscribe((status)=>{
+    if (text) {
+      this.collectorService.modifyRecord(this.id, text).subscribe((status) => {
         console.log(status);
       });
     }
+  }
+
+  cancelReports() {
+    this.collectorService.cancelReports(this.id).subscribe((status) => console.log(status));
+  }
+
+  deleteRecord() {
+    this.collectorService.deleteRecord(this.id).subscribe((status) => console.log(status));
   }
 
 }

@@ -16,6 +16,7 @@ export class ReportsPanelComponent implements OnInit {
   public records: any;
 
   ngOnInit() {
+    this.service.observedRecords.next([]);
     this.route.queryParamMap.subscribe((params: any) => {
 
       let filter = params.params.filter;

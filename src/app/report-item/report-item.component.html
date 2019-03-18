@@ -18,6 +18,15 @@
   <div class="reports">
     <div class="quantity">
       Liczba zgłoszeń: {{qty}}
+      <span class="record-options">
+        <a class="option-delete" (click)="deleteRecord()">
+          usuń
+        </a>
+        |
+        <a class="option-decline" (click)="cancelReports()">
+          anuluj
+        </a>
+      </span>
     </div>
     <div class="details">
       <div class="internal-separator"></div>

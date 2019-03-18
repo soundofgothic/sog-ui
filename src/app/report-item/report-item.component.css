@@ -24,6 +24,21 @@ audio {
   width: 75%;
 }
 
+.record-options {
+  text-align: right;
+  float: right;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.option-delete {
+  color: red;
+}
+
+.option-decline {
+  color: green;
+}
+
 .loading {
   height: auto;
   max-width: 30px;
