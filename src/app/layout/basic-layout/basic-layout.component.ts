@@ -3,6 +3,7 @@ import {AfterViewChecked, ChangeDetectorRef, Component, Inject, OnInit} from '@a
 import {ActivatedRoute, Router} from '@angular/router';
 import {CollectorService, SearchType, componentTypeResolver} from '../../collector.service';
 import {UserService} from '../../access/user.service';
+import {MatSnackBar} from '@angular/material';
 
 
 @Component({
@@ -16,7 +17,8 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
               private route: ActivatedRoute,
               private router: Router,
               private cdRef: ChangeDetectorRef,
-              private userService: UserService) {
+              private userService: UserService,
+              private snackbar: MatSnackBar) {
   }
 
   public recordCount: number;
@@ -35,7 +37,11 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   public pageSizeOptions: number[] = [10, 50, 100];
   public pageSizeSelected: number;
 
+  public reportLink = false;
+
   ngOnInit() {
+    this.userService.logged().then((status)=> this.reportLink = status);
+
     this.collectionService.observedMetadata.subscribe((data) => {
       this.recordCount = data.recordCount;
       this.totalRecordCount = data.totalRecordCount;

@@ -1,11 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {environment} from '../environments/environment';
-import {Observable} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
+import {MatSnackBar} from '@angular/material';
+import {catchError, tap} from 'rxjs/operators';
 
 @Injectable()
 export class Interceptor implements HttpInterceptor {
-  constructor() {
+  constructor(private snackBar: MatSnackBar) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -23,7 +25,20 @@ export class Interceptor implements HttpInterceptor {
       });
     }
 
-    return next.handle(request);
+    return next.handle(request).pipe(catchError(err => {
+      if (err instanceof HttpErrorResponse) {
+        if (err.status === 401) {
+          console.log('User not logged in');
+        } else {
+          if (err.error.msg) {
+            this.snackBar.open(err.error.msg, ':c', {duration: 3000});
+          } else {
+            this.snackBar.open('Coś poszło nie tak', ':c', {duration: 3000});
+          }
+        }
+        return throwError(err);
+      }
+    }));
   }
 
   getToken(): string {

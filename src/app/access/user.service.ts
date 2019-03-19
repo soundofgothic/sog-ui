@@ -2,8 +2,8 @@ import {Inject, Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {WINDOW, NGT_DOCUMENT, LOCAL_STORAGE} from '@ng-toolkit/universal';
-import {tap} from 'rxjs/operators';
-import {Subject} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
+import {Subject, throwError} from 'rxjs';
 
 
 @Injectable()
@@ -14,13 +14,13 @@ export class UserService {
 
   constructor(private http: HttpClient,
               private router: Router,
-              @Inject(LOCAL_STORAGE) private local_storage: any,) {
+              @Inject(LOCAL_STORAGE) private local_storage: any) {
   }
 
   login(username: string, password: string) {
     return this.http.post('/user/auth', {email: username, password: password}).pipe(tap(response => {
-      let user = response;
-      if (user) {
+      let user: any = response;
+      if (user.user) {
         this.userData = user;
         this.userData.logged = true;
         this.status.next(this.userData);

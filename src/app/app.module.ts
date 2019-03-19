@@ -14,8 +14,11 @@ import {interceptorProvider} from './interceptor';
 import {FormsModule} from '@angular/forms';
 import {AboutComponent} from './about/about.component';
 import {AccessModule} from './access/access.module';
-import { ReportsPanelComponent } from './reports-panel/reports-panel.component';
-import { ReportItemComponent } from './report-item/report-item.component';
+import {ReportsPanelComponent} from './reports-panel/reports-panel.component';
+import {ReportItemComponent} from './report-item/report-item.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+
 
 @NgModule({
   declarations: [
@@ -35,7 +38,9 @@ import { ReportItemComponent } from './report-item/report-item.component';
     AccessModule,
     RoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    MatSnackBarModule
   ],
   providers: [
     interceptorProvider

@@ -3,6 +3,7 @@ import {environment} from '../../environments/environment';
 import {CollectorService, SearchType} from '../collector.service';
 import {Router} from '@angular/router';
 import {LOCAL_STORAGE} from '@ng-toolkit/universal';
+import {MatSnackBar} from '@angular/material';
 
 
 @Component({
@@ -23,7 +24,10 @@ export class ItemComponent implements OnInit {
   reportDetails: string;
   reportSent = false;
 
-  constructor(protected collectorService: CollectorService, @Inject(LOCAL_STORAGE) private local_storage: any, private router: Router) {
+  constructor(protected collectorService: CollectorService,
+              @Inject(LOCAL_STORAGE) private local_storage: any,
+              private router: Router,
+              protected snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -51,6 +55,7 @@ export class ItemComponent implements OnInit {
       this.reportMode = false;
       this.loading = false;
       this.reportSent = true;
+      this.snackBar.open('Dziekuję za zgłoszenie!', ':)', {duration: 3000});
     });
   }
 

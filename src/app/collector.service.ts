@@ -1,10 +1,10 @@
 import {WINDOW, NGT_DOCUMENT, LOCAL_STORAGE} from '@ng-toolkit/universal';
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, throwError} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {isPlatformBrowser, isPlatformServer} from '@angular/common';
-import {tap} from 'rxjs/operators';
+import {catchError, tap} from 'rxjs/operators';
 
 declare var Pizzicato: any;
 
@@ -59,7 +59,10 @@ export class CollectorService {
 
     this.loading.next(true);
 
-    this.httpClient.get(url, options).subscribe((data: any) => {
+    this.httpClient.get(url, options).pipe(catchError(err=> {
+      this.router.navigate(['/login'], {queryParams: {returnUrl: this.router.url}});
+      return throwError(err);
+    })).subscribe((data: any) => {
       this.observedRecords.next(data);
       this.lastSearchType = type;
       this.lastFilter = filter;
@@ -135,7 +138,6 @@ export class CollectorService {
 
   nextPage() {
     if (this.forwardOption) {
-      console.log(this.lastFilter);
       this.router.navigate(['text'], {
         queryParams: {
           filter: this.lastFilter,

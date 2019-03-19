@@ -12,18 +12,21 @@ export class ReportItemComponent extends ItemComponent implements OnInit {
 
   modifyText(text) {
     if (text) {
-      this.collectorService.modifyRecord(this.id, text).subscribe((status) => {
-        console.log(status);
+      this.collectorService.modifyRecord(this.id, text).subscribe(() => {
       });
     }
   }
 
   cancelReports() {
-    this.collectorService.cancelReports(this.id).subscribe((status) => console.log(status));
+    this.collectorService.cancelReports(this.id).subscribe((status) => {
+      this.snackBar.open('Anuluowano zgłoszenie dla wpisu: ' + this.text, ':)', {duration: 3000});
+    });
   }
 
   deleteRecord() {
-    this.collectorService.deleteRecord(this.id).subscribe((status) => console.log(status));
+    this.collectorService.deleteRecord(this.id).subscribe((status) => {
+      this.snackBar.open('Usunięto wpis: ' + this.text, ':)', {duration: 3000});
+    });
   }
 
 }
