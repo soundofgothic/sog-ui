@@ -1,13 +1,16 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {environment} from '../environments/environment';
 import {Observable, throwError} from 'rxjs';
 import {MatSnackBar} from '@angular/material';
 import {catchError, tap} from 'rxjs/operators';
+import {LOCAL_STORAGE} from '@ng-toolkit/universal';
+
 
 @Injectable()
 export class Interceptor implements HttpInterceptor {
-  constructor(private snackBar: MatSnackBar) {
+  constructor(private snackBar: MatSnackBar,
+              @Inject(LOCAL_STORAGE) private local_storage: any) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -42,7 +45,7 @@ export class Interceptor implements HttpInterceptor {
   }
 
   getToken(): string {
-    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    let currentUser = JSON.parse(this.local_storage.getItem('currentUser'));
     if (currentUser && currentUser.token) {
       return currentUser.token;
     } else {
