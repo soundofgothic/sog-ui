@@ -32,7 +32,7 @@ export class ItemComponent implements OnInit {
 
   ngOnInit() {
     if (this.local_storage[this.id] == 'reported') {
-      this.reportSent = true;
+      // this.reportSent = true;
     }
   }
 

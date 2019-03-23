@@ -1,13 +1,12 @@
 
 <div class="container">
   <div class="card card-container">
-    <h1 class="title">Tytuł</h1>
-    <p>Podtytuł</p>
+    <h1 class="title">Sound of Gothic</h1>
+    <p>Panel administracyjny</p>
     <form class="form-signin" (submit)="f.form.valid && submit()" #f="ngForm">
       <input type="email" id="inputEmail" name="email" class="form-control" [(ngModel)]="model.email" #email="ngModel" placeholder="Email" required autofocus>
       <input type="password" id="inputPassword" name="password" class="form-control" [(ngModel)]="model.password" #password="ngModel" placeholder="Hasło" required>
       <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Zaloguj</button>
     </form>
-    <a class="btn btn-sm btn-white btn-block" [routerLink]="['/register']" href="#">Utwórz konto</a>
   </div>
 </div>

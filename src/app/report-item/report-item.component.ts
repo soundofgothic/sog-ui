@@ -13,6 +13,7 @@ export class ReportItemComponent extends ItemComponent implements OnInit {
   modifyText(text) {
     if (text) {
       this.collectorService.modifyRecord(this.id, text).subscribe(() => {
+        this.snackBar.open('Zmodyfikowano wpis: ' + this.text, ':)', {duration: 3000});
       });
     }
   }
