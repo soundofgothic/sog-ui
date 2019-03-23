@@ -45,12 +45,17 @@ export class Interceptor implements HttpInterceptor {
   }
 
   getToken(): string {
-    let currentUser = JSON.parse(this.local_storage.getItem('currentUser'));
-    if (currentUser && currentUser.token) {
-      return currentUser.token;
-    } else {
-      return '';
+    try {
+      let currentUser = JSON.parse(this.local_storage.getItem('currentUser'));
+      if (currentUser && currentUser.token) {
+        return currentUser.token;
+      } else {
+        return '';
+      }
+    } catch (e) {
+
     }
+    return '';
   }
 
 }
