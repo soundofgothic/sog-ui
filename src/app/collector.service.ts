@@ -138,7 +138,7 @@ export class CollectorService {
 
   nextPage() {
     if (this.forwardOption) {
-      this.router.navigate(['text'], {
+      this.router.navigate([componentTypeResolver[this.lastSearchType]], {
         queryParams: {
           filter: this.lastFilter,
           page: this.pageNumber + 1,
@@ -169,14 +169,15 @@ export class CollectorService {
   }
 
   reloadPage() {
-    this.router.navigate([componentTypeResolver[this.lastSearchType]], {
-      queryParams: {
-        filter: this.lastFilter,
-        page: this.pageNumber,
-        pageSize: this.pageSize,
-        type: this.lastSearchType
-      }
-    });
+    this.getFilteredRecords(this.lastFilter, this.pageNumber, this.lastSearchType, this.pageSize);
+    // this.router.navigate([componentTypeResolver[this.lastSearchType]], {
+    //   queryParams: {
+    //     filter: this.lastFilter,
+    //     page: this.pageNumber,
+    //     pageSize: this.pageSize,
+    //     type: this.lastSearchType
+    //   }
+    // });
   }
 
   reportRecord(id, details): Observable<any> {
