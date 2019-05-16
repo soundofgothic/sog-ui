@@ -36,6 +36,23 @@
   text-align: right;
 }
 
+.sidenav-panel {
+  font-size: 12px;
+  line-height: 30px;
+}
+
+.right {
+  text-align: right;
+}
+
+
+.sidenav-panel a {
+  text-decoration: none;
+  color: yellow;
+  text-align: right;
+  font-size: 12px;
+}
+
 .logo {
   text-align: center;
   letter-spacing: 0.05em;
@@ -174,6 +191,10 @@ form {
   animation-timing-function: linear;
 }
 
+.sidenav-panel-mobile {
+  font-family: DefaultFont;
+}
+
 select {
   background-color: transparent;
   color: white;
@@ -236,6 +257,10 @@ option {
   }
 
   .sidenav-item-bottom {
+    display: none;
+  }
+
+  .no-mobile {
     display: none;
   }
 

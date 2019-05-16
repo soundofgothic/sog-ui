@@ -29,6 +29,12 @@
     </select>
   </div>
 
+  <div class="sidenav-item sidenav-panel no-mobile">
+    <app-info-panel-component>
+    </app-info-panel-component>
+  </div>
+
+
   <div class="sidenav-item sidenav-item-bottom right icons-set">
     <a href="https://github.com/soundofgothic" class="project-link">
       <i class="fab fa-github"></i>
@@ -59,6 +65,10 @@
     <span *ngIf="backDisplay" (click)="back()" class="icon-item-left"> <i class="fa fa-arrow-left"></i> </span>
     <span>{{recordCount}} - {{upTo}} / {{totalRecordCount}}</span>
     <span *ngIf="forwardDisplay" (click)="forward()" class="icon-item-right"> <i class="fa fa-arrow-right"></i> </span>
+  </div>
+  <div class="sidenav-item sidenav-panel">
+    <app-info-panel-component>
+    </app-info-panel-component>
   </div>
   <div class="sidenav-item centered icons-set">
     <a href="https://github.com/soundofgothic" class="project-link">

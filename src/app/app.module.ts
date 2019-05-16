@@ -18,6 +18,7 @@ import {ReportsPanelComponent} from './reports-panel/reports-panel.component';
 import {ReportItemComponent} from './report-item/report-item.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { InfoPanelComponentComponent } from './info-panel-component/info-panel-component.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     ItemComponent,
     AboutComponent,
     ReportsPanelComponent,
-    ReportItemComponent
+    ReportItemComponent,
+    InfoPanelComponentComponent
   ],
   imports: [
     CommonModule,
