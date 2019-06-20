@@ -11,11 +11,12 @@ declare var Pizzicato: any;
 export enum SearchType {
   TEXT,
   SOURCE,
-  REPORT
+  REPORT,
+  SFX
 }
 
-const typeResolver = ['/', '/source', '/reports'];
-export const componentTypeResolver = ['text', 'text', 'reports'];
+const typeResolver = ['/', '/source', '/reports', '/sfx'];
+export const componentTypeResolver = ['text', 'text', 'reports', 'sfx'];
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,7 @@ export class CollectorService {
 
 
   public lastSearchType: SearchType = SearchType.TEXT;
-  public lastFilter: string = '';
+  public lastFilter = '';
 
   private recordCount: number;
   private totalRecordCount: number;
@@ -45,11 +46,15 @@ export class CollectorService {
 
   }
 
-  getFilteredRecords(filter: string, page: number = 0, type: SearchType = SearchType.TEXT, pageSize?): any {
+  getFilteredRecords(filter: string, page: number = 0, type: SearchType = SearchType.TEXT, pageSize?, tags?: string[]): any {
     let queryParams = new HttpParams()
       .set('pageSize', pageSize + '')
       .set('page', page + '')
       .set('filter', filter);
+
+    if(tags) {
+      queryParams = queryParams.append('tags', tags.join(', '));
+    }
 
     const options = {
       params: queryParams
@@ -59,8 +64,9 @@ export class CollectorService {
 
     this.loading.next(true);
 
-    this.httpClient.get(url, options).pipe(catchError(err=> {
-      this.router.navigate(['/login'], {queryParams: {returnUrl: this.router.url}});
+    this.httpClient.get(url, options).pipe(catchError(err => {
+      // sometimes error doesnt mean wish to login
+      // this.router.navigate(['/login'], {queryParams: {returnUrl: this.router.url}});
       return throwError(err);
     })).subscribe((data: any) => {
       this.observedRecords.next(data);
@@ -92,10 +98,6 @@ export class CollectorService {
     }
 
     return (width <= 600) ? 10 : 50;
-  }
-
-  resetService(): void {
-
   }
 
   searchBySource(filesource) {

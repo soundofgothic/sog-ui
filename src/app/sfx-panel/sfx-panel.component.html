@@ -1,0 +1,7 @@
+<div class="records" *ngFor="let record of records">
+  <app-sfx-item [description]="record.description"
+                [filename]="record.filename"
+                [version]="record.g"
+                [id]="record._id"
+  ></app-sfx-item>
+</div>

@@ -160,6 +160,22 @@ form {
   opacity: 0;
 }
 
+.suspend {
+  max-height: 0;
+}
+
+.dropdown {
+  transition: 0.5s;
+  overflow: hidden;
+  margin: 0;
+  list-style: none;
+}
+
+.drop {
+  max-height: 100px;
+}
+
+
 .loading {
   background-color: #888888;
   position: fixed;

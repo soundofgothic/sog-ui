@@ -40,7 +40,7 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   public reportLink = false;
 
   ngOnInit() {
-    this.userService.logged().then((status)=> this.reportLink = status);
+    this.userService.logged().then((status) => this.reportLink = status);
 
     this.collectionService.observedMetadata.subscribe((data) => {
       this.recordCount = data.recordCount;
@@ -58,7 +58,7 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
 
   search() {
     let activeUrl = this.router.url.split(/[/,\?]+/)[1];
-    let type = activeUrl == 'text' || activeUrl === '' ? SearchType.TEXT : SearchType.REPORT;
+    let type = this.collectionService.lastSearchType;
     let queryParams: any = {
       filter: this.value,
       page: 0,
@@ -92,4 +92,6 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   onPageSizeChange($event) {
     this.collectionService.updatePageSize($event);
   }
+
+
 }

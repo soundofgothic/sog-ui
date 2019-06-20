@@ -1,0 +1,45 @@
+<div class="item">
+  <div class="audio-item">
+    <audio controls preload="none">
+      <source src="{{parseFilename(filename)}}" type="audio/wav">
+    </audio>
+  </div>
+  <div class="text-item">
+    <span *ngIf="reportMode; else displayMode">
+      <form class="report-form" (ngSubmit)="commitReport()">
+        <span>Zaproponuj nowy tekst: </span>
+        <input type="text" [(ngModel)]="reportDetails" name="reportDetails">
+        <input type="submit">
+        <i class="far fa-window-close" (click)="reportMode=false"></i>
+      </form>
+    </span>
+    <ng-template #displayMode>
+      {{ filename }}
+    </ng-template>
+    <div class="meta-info">
+      <ul class="tag-list">
+        <li class="tag">
+          #tag1
+        </li>
+        <li class="tag">
+          #tag2
+        </li>
+        <li class="tag">
+          #tag3
+        </li>
+      </ul>
+      <span class="version">
+        {{version == 2 ? "Gothic II" : "Gothic I"}}
+        <br> <span *ngIf="reportSent; else reportOption">Wysłano</span>
+        <ng-template #reportOption>
+          <span class="report" (click)="openReport()">
+            Zgłoś błąd
+          </span>
+        </ng-template>
+        <img *ngIf="loading" class="loading" src="/assets/loading.svg">
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="separator"></div>

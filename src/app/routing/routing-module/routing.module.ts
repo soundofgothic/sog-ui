@@ -6,6 +6,7 @@ import {CollectorComponent} from '../../collector/collector.component';
 import {AboutComponent} from '../../about/about.component';
 import {ReportsPanelComponent} from '../../reports-panel/reports-panel.component';
 import {AuthGuard} from '../../access/auth.guard';
+import {SfxPanelComponent} from '../../sfx-panel/sfx-panel.component';
 
 const routes: Routes = [
   {
@@ -14,7 +15,8 @@ const routes: Routes = [
       {path: '', component: CollectorComponent},
       {path: 'text', component: CollectorComponent},
       {path: 'about', component: AboutComponent},
-      {path: 'reports', component: ReportsPanelComponent, canActivate: [AuthGuard]}
+      {path: 'reports', component: ReportsPanelComponent, canActivate: [AuthGuard]},
+      {path: 'sfx', component: SfxPanelComponent}
     ]
   },
   {path: '**', redirectTo: '', pathMatch: 'full'}
