@@ -14,14 +14,29 @@ audio {
   vertical-align: middle;
 }
 
-.report-form > input[type=text] {
+.report-form input[type=text] {
   border-top: 0;
   border-left: 0;
   border-right: 0;
   outline: 0;
   font-size: 20px;
   font-family: DefaultFont;
-  width: 50%;
+  width: 75%;
+}
+
+.record-options {
+  text-align: right;
+  float: right;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.option-delete {
+  color: red;
+}
+
+.option-decline {
+  color: green;
 }
 
 .loading {
@@ -32,7 +47,7 @@ audio {
   top: 0;
 }
 
-.report-form > input[type=submit] {
+.report-form input[type=submit] {
   margin-left: 10px;
   font-family: DefaultFont;
   border: 0;
@@ -49,6 +64,11 @@ audio {
   position: relative;
   min-height: 55px;
   font-family: DefaultFont;
+  border: 1px solid #888888;
+  border-radius: 5px;
+  margin-top: 10px;
+  padding: 5px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
 }
 
 .audio-item {
@@ -64,12 +84,42 @@ audio {
   width: 100%;
 }
 
+.detail-text {
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: 5px;
+  width: 100%;
+}
+
+.detail-options {
+  position: relative;
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 22px;
+}
+
 .separator {
   display: none;
 }
 
+
+.internal-separator {
+  display: block;
+  height: 0;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  width: 100%;
+  border: 1px dashed black;
+}
+
 .meta-info {
   width: 100%;
+}
+
+.details {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .filesource {
@@ -87,6 +137,13 @@ audio {
   position: relative;
 }
 
+.single-detail {
+  font-size: 16px;
+}
+
+.fa-check-square {
+  cursor: pointer;
+}
 
 @media only screen and (max-width: 600px) {
 

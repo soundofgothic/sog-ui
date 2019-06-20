@@ -1,7 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {CollectorService, SearchType} from '../collector.service';
 import {Router} from '@angular/router';
+import {LOCAL_STORAGE} from '@ng-toolkit/universal';
+import {MatSnackBar} from '@angular/material';
 
 
 @Component({
@@ -15,12 +17,23 @@ export class ItemComponent implements OnInit {
   @Input() text: string;
   @Input() filesource: string;
   @Input() version: any;
+  @Input() id: string;
 
-  constructor(private collectorService: CollectorService, private router: Router) {
+  reportMode = false;
+  loading = false;
+  reportDetails: string;
+  reportSent = false;
+
+  constructor(protected collectorService: CollectorService,
+              @Inject(LOCAL_STORAGE) private local_storage: any,
+              private router: Router,
+              protected snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
-
+    if (this.local_storage[this.id] == 'reported') {
+      // this.reportSent = true;
+    }
   }
 
   parseFilename(filename: String): String {
@@ -29,15 +42,21 @@ export class ItemComponent implements OnInit {
   }
 
   searchBySource() {
-    this.router.navigate(['text'], {
-      queryParams: {
-        filter: this.filesource,
-        page: 0,
-        type: SearchType.SOURCE
-      }
-    });
+    this.collectorService.searchBySource(this.filesource);
+  }
 
-    // this.collectorService.getFilteredRecords(this.filesource, 0, SearchType.SOURCE);
+  openReport() {
+    this.reportMode = !this.reportMode;
+  }
+
+  commitReport() {
+    this.loading = true;
+    this.collectorService.reportRecord(this.id, this.reportDetails).subscribe((data) => {
+      this.reportMode = false;
+      this.loading = false;
+      this.reportSent = true;
+      this.snackBar.open('Dziekuję za zgłoszenie!', ':)', {duration: 3000});
+    });
   }
 
 }

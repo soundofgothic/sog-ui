@@ -1,15 +1,25 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {NgtUniversalModule} from '@ng-toolkit/universal';
+import {CommonModule} from '@angular/common';
+import {TransferHttpCacheModule} from '@nguniversal/common';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
-import { AppComponent } from './app.component';
-import { BasicLayoutComponent } from './layout/basic-layout/basic-layout.component';
-import { RoutingModule } from './routing/routing-module/routing.module';
-import { CollectorComponent } from './collector/collector.component';
-import { ItemComponent } from './item/item.component';
-import { HttpClientModule } from '@angular/common/http';
-import { interceptorProvider } from './interceptor';
-import { FormsModule } from '@angular/forms';
-import { AboutComponent } from './about/about.component';
+import {AppComponent} from './app.component';
+import {BasicLayoutComponent} from './layout/basic-layout/basic-layout.component';
+import {RoutingModule} from './routing/routing-module/routing.module';
+import {CollectorComponent} from './collector/collector.component';
+import {ItemComponent} from './item/item.component';
+import {HttpClientModule} from '@angular/common/http';
+import {interceptorProvider} from './interceptor';
+import {FormsModule} from '@angular/forms';
+import {AboutComponent} from './about/about.component';
+import {AccessModule} from './access/access.module';
+import {ReportsPanelComponent} from './reports-panel/reports-panel.component';
+import {ReportItemComponent} from './report-item/report-item.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { InfoPanelComponentComponent } from './info-panel-component/info-panel-component.component';
+
 
 @NgModule({
   declarations: [
@@ -17,17 +27,26 @@ import { AboutComponent } from './about/about.component';
     BasicLayoutComponent,
     CollectorComponent,
     ItemComponent,
-    AboutComponent
+    AboutComponent,
+    ReportsPanelComponent,
+    ReportItemComponent,
+    InfoPanelComponentComponent
   ],
   imports: [
-    BrowserModule,
+    CommonModule,
+    NgtUniversalModule,
+    TransferHttpCacheModule,
+    HttpClientModule,
+    AccessModule,
     RoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    MatSnackBarModule
   ],
   providers: [
     interceptorProvider
   ],
-  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

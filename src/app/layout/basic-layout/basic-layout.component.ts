@@ -1,6 +1,9 @@
-import {AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {WINDOW} from '@ng-toolkit/universal';
+import {AfterViewChecked, ChangeDetectorRef, Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CollectorService, SearchType} from '../../collector.service';
+import {CollectorService, SearchType, componentTypeResolver} from '../../collector.service';
+import {UserService} from '../../access/user.service';
+import {MatSnackBar} from '@angular/material';
 
 
 @Component({
@@ -10,10 +13,12 @@ import {CollectorService, SearchType} from '../../collector.service';
 })
 export class BasicLayoutComponent implements OnInit, AfterViewChecked {
 
-  constructor(private collectionService: CollectorService,
+  constructor(@Inject(WINDOW) private window: Window, private collectionService: CollectorService,
               private route: ActivatedRoute,
               private router: Router,
-              private cdRef: ChangeDetectorRef) {
+              private cdRef: ChangeDetectorRef,
+              private userService: UserService,
+              private snackbar: MatSnackBar) {
   }
 
   public recordCount: number;
@@ -26,8 +31,17 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   public forwardDisplay: boolean = false;
   public value: string;
   public loading: boolean = false;
+  public filter: string;
+  public lastSearchType: string;
+
+  public pageSizeOptions: number[] = [10, 50, 100];
+  public pageSizeSelected: number;
+
+  public reportLink = false;
 
   ngOnInit() {
+    this.userService.logged().then((status)=> this.reportLink = status);
+
     this.collectionService.observedMetadata.subscribe((data) => {
       this.recordCount = data.recordCount;
       this.totalRecordCount = data.totalRecordCount;
@@ -36,31 +50,46 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
       this.pageNumber = data.pageNumber;
       this.backDisplay = data.backOption;
       this.forwardDisplay = data.forwardOption;
+      this.pageSizeSelected = data.pageSize;
+      this.filter = data.filter;
+      this.lastSearchType = data.lastSearchType;
     });
   }
+
   search() {
-    this.router.navigate(['text'], {
-      queryParams: {
-        filter: this.value,
-        page: 0,
-        type: SearchType.TEXT
-      }
+    let activeUrl = this.router.url.split(/[/,\?]+/)[1];
+    let type = activeUrl == 'text' || activeUrl === '' ? SearchType.TEXT : SearchType.REPORT;
+    let queryParams: any = {
+      filter: this.value,
+      page: 0,
+      type: type
+    };
+
+    if (this.pageSizeSelected) {
+      queryParams.pageSize = this.pageSizeSelected;
+    }
+
+    this.router.navigate([componentTypeResolver[type]], {
+      queryParams: queryParams
     });
   }
 
   ngAfterViewChecked(): void {
     this.collectionService.loading.subscribe(status => this.loading = status);
     this.cdRef.detectChanges();
-
   }
 
   back() {
     this.collectionService.previousPage();
-    window.scrollTo(0, 0);
+    this.window.scrollTo(0, 0);
   }
 
   forward() {
     this.collectionService.nextPage();
-    window.scrollTo(0, 0);
+    this.window.scrollTo(0, 0);
+  }
+
+  onPageSizeChange($event) {
+    this.collectionService.updatePageSize($event);
   }
 }

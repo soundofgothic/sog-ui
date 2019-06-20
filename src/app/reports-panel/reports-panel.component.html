@@ -1,0 +1,11 @@
+<div class="records" *ngFor="let record of records">
+  <app-report-item [text]="record.text"
+                   [filename]="record.filename"
+                   [filesource]="record.source"
+                   [version]="record.g"
+                   [id]="record._id"
+                   [details]="record.details"
+                   [qty]="record.reported"
+  >
+  </app-report-item>
+</div>

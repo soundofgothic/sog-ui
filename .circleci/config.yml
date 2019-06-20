@@ -1,66 +1,19 @@
 version: 2
 jobs:
-  build:
-    docker:
-    - image: circleci/node:10
-    working_directory: ~/repo
+  deploy:
+    machine:
+      enabled: true
     steps:
-    - checkout
-    - restore_cache:
-        keys:
-        - v1-dependencies-{{ checksum "package.json" }}
-        - v1-dependencies-
-    - run:
-        name: Install dependencies
-        command: npm install
-    - save_cache:
-        paths:
-        - node_modules
-        key: v1-dependencies-{{ checksum "package.json" }}
-
-  deploy_to_staging:
-    docker:
-    - image: google/cloud-sdk
-    environment:
-    - PROJECT_NAME: "sog-ui"
-    - GOOGLE_PROJECT_ID: "enhanced-cable-224019"
-    - GOOGLE_COMPUTE_ZONE: "europe-west1-b"
-    - GOOGLE_CLUSTER_NAME: "soundofgothic-claster"
-    steps:
-    - checkout
-    - run:
-        name: Setup Google Cloud SDK
-        command: |
-          apt-get install -qq -y gettext
-          echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
-          gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
-          gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
-          gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
-          gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
-    - setup_remote_docker
-    - run:
-        name: Docker build and push
-        command: |
-          docker build -t ${PROJECT_NAME} .
-          docker tag ${PROJECT_NAME} ${DOCKERHUB_REPO_NAME}:${CIRCLE_SHA1}
-          echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_LOGIN --password-stdin
-          docker push ${DOCKERHUB_REPO_NAME}:${CIRCLE_SHA1}
-    - run:
-        name: Deploy to Kubernetes
-        command: |
-          envsubst < ${HOME}/project/k8s.yml > ${HOME}/patched_k8s.yml
-          kubectl apply -f ${HOME}/patched_k8s.yml
-          kubectl rollout status deployment/${PROJECT_NAME}
-
+      - run:
+          name: Deploy Over SSH
+          command: |
+            ssh $SSH_USER@$SSH_HOST "./ui.sh"
 
 workflows:
   version: 2
   build_test_deploy:
     jobs:
-    - build
-    - deploy_to_staging:
-        requires:
-        - build
-        filters:
-          branches:
-            only: master
+      - deploy:
+          filters:
+            branches:
+              only: develop

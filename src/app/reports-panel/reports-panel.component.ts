@@ -1,13 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {CollectorService, SearchType} from '../collector.service';
-import {ActivatedRoute, UrlSegment} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
-  selector: 'app-collector',
-  templateUrl: './collector.component.html',
-  styleUrls: ['./collector.component.css']
+  selector: 'app-reports-panel',
+  templateUrl: './reports-panel.component.html',
+  styleUrls: ['./reports-panel.component.css']
 })
-export class CollectorComponent implements OnInit {
+export class ReportsPanelComponent implements OnInit {
+
   constructor(private service: CollectorService,
               private route: ActivatedRoute) {
   }
@@ -15,6 +16,7 @@ export class CollectorComponent implements OnInit {
   public records: any;
 
   ngOnInit() {
+    this.service.observedRecords.next([]);
     this.route.queryParamMap.subscribe((params: any) => {
 
       let filter = params.params.filter;
@@ -25,7 +27,7 @@ export class CollectorComponent implements OnInit {
       filter = filter ? filter : '';
       pageSize = pageSize ? pageSize : this.service.deviceDependsPageSize();
       page = page ? parseInt(page) : 0;
-      type = type ? parseInt(type) : SearchType.TEXT;
+      type = SearchType.REPORT;
 
       this.service.getFilteredRecords(filter, page, type, pageSize);
     });

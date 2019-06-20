@@ -11,7 +11,7 @@
 }
 
 .sidenav-item {
-  width: 100%;
+  width: calc(100% - 10px);
   color: whitesmoke;
   padding-left: 5px;
   padding-right: 5px;
@@ -28,8 +28,29 @@
 
 .sidenav-item-bottom {
   position: absolute;
-
   bottom: 0;
+}
+
+.link {
+  position: relative;
+  text-align: right;
+}
+
+.sidenav-panel {
+  font-size: 12px;
+  line-height: 30px;
+}
+
+.right {
+  text-align: right;
+}
+
+
+.sidenav-panel a {
+  text-decoration: none;
+  color: yellow;
+  text-align: right;
+  font-size: 12px;
 }
 
 .logo {
@@ -49,6 +70,10 @@
 
 .centered {
   text-align: center;
+}
+
+.right {
+  text-align: right;
 }
 
 .icon-item-right {
@@ -113,6 +138,10 @@
   background-color: inherit;
 }
 
+.sound_form {
+  width: 75%;
+}
+
 form {
   display: inline-block;
 }
@@ -162,6 +191,38 @@ form {
   animation-timing-function: linear;
 }
 
+.sidenav-panel-mobile {
+  font-family: DefaultFont;
+}
+
+select {
+  background-color: transparent;
+  color: white;
+  border: 0;
+  margin-left: 10px;
+  font-size: 16px;
+  -moz-appearance: menuarrow;
+  font-family: DefaultFont;
+  outline: 0;
+}
+
+option {
+  outline: 0;
+  color: white;
+  background-color: #614a4e;
+}
+
+.project-link {
+  color: inherit;
+  opacity: 0.7;
+  text-decoration: none;
+}
+
+.icons-set {
+  letter-spacing: 0.5em;
+  font-size: 30px;
+}
+
 @media only screen and (max-width: 600px) {
   .sidenav {
     display: block;
@@ -193,6 +254,14 @@ form {
 
   .loading-gif {
     position: fixed;
+  }
+
+  .sidenav-item-bottom {
+    display: none;
+  }
+
+  .no-mobile {
+    display: none;
   }
 
 

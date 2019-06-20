@@ -1,0 +1,10 @@
+.right {
+  text-align: right;
+}
+
+a {
+  text-decoration: none;
+  color: yellow;
+  text-align: right;
+  font-size: 12px;
+}
