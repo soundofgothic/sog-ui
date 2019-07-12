@@ -1,9 +1,13 @@
 import {WINDOW} from '@ng-toolkit/universal';
 import {AfterViewChecked, ChangeDetectorRef, Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CollectorService, SearchType, componentTypeResolver} from '../../collector.service';
+import {CollectorService, componentTypeResolver, SearchType} from '../../collector.service';
 import {UserService} from '../../access/user.service';
 import {MatSnackBar} from '@angular/material';
+import {SfxService} from '../../sfx.service';
+import {combineLatest} from 'rxjs';
+import {toArray, take} from 'rxjs/operators';
+import {d} from '@angular/core/src/render3';
 
 
 @Component({
@@ -18,6 +22,7 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
               private router: Router,
               private cdRef: ChangeDetectorRef,
               private userService: UserService,
+              private sfxService: SfxService,
               private snackbar: MatSnackBar) {
   }
 
@@ -39,10 +44,15 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
 
   public reportLink = false;
 
+  public tags: any[];
+  public tagsSelectionModel: any = {};
+  public displayTags: boolean;
+
   ngOnInit() {
     this.userService.logged().then((status) => this.reportLink = status);
 
-    this.collectionService.observedMetadata.subscribe((data) => {
+
+    combineLatest(this.collectionService.observedMetadata, this.sfxService.tagsList).subscribe(([data, tagList]) => {
       this.recordCount = data.recordCount;
       this.totalRecordCount = data.totalRecordCount;
       this.pageSize = data.pageSize;
@@ -53,7 +63,15 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
       this.pageSizeSelected = data.pageSize;
       this.filter = data.filter;
       this.lastSearchType = data.lastSearchType;
+      this.displayTags = [SearchType.SFX_E, SearchType.SFX].includes(data.lastSearchType);
+
+      if (this.displayTags) {
+        this.tags = tagList;
+        tagList.map(e => this.tagsSelectionModel[e._id] = {selected: data.lastTags.includes(e._id)});
+      }
     });
+
+    this.sfxService.updateTagsList();
   }
 
   search() {
@@ -88,6 +106,13 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
     this.collectionService.nextPage();
     this.window.scrollTo(0, 0);
   }
+
+  filterTags() {
+    let filters = Object.keys(this.tagsSelectionModel).filter(e => this.tagsSelectionModel[e].selected);
+    console.log(filters);
+    this.collectionService.filterTags(filters);
+  }
+
 
   onPageSizeChange($event) {
     this.collectionService.updatePageSize($event);

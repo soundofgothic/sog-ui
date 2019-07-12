@@ -19,8 +19,10 @@ import {ReportItemComponent} from './report-item/report-item.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {InfoPanelComponentComponent} from './info-panel-component/info-panel-component.component';
-import {SfxPanelComponent} from './sfx-panel/sfx-panel.component';
-import { SfxItemComponent } from './sfx-item/sfx-item.component';
+import {SfxPanelComponent} from './sfx/sfx-panel/sfx-panel.component';
+import { SfxItemComponent } from './sfx/sfx-item/sfx-item.component';
+import { SfxPanelExtendedComponent } from './sfx/sfx-panel-extended/sfx-panel-extended.component';
+import { SfxItemExtendedComponent } from './sfx/sfx-item-extended/sfx-item-extended.component';
 
 
 @NgModule({
@@ -34,7 +36,9 @@ import { SfxItemComponent } from './sfx-item/sfx-item.component';
     ReportItemComponent,
     InfoPanelComponentComponent,
     SfxPanelComponent,
-    SfxItemComponent
+    SfxItemComponent,
+    SfxPanelExtendedComponent,
+    SfxItemExtendedComponent
   ],
   imports: [
     CommonModule,

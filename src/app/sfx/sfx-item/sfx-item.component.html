@@ -7,27 +7,38 @@
   <div class="text-item">
     <span *ngIf="reportMode; else displayMode">
       <form class="report-form" (ngSubmit)="commitReport()">
-        <span>Zaproponuj nowy tekst: </span>
+        <span>Zaproponuj opis: </span>
         <input type="text" [(ngModel)]="reportDetails" name="reportDetails">
         <input type="submit">
         <i class="far fa-window-close" (click)="reportMode=false"></i>
       </form>
+      <div class="tag-section">
+        <span class="tag-helper">Zaproponuj tagi: </span>
+        <ul>
+          <li class="fancy-tag" *ngFor="let pTag of proposedTags">
+            {{pTag}}
+          </li>
+          <li class="fancy-tag new-tag">
+            + <span #editSpan class="new-tag" contenteditable="true"></span>
+          </li>
+        </ul>
+      </div>
+
     </span>
     <ng-template #displayMode>
-      {{ filename }}
+      <div class="filename-cell">
+        {{ filename }}
+      </div>
+      <div class="description-cell">
+        {{ description }}
+      </div>
     </ng-template>
     <div class="meta-info">
-      <ul class="tag-list">
-        <li class="tag">
-          #tag1
-        </li>
-        <li class="tag">
-          #tag2
-        </li>
-        <li class="tag">
-          #tag3
-        </li>
-      </ul>
+      <!--<ul class="tag-list">-->
+        <!--<li *ngFor="let tag of tags" class="tag">-->
+          <!--{{tag}}-->
+        <!--</li>-->
+      <!--</ul>-->
       <span class="version">
         {{version == 2 ? "Gothic II" : "Gothic I"}}
         <br> <span *ngIf="reportSent; else reportOption">Wysłano</span>

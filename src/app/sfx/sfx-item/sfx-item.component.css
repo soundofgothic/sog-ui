@@ -47,7 +47,7 @@ audio {
 
 .item {
   position: relative;
-  min-height: 55px;
+  min-height: 70px;
   font-family: DefaultFont;
 }
 
@@ -59,7 +59,7 @@ audio {
 
 .text-item {
   display: table-cell;
-  vertical-align: middle;
+  vertical-align: bottom;
   padding-left: 5px;
   width: 100%;
 }
@@ -97,6 +97,41 @@ audio {
   display: inline-block;
   font-size: 10px;
   margin-right: 5px;
+}
+
+.tag-section ul {
+  display: inline-block;
+  list-style: none;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+
+.tag-section {
+  font-size: 16px;
+}
+
+.fancy-tag {
+  list-style: none;
+  display: inline-block;
+  margin: 0 5px 0 5px;
+  background-color: #614a4e;
+  color: white;
+  padding: 5px;
+  font-size: 10px;
+  vertical-align: middle;
+}
+
+.new-tag {
+  min-width: 50px;
+}
+
+.filename-cell {
+  font-size: 18px;
+}
+
+.description-cell {
+  font-size: 16px;
 }
 
 
