@@ -13,6 +13,12 @@
     </a>
   </div>
 
+  <div class="sidenav-item link">
+    <a class="router-link" routerLink="/sfx" routerLinkActive="active-link">
+      Dźwięki <span class="warning">(beta)</span>
+    </a>
+  </div>
+
   <div class="sidenav-item sidenav-item-selected">
       <form class="sound_form" (ngSubmit)="search()">
         <input [(ngModel)]="value" name="value" class="sound_search" type="text">
@@ -32,6 +38,18 @@
   <div class="sidenav-item sidenav-panel no-mobile">
     <app-info-panel-component>
     </app-info-panel-component>
+  </div>
+
+  <div *ngIf="displayTags" class="sidenav-item no-mobile">
+    <div class="scroll-pane">
+      <label  *ngFor="let tag of tags" class="tag-container">
+        <input (change)="filterTags()" type="checkbox" name="{{tag._id}}" [(ngModel)]="tagsSelectionModel[tag._id].selected">
+        <span class="tag-text">
+          {{tag._id}} ({{tag.count}})
+        </span>
+        <span class="checkmark"></span>
+      </label>
+    </div>
   </div>
 
 

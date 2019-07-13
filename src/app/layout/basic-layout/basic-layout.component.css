@@ -160,6 +160,22 @@ form {
   opacity: 0;
 }
 
+.suspend {
+  max-height: 0;
+}
+
+.dropdown {
+  transition: 0.5s;
+  overflow: hidden;
+  margin: 0;
+  list-style: none;
+}
+
+.drop {
+  max-height: 100px;
+}
+
+
 .loading {
   background-color: #888888;
   position: fixed;
@@ -171,6 +187,70 @@ form {
   transition: 0.5s;
   height: 100%;
   z-index: 100;
+}
+
+.tag-container {
+  display: block;
+  width: 100%;
+  position: relative;
+  /*padding-left: 35px;*/
+}
+
+.tag-text {
+  margin-left: 35px;
+}
+
+.tag-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #888888;
+}
+
+.tag-container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.tag-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.warning {
+  font-size: 10px;
+  color: #ff4a4a;
+}
+
+.scroll-pane {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
+.tag-container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 
 @keyframes loading {

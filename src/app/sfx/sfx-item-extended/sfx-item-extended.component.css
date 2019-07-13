@@ -1,0 +1,251 @@
+audio {
+  line-height: 20px;
+  font-size: 10px;
+}
+
+.report {
+  color: red;
+  font-size: 8px;
+  cursor: pointer;
+}
+
+.report-form {
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+.report-form > input[type=text] {
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  outline: 0;
+  font-size: 20px;
+  font-family: DefaultFont;
+  width: 50%;
+}
+
+.loading {
+  height: auto;
+  max-width: 30px;
+  position: absolute;
+  left: -30px;
+  top: 0;
+}
+
+.report-form > input[type=submit] {
+  margin-left: 10px;
+  font-family: DefaultFont;
+  border: 0;
+  background-color: transparent;
+}
+
+.report-form .fa-window-close {
+  font-size: 22px;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+.item {
+  position: relative;
+  min-height: 55px;
+  font-family: DefaultFont;
+  border: 1px solid #888888;
+  border-radius: 5px;
+  margin-top: 10px;
+  padding: 5px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.audio-item {
+  position: relative;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.text-item {
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: 5px;
+  width: 100%;
+}
+
+.separator {
+  display: none;
+}
+
+.meta-info {
+  width: 100%;
+}
+
+.filesource {
+  font-size: 10px;
+  text-decoration: none;
+  color: yellow;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  cursor: pointer;
+}
+
+.version {
+  text-align: center;
+  float: right;
+  font-size: 10px;
+  position: relative;
+}
+
+.tag-list {
+  margin: 0;
+  list-style: none;
+  display: inline-block;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 10px;
+  margin-right: 5px;
+}
+
+.edit-section {
+  margin: 5px 0 20px 0;
+  display: flex;
+  text-align: center;
+}
+
+
+.item-tags-column {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 20%;
+}
+
+.all-tags-column {
+  flex-grow: 2;
+  flex-basis: 40%;
+  flex-shrink: 0;
+}
+
+.description-column {
+  flex-grow: 2;
+  flex-shrink: 0;
+  flex-basis: 40%;
+}
+
+.all-tags-column > ul, .item-tags-column > ul {
+  list-style: none;
+  text-align: left;
+  margin: 0;
+}
+
+.fancy-tag {
+  list-style: none;
+  display: inline-block;
+  margin: 5px;
+  background-color: #614a4e;
+  color: white;
+  padding: 5px;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.new-tag {
+  min-width: 50px;
+}
+
+.p-tag {
+  background-color: wheat;
+  color: black;
+}
+
+.detail-text {
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: 5px;
+  width: 100%;
+  text-align: left;
+}
+
+.detail-options {
+  position: relative;
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 22px;
+}
+
+.report-form input[type=submit] {
+  margin-left: 10px;
+  font-family: DefaultFont;
+  border: 0;
+  background-color: transparent;
+}
+
+.report-form input[type=text] {
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  outline: 0;
+  font-size: 16px;
+  font-family: DefaultFont;
+  width: 75%;
+}
+
+.description-container {
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.p-description {
+  font-size: 12px;
+  padding: 5px;
+  background-color: wheat;
+}
+
+
+@media only screen and (max-width: 600px) {
+
+  .item {
+    margin: 10px 0;
+  }
+
+  .edit-section {
+    display: block;
+  }
+
+  .item-tags-column {
+    display: block;
+  }
+
+  .all-tags-column {
+    display: block;
+  }
+
+  .item-tags-column ul {
+    padding: 0;
+  }
+
+  .all-tags-column ul {
+    padding: 0;
+  }
+
+  .description-column {
+    display: block;
+  }
+
+
+
+  .audio-item {
+    display: block;
+    text-align: center;
+  }
+
+  .text-item {
+    display: block;
+  }
+
+  .separator {
+    display: block;
+    height: 1px;
+    width: 100%;
+    background-color: black;
+  }
+
+
+}

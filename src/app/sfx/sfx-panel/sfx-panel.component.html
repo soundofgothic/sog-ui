@@ -1,0 +1,13 @@
+<div *ngIf="extendOption" class="extended-link">
+  <a class="router-link" routerLink="/sfx/extended" routerLinkActive="active-link">
+    Zgłoszenia
+  </a>
+</div>
+<div class="records" *ngFor="let record of records">
+  <app-sfx-item [description]="record.description"
+                [filename]="record.filename"
+                [version]="record.g"
+                [id]="record._id"
+                [tags]="record.tags"
+  ></app-sfx-item>
+</div>

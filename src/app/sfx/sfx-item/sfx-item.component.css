@@ -1,0 +1,196 @@
+audio {
+  line-height: 20px;
+  font-size: 10px;
+}
+
+.report {
+  color: red;
+  font-size: 8px;
+  cursor: pointer;
+}
+
+.report-form {
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+.report-form > input[type=text] {
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  outline: 0;
+  font-size: 20px;
+  font-family: DefaultFont;
+  width: 50%;
+}
+
+.loading {
+  height: auto;
+  max-width: 30px;
+  position: absolute;
+  left: -30px;
+  top: 0;
+}
+
+.report-form > input[type=submit] {
+  margin-left: 10px;
+  font-family: DefaultFont;
+  border: 0;
+  background-color: transparent;
+}
+
+.report-form .fa-window-close {
+  font-size: 22px;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+.item {
+  position: relative;
+  min-height: 70px;
+  font-family: DefaultFont;
+}
+
+.audio-item {
+  position: relative;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.text-item {
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: 5px;
+  width: 100%;
+}
+
+.no-mobile {
+  display: none;
+}
+
+.separator {
+  display: none;
+}
+
+.meta-info {
+  width: 100%;
+}
+
+.filesource {
+  font-size: 10px;
+  text-decoration: none;
+  color: yellow;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  cursor: pointer;
+}
+
+.version {
+  text-align: center;
+  float: right;
+  font-size: 10px;
+  position: relative;
+}
+
+.mobile-close {
+  display: none;
+}
+
+.tag-list {
+  margin: 0;
+  list-style: none;
+  display: inline-block;
+  padding: 0;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 10px;
+  margin-right: 5px;
+}
+
+.tag-section ul {
+  display: inline-block;
+  list-style: none;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+
+.tag-section {
+  font-size: 16px;
+}
+
+.fancy-tag {
+  list-style: none;
+  display: inline-block;
+  margin: 0 5px 0 5px;
+  background-color: #614a4e;
+  color: white;
+  padding: 5px;
+  font-size: 10px;
+  vertical-align: middle;
+}
+
+.new-tag {
+  min-width: 50px;
+}
+
+.filename-span {
+  font-size: 18px;
+}
+
+.description-span {
+  font-size: 14px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.tag {
+
+}
+
+
+@media only screen and (max-width: 600px) {
+
+  .mobile-close {
+    display: inline-block;
+    float: right;
+  }
+  .item {
+    margin: 10px 0;
+  }
+
+  .audio-item {
+    display: block;
+    text-align: center;
+  }
+
+  .text-item {
+    display: block;
+  }
+
+  .report-form > input[type=text] {
+    font-size: 14px;
+    width: 100%;
+    margin: 10px 0 10px 0;
+  }
+
+  .report-form > input[type=submit] {
+    font-size: 14px;
+    float: right;
+    font-family: DefaultFont;
+    border: 0;
+    background-color: transparent;
+  }
+
+  .separator {
+    display: block;
+    height: 1px;
+    width: 100%;
+    background-color: black;
+  }
+
+
+}

@@ -2,7 +2,7 @@ import {WINDOW, NGT_DOCUMENT, LOCAL_STORAGE} from '@ng-toolkit/universal';
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {BehaviorSubject, Observable, Subject, throwError} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {isPlatformBrowser, isPlatformServer} from '@angular/common';
 import {catchError, tap} from 'rxjs/operators';
 
@@ -11,11 +11,13 @@ declare var Pizzicato: any;
 export enum SearchType {
   TEXT,
   SOURCE,
-  REPORT
+  REPORT,
+  SFX,
+  SFX_E
 }
 
-const typeResolver = ['/', '/source', '/reports'];
-export const componentTypeResolver = ['text', 'text', 'reports'];
+const typeResolver = ['/', '/source', '/reports', '/sfx', '/sfx'];
+export const componentTypeResolver = ['text', 'text', 'reports', 'sfx', 'sfx/extended'];
 
 @Injectable({
   providedIn: 'root'
@@ -26,9 +28,9 @@ export class CollectorService {
   public observedMetadata: Subject<any> = new Subject();
   public loading: Subject<boolean> = new BehaviorSubject<any>(false);
 
-
   public lastSearchType: SearchType = SearchType.TEXT;
-  public lastFilter: string = '';
+  public lastFilter = '';
+  private lastTags = [];
 
   private recordCount: number;
   private totalRecordCount: number;
@@ -41,15 +43,25 @@ export class CollectorService {
   constructor(@Inject(WINDOW) private window: Window,
               @Inject(LOCAL_STORAGE) private local_storage: any,
               @Inject(PLATFORM_ID) private platformId: Object,
+              private route: ActivatedRoute,
               private httpClient: HttpClient, private router: Router) {
 
   }
 
-  getFilteredRecords(filter: string, page: number = 0, type: SearchType = SearchType.TEXT, pageSize?): any {
+  getFilteredRecords(filter: string, page: number = 0, type: SearchType = SearchType.TEXT, pageSize?, tags?: string[]): any {
     let queryParams = new HttpParams()
       .set('pageSize', pageSize + '')
       .set('page', page + '')
       .set('filter', filter);
+
+
+    if(type === SearchType.SFX_E) {
+      queryParams = queryParams.set('sortField', 'reported');
+    }
+
+    if(tags) {
+      queryParams = queryParams.append('tags', tags.join(', '));
+    }
 
     const options = {
       params: queryParams
@@ -59,18 +71,21 @@ export class CollectorService {
 
     this.loading.next(true);
 
-    this.httpClient.get(url, options).pipe(catchError(err=> {
-      this.router.navigate(['/login'], {queryParams: {returnUrl: this.router.url}});
+    this.httpClient.get(url, options).pipe(catchError(err => {
+      // sometimes error doesnt mean wish to login
+      // this.router.navigate(['/login'], {queryParams: {returnUrl: this.router.url}});
       return throwError(err);
     })).subscribe((data: any) => {
       this.observedRecords.next(data);
       this.lastSearchType = type;
       this.lastFilter = filter;
+      this.lastTags = tags ? tags : [];
       this.parseRecords(data);
       this.updateMetadata();
       this.loading.next(false);
     });
   }
+
 
   parseRecords(data: any) {
     this.recordCount = (data.recordsOnPage > 0) ? data.pageNumber * data.defaultPageSize + 1 : 0;
@@ -92,10 +107,6 @@ export class CollectorService {
     }
 
     return (width <= 600) ? 10 : 50;
-  }
-
-  resetService(): void {
-
   }
 
   searchBySource(filesource) {
@@ -132,19 +143,23 @@ export class CollectorService {
       backOption: this.backOption,
       forwardOption: this.forwardOption,
       filter: this.lastFilter,
-      lastSearchType: this.lastSearchType
+      lastSearchType: this.lastSearchType,
+      lastTags: this.lastTags
     });
   }
 
-  nextPage() {
+  nextPage()  {
     if (this.forwardOption) {
+      let queryParams: any = {
+        filter: this.lastFilter,
+        page: this.pageNumber + 1,
+        pageSize: this.pageSize,
+        type: this.lastSearchType,
+        tags: this.lastTags
+      };
+
       this.router.navigate([componentTypeResolver[this.lastSearchType]], {
-        queryParams: {
-          filter: this.lastFilter,
-          page: this.pageNumber + 1,
-          pageSize: this.pageSize,
-          type: this.lastSearchType
-        }
+        queryParams: queryParams
       });
     }
 
@@ -157,19 +172,46 @@ export class CollectorService {
 
   previousPage() {
     if (this.backOption) {
+      let queryParams: any = {
+        filter: this.lastFilter,
+        page: this.pageNumber - 1,
+        pageSize: this.pageSize,
+        type: this.lastSearchType,
+        tags: this.lastTags
+      };
+
       this.router.navigate([componentTypeResolver[this.lastSearchType]], {
-        queryParams: {
-          filter: this.lastFilter,
-          page: this.pageNumber - 1,
-          pageSize: this.pageSize,
-          type: this.lastSearchType
-        }
+        queryParams: queryParams
       });
     }
   }
 
+  filterTags(tags) {
+    this.router.navigate([componentTypeResolver[this.lastSearchType]], {
+      queryParams: {
+        filter: "",
+        page: 0,
+        pageSize: this.pageSize,
+        type: this.lastSearchType,
+        tags: tags
+      }
+    });
+  }
+
+  selectTag(tagName) {
+    this.router.navigate([componentTypeResolver[this.lastSearchType]], {
+      queryParams: {
+        filter: "",
+        page: 0,
+        pageSize: this.pageSize,
+        type: this.lastSearchType,
+        tags: [tagName]
+      }
+    });
+  }
+
   reloadPage() {
-    this.getFilteredRecords(this.lastFilter, this.pageNumber, this.lastSearchType, this.pageSize);
+    this.getFilteredRecords(this.lastFilter, this.pageNumber, this.lastSearchType, this.pageSize, this.lastTags);
     // this.router.navigate([componentTypeResolver[this.lastSearchType]], {
     //   queryParams: {
     //     filter: this.lastFilter,

@@ -1,0 +1,60 @@
+<div class="item">
+  <div class="audio-item">
+    <audio controls preload="none">
+      <source src="{{parseFilename(filename)}}" type="audio/wav">
+    </audio>
+  </div>
+  <div class="text-item">
+    <span *ngIf="reportMode; else displayMode">
+      <form class="report-form" (ngSubmit)="commitReport()">
+        <span>Zaproponuj opis: </span>
+        <i class="far fa-window-close mobile-close" (click)="reportMode=false"></i>
+        <input type="text" [(ngModel)]="reportDetails" name="reportDetails">
+        <input type="submit">
+        <i class="far fa-window-close no-mobile" (click)="reportMode=false"></i>
+      </form>
+      <div class="tag-section">
+        <span class="tag-helper">Zaproponuj tagi: </span>
+        <ul>
+          <li class="fancy-tag" *ngFor="let pTag of proposedTags">
+            {{pTag}}
+          </li>
+          <li class="fancy-tag new-tag">
+            + <span #editSpan class="new-tag" contenteditable="true"></span>
+          </li>
+        </ul>
+      </div>
+
+    </span>
+    <ng-template #displayMode>
+       <span class="filename-span">
+         {{ filename }}
+       </span>
+      <br>
+      <span class="description-span">
+        {{ description }}
+      </span>
+      <ul class="tag-list">
+        <li (click)="selectTag(tag)" *ngFor="let tag of tags" class="fancy-tag clickable">
+          #{{tag}}
+        </li>
+      </ul>
+
+      <span class="version">
+        {{version == 2 ? "Gothic II" : "Gothic I"}}
+        <br> <span *ngIf="reportSent; else reportOption">Wysłano</span>
+        <ng-template #reportOption>
+          <span class="report" (click)="openReport()">
+            Zgłoś błąd
+          </span>
+        </ng-template>
+        <img *ngIf="loading" class="loading" src="/assets/loading.svg">
+      </span>
+    </ng-template>
+    <div class="meta-info">
+
+    </div>
+  </div>
+</div>
+
+<div class="separator"></div>
