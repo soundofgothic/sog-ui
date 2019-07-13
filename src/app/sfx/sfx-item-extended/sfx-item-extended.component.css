@@ -143,6 +143,7 @@ audio {
   color: white;
   padding: 5px;
   font-size: 10px;
+  cursor: pointer;
 }
 
 .new-tag {
@@ -203,6 +204,32 @@ audio {
   .item {
     margin: 10px 0;
   }
+
+  .edit-section {
+    display: block;
+  }
+
+  .item-tags-column {
+    display: block;
+  }
+
+  .all-tags-column {
+    display: block;
+  }
+
+  .item-tags-column ul {
+    padding: 0;
+  }
+
+  .all-tags-column ul {
+    padding: 0;
+  }
+
+  .description-column {
+    display: block;
+  }
+
+
 
   .audio-item {
     display: block;

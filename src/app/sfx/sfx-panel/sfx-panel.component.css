@@ -1,0 +1,12 @@
+.extended-link {
+  line-height: 20px;
+  font-family: DefaultFont;
+  font-size: 18px;
+  text-align: right;
+}
+
+.extended-link a {
+  text-decoration: none;
+  color: #FFFF00;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}

@@ -54,6 +54,11 @@ export class CollectorService {
       .set('page', page + '')
       .set('filter', filter);
 
+
+    if(type === SearchType.SFX_E) {
+      queryParams = queryParams.set('sortField', 'reported');
+    }
+
     if(tags) {
       queryParams = queryParams.append('tags', tags.join(', '));
     }
@@ -74,7 +79,7 @@ export class CollectorService {
       this.observedRecords.next(data);
       this.lastSearchType = type;
       this.lastFilter = filter;
-      this.lastTags = tags;
+      this.lastTags = tags ? tags : [];
       this.parseRecords(data);
       this.updateMetadata();
       this.loading.next(false);
@@ -143,16 +148,18 @@ export class CollectorService {
     });
   }
 
-  async nextPage()  {
+  nextPage()  {
     if (this.forwardOption) {
+      let queryParams: any = {
+        filter: this.lastFilter,
+        page: this.pageNumber + 1,
+        pageSize: this.pageSize,
+        type: this.lastSearchType,
+        tags: this.lastTags
+      };
+
       this.router.navigate([componentTypeResolver[this.lastSearchType]], {
-        queryParams: {
-          filter: this.lastFilter,
-          page: this.pageNumber + 1,
-          pageSize: this.pageSize,
-          type: this.lastSearchType,
-          tags: this.lastTags
-        }
+        queryParams: queryParams
       });
     }
 
@@ -165,13 +172,16 @@ export class CollectorService {
 
   previousPage() {
     if (this.backOption) {
+      let queryParams: any = {
+        filter: this.lastFilter,
+        page: this.pageNumber - 1,
+        pageSize: this.pageSize,
+        type: this.lastSearchType,
+        tags: this.lastTags
+      };
+
       this.router.navigate([componentTypeResolver[this.lastSearchType]], {
-        queryParams: {
-          filter: this.lastFilter,
-          page: this.pageNumber - 1,
-          pageSize: this.pageSize,
-          type: this.lastSearchType
-        }
+        queryParams: queryParams
       });
     }
   }
@@ -179,8 +189,8 @@ export class CollectorService {
   filterTags(tags) {
     this.router.navigate([componentTypeResolver[this.lastSearchType]], {
       queryParams: {
-        filter: this.lastFilter,
-        page: this.pageNumber,
+        filter: "",
+        page: 0,
         pageSize: this.pageSize,
         type: this.lastSearchType,
         tags: tags
@@ -188,8 +198,20 @@ export class CollectorService {
     });
   }
 
+  selectTag(tagName) {
+    this.router.navigate([componentTypeResolver[this.lastSearchType]], {
+      queryParams: {
+        filter: "",
+        page: 0,
+        pageSize: this.pageSize,
+        type: this.lastSearchType,
+        tags: [tagName]
+      }
+    });
+  }
+
   reloadPage() {
-    this.getFilteredRecords(this.lastFilter, this.pageNumber, this.lastSearchType, this.pageSize);
+    this.getFilteredRecords(this.lastFilter, this.pageNumber, this.lastSearchType, this.pageSize, this.lastTags);
     // this.router.navigate([componentTypeResolver[this.lastSearchType]], {
     //   queryParams: {
     //     filter: this.lastFilter,

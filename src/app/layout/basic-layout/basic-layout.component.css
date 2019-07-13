@@ -193,7 +193,11 @@ form {
   display: block;
   width: 100%;
   position: relative;
-  padding-left: 35px;
+  /*padding-left: 35px;*/
+}
+
+.tag-text {
+  margin-left: 35px;
 }
 
 .tag-container input {
@@ -223,6 +227,11 @@ form {
   content: "";
   position: absolute;
   display: none;
+}
+
+.warning {
+  font-size: 10px;
+  color: #ff4a4a;
 }
 
 .scroll-pane {

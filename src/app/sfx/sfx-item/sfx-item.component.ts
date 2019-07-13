@@ -72,6 +72,10 @@ export class SfxItemComponent implements OnInit {
     this.proposedTags = [];
   }
 
+  selectTag(tagName) {
+    this.collectorService.selectTag(tagName);
+  }
+
   commitReport() {
     this.loading = true;
     this.sfxService.report(this.id, this.reportDetails, this.proposedTags).subscribe((data) => {

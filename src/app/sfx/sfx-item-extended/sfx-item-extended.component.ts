@@ -40,6 +40,7 @@ export class SfxItemExtendedComponent extends SfxItemComponent implements OnInit
         this.editSpanE.nativeElement.textContent = '';
       }
     });
+    this.reportDetails = this.description;
   }
 
   addTag(tag) {
@@ -72,6 +73,7 @@ export class SfxItemExtendedComponent extends SfxItemComponent implements OnInit
       this.loading = false;
       this.snackBar.open('Zaaktualizowano wpis!', ':)', {duration: 3000});
     });
+    this.collectorService.reloadPage();
   }
 
 }

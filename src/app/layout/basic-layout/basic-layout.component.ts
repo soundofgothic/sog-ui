@@ -75,7 +75,6 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   }
 
   search() {
-    let activeUrl = this.router.url.split(/[/,\?]+/)[1];
     let type = this.collectionService.lastSearchType;
     let queryParams: any = {
       filter: this.value,
@@ -108,11 +107,9 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   }
 
   filterTags() {
-    let filters = Object.keys(this.tagsSelectionModel).filter(e => this.tagsSelectionModel[e].selected);
-    console.log(filters);
+    let filters = this.tags.map(e => e._id).filter(e => this.tagsSelectionModel[e] && this.tagsSelectionModel[e].selected);
     this.collectionService.filterTags(filters);
   }
-
 
   onPageSizeChange($event) {
     this.collectionService.updatePageSize($event);

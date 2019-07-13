@@ -59,9 +59,13 @@ audio {
 
 .text-item {
   display: table-cell;
-  vertical-align: bottom;
+  vertical-align: middle;
   padding-left: 5px;
   width: 100%;
+}
+
+.no-mobile {
+  display: none;
 }
 
 .separator {
@@ -87,10 +91,15 @@ audio {
   position: relative;
 }
 
+.mobile-close {
+  display: none;
+}
+
 .tag-list {
   margin: 0;
   list-style: none;
   display: inline-block;
+  padding: 0;
 }
 
 .tag {
@@ -126,17 +135,29 @@ audio {
   min-width: 50px;
 }
 
-.filename-cell {
+.filename-span {
   font-size: 18px;
 }
 
-.description-cell {
-  font-size: 16px;
+.description-span {
+  font-size: 14px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.tag {
+
 }
 
 
 @media only screen and (max-width: 600px) {
 
+  .mobile-close {
+    display: inline-block;
+    float: right;
+  }
   .item {
     margin: 10px 0;
   }
@@ -148,6 +169,20 @@ audio {
 
   .text-item {
     display: block;
+  }
+
+  .report-form > input[type=text] {
+    font-size: 14px;
+    width: 100%;
+    margin: 10px 0 10px 0;
+  }
+
+  .report-form > input[type=submit] {
+    font-size: 14px;
+    float: right;
+    font-family: DefaultFont;
+    border: 0;
+    background-color: transparent;
   }
 
   .separator {
