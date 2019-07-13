@@ -64,9 +64,6 @@ audio {
   width: 100%;
 }
 
-.no-mobile {
-  display: none;
-}
 
 .separator {
   display: none;
@@ -190,6 +187,9 @@ audio {
     height: 1px;
     width: 100%;
     background-color: black;
+  }
+  .no-mobile {
+    display: none;
   }
 
 
