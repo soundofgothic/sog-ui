@@ -12,7 +12,7 @@ export class SfxPanelComponent implements OnInit {
 
   public records: any[];
   protected sfxType: SearchType;
-  protected extendOption: boolean;
+  public extendOption: boolean;
 
   constructor(protected service: CollectorService, protected route: ActivatedRoute, protected userService: UserService) {
     this.sfxType = SearchType.SFX;
