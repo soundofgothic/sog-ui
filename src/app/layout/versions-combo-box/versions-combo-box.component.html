@@ -1,0 +1,9 @@
+<div class="scroll-pane">
+  <label  *ngFor="let version of versions" class="tag-container">
+    <input (change)="onSelect(version)" type="checkbox" name="{{version}}" [(ngModel)]="selectionModel[version].selected">
+    <span class="tag-text">
+          Gothic {{romaNumerals[version]}}
+        </span>
+    <span class="checkmark"></span>
+  </label>
+</div>

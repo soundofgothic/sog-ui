@@ -1,44 +1,45 @@
 import {NgtUniversalModule} from '@ng-toolkit/universal';
 import {CommonModule} from '@angular/common';
 import {TransferHttpCacheModule} from '@nguniversal/common';
-import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {BasicLayoutComponent} from './layout/basic-layout/basic-layout.component';
 import {RoutingModule} from './routing/routing-module/routing.module';
-import {CollectorComponent} from './collector/collector.component';
-import {ItemComponent} from './item/item.component';
+import {TextsPanelComponent} from './panels/texts-panel/texts-panel.component';
+import {TextItemComponent} from './items/text-item/text-item.component';
 import {HttpClientModule} from '@angular/common/http';
 import {interceptorProvider} from './interceptor';
 import {FormsModule} from '@angular/forms';
-import {AboutComponent} from './about/about.component';
 import {AccessModule} from './access/access.module';
-import {ReportsPanelComponent} from './reports-panel/reports-panel.component';
-import {ReportItemComponent} from './report-item/report-item.component';
+import {ReportsPanelComponent} from './panels/reports-panel/reports-panel.component';
+import {ReportTextItemComponent} from './items/report-text-item/report-text-item.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {InfoPanelComponentComponent} from './info-panel-component/info-panel-component.component';
-import {SfxPanelComponent} from './sfx/sfx-panel/sfx-panel.component';
-import { SfxItemComponent } from './sfx/sfx-item/sfx-item.component';
-import { SfxPanelExtendedComponent } from './sfx/sfx-panel-extended/sfx-panel-extended.component';
-import { SfxItemExtendedComponent } from './sfx/sfx-item-extended/sfx-item-extended.component';
+import {InfoPanelComponentComponent} from './layout/info-panel-component/info-panel-component.component';
+import {SfxPanelComponent} from './panels/sfx-panel/sfx-panel.component';
+import {SfxItemComponent} from './items/sfx-item/sfx-item.component';
+import {SfxPanelExtendedComponent} from './panels/sfx-panel-extended/sfx-panel-extended.component';
+import {SfxItemExtendedComponent} from './items/sfx-item-extended/sfx-item-extended.component';
+import { TagsComboBoxComponent } from './layout/tags-combo-box/tags-combo-box.component';
+import { VersionsComboBoxComponent } from './layout/versions-combo-box/versions-combo-box.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     BasicLayoutComponent,
-    CollectorComponent,
-    ItemComponent,
-    AboutComponent,
+    TextsPanelComponent,
+    TextItemComponent,
     ReportsPanelComponent,
-    ReportItemComponent,
+    ReportTextItemComponent,
     InfoPanelComponentComponent,
     SfxPanelComponent,
     SfxItemComponent,
     SfxPanelExtendedComponent,
-    SfxItemExtendedComponent
+    SfxItemExtendedComponent,
+    TagsComboBoxComponent,
+    VersionsComboBoxComponent
   ],
   imports: [
     CommonModule,

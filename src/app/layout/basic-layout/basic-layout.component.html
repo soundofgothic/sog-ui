@@ -1,6 +1,7 @@
 <div class="sidenav">
   <div class="sidenav-item">
     <div class="logo">
+      <span (click)="toggleSidePanel()" class="mobile-only mobile-toggler"><i class="fa fa-bars"></i></span>
       <a class="router-link" routerLink="/" routerLinkActive="active-link">
         SoundOfGothic
       </a>
@@ -20,10 +21,10 @@
   </div>
 
   <div class="sidenav-item sidenav-item-selected">
-      <form class="sound_form" (ngSubmit)="search()">
-        <input [(ngModel)]="value" name="value" class="sound_search" type="text">
-      </form>
-      <span (click)="search()" class="icon-item"> <i class="fa fa-search"></i> </span>
+    <form class="sound_form" (ngSubmit)="search()">
+      <input [(ngModel)]="value" name="value" class="sound_search" type="text">
+    </form>
+    <span (click)="search()" class="icon-item"> <i class="fa fa-search"></i> </span>
   </div>
 
   <div class="sidenav-item centered">
@@ -40,24 +41,24 @@
     </app-info-panel-component>
   </div>
 
-  <div *ngIf="displayTags" class="sidenav-item no-mobile">
-    <div class="scroll-pane">
-      <label  *ngFor="let tag of tags" class="tag-container">
-        <input (change)="filterTags()" type="checkbox" name="{{tag._id}}" [(ngModel)]="tagsSelectionModel[tag._id].selected">
-        <span class="tag-text">
-          {{tag._id}} ({{tag.count}})
-        </span>
-        <span class="checkmark"></span>
-      </label>
-    </div>
+
+  <div class="sidenav-item no-mobile">
+    <app-versions-combo-box [selections]="versionSelections" (onSelectAction)="filterVersions($event)">
+    </app-versions-combo-box>
   </div>
 
+  <div class="separator"></div>
+
+  <div *ngIf="displayTags" class="sidenav-item no-mobile">
+    <app-combo-box-list [tags]="tags" [selections]="tagsSelections" (onSelectAction)="filterTags($event)">
+    </app-combo-box-list>
+  </div>
 
   <div class="sidenav-item sidenav-item-bottom right icons-set">
     <a href="https://github.com/soundofgothic" class="project-link">
       <i class="fab fa-github"></i>
     </a>
-    <a  class="project-link" href="https://www.facebook.com/Sound-of-Gothic-1996703900457878/">
+    <a class="project-link" href="https://www.facebook.com/Sound-of-Gothic-1996703900457878/">
       <i class="fab fa-facebook-square"></i>
     </a>
   </div>
@@ -73,7 +74,6 @@
     </div>
 
   </div>
-
 
   <router-outlet></router-outlet>
 </div>
@@ -92,8 +92,33 @@
     <a href="https://github.com/soundofgothic" class="project-link">
       <i class="fab fa-github"></i>
     </a>
-    <a  class="project-link" href="https://www.facebook.com/Sound-of-Gothic-1996703900457878/">
+    <a class="project-link" href="https://www.facebook.com/Sound-of-Gothic-1996703900457878/">
       <i class="fab fa-facebook-square"></i>
     </a>
   </div>
 </div>
+
+<div class="sidenav-block" (click)="toggleSidePanel()" [ngClass]="sidenavToggled ? 'visible' : '' ">
+  <div class="mobile-expand-panel sidenav-item" [ngClass]="sidenavToggled ? 'visible' : '' ">
+    <div *ngIf="displayTags" class="tag-mobile-panel">
+      <div class="versions-mobile-panel">
+        <app-versions-combo-box [selections]="versionSelections" (onSelectAction)="filterVersions($event)">
+        </app-versions-combo-box>
+      </div>
+      <div class="separator"></div>
+      <app-combo-box-list [tags]="tags" [selections]="tagsSelections" (onSelectAction)="filterTags($event)">
+      </app-combo-box-list>
+    </div>
+
+    <div *ngIf="!displayTags" class="tag-mobile-panel">
+      <div class="versions-mobile-panel">
+        <app-versions-combo-box [selections]="versionSelections" (onSelectAction)="filterVersions($event)">
+        </app-versions-combo-box>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+

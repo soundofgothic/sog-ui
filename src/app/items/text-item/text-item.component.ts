@@ -1,6 +1,6 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
-import {environment} from '../../environments/environment';
-import {CollectorService, SearchType} from '../collector.service';
+import {environment} from '../../../environments/environment';
+import {CollectorService, SearchType} from '../../services/collector.service';
 import {Router} from '@angular/router';
 import {LOCAL_STORAGE} from '@ng-toolkit/universal';
 import {MatSnackBar} from '@angular/material';
@@ -8,10 +8,10 @@ import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-item',
-  templateUrl: './item.component.html',
-  styleUrls: ['./item.component.css']
+  templateUrl: './text-item.component.html',
+  styleUrls: ['./text-item.component.css']
 })
-export class ItemComponent implements OnInit {
+export class TextItemComponent implements OnInit {
 
   @Input() filename: string;
   @Input() text: string;
@@ -23,6 +23,8 @@ export class ItemComponent implements OnInit {
   loading = false;
   reportDetails: string;
   reportSent = false;
+
+  romanNumerals = ['I', 'II', 'III'];
 
   constructor(protected collectorService: CollectorService,
               @Inject(LOCAL_STORAGE) private local_storage: any,
@@ -37,12 +39,19 @@ export class ItemComponent implements OnInit {
   }
 
   parseFilename(filename: String): String {
-    filename = filename.toUpperCase() + '.WAV';
-    return environment.soundsAssetsUrl + '/assets/gsounds/' + filename;
+    if(this.version < 3) {
+      filename = filename.toUpperCase() + '.WAV';
+      return environment.soundsAssetsUrl + '/assets/gsounds/' + filename;
+    } else {
+      return environment.soundsAssetsUrl + '/assets/g3sounds/' + filename;
+    }
+
   }
 
   searchBySource() {
-    this.collectorService.searchBySource(this.filesource);
+    if(this.filesource) {
+      this.collectorService.searchBySource(this.filesource);
+    }
   }
 
   openReport() {

@@ -1,9 +1,9 @@
-import {WINDOW, NGT_DOCUMENT, LOCAL_STORAGE} from '@ng-toolkit/universal';
+import {WINDOW, LOCAL_STORAGE} from '@ng-toolkit/universal';
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {BehaviorSubject, Observable, Subject, throwError} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {ActivatedRoute, Router} from '@angular/router';
-import {isPlatformBrowser, isPlatformServer} from '@angular/common';
+import {isPlatformBrowser} from '@angular/common';
 import {catchError, tap} from 'rxjs/operators';
 
 declare var Pizzicato: any;
@@ -19,6 +19,15 @@ export enum SearchType {
 const typeResolver = ['/', '/source', '/reports', '/sfx', '/sfx'];
 export const componentTypeResolver = ['text', 'text', 'reports', 'sfx', 'sfx/extended'];
 
+export interface SearchConfig {
+  filter: string,
+  page?: number,
+  type?: SearchType,
+  pageSize?: number,
+  tags?: string[],
+  versions?: number[]
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -31,6 +40,7 @@ export class CollectorService {
   public lastSearchType: SearchType = SearchType.TEXT;
   public lastFilter = '';
   private lastTags = [];
+  private lastVersions = [];
 
   private recordCount: number;
   private totalRecordCount: number;
@@ -48,26 +58,31 @@ export class CollectorService {
 
   }
 
-  getFilteredRecords(filter: string, page: number = 0, type: SearchType = SearchType.TEXT, pageSize?, tags?: string[]): any {
+  getFilteredRecords(config: SearchConfig): any {
     let queryParams = new HttpParams()
-      .set('pageSize', pageSize + '')
-      .set('page', page + '')
-      .set('filter', filter);
+      .set('pageSize', config.pageSize + '')
+      .set('page', config.page + '')
+      .set('filter', config.filter);
 
 
-    if(type === SearchType.SFX_E) {
+    if (config.type === SearchType.SFX_E) {
       queryParams = queryParams.set('sortField', 'reported');
     }
 
-    if(tags) {
-      queryParams = queryParams.append('tags', tags.join(', '));
+    if (config.tags) {
+      queryParams = queryParams.append('tags', config.tags.join(', '));
     }
+
+    if (config.versions) {
+      queryParams = queryParams.append('g', config.versions.join(', '));
+    }
+
 
     const options = {
       params: queryParams
     };
 
-    const url = typeResolver[type];
+    const url = typeResolver[config.type];
 
     this.loading.next(true);
 
@@ -77,9 +92,10 @@ export class CollectorService {
       return throwError(err);
     })).subscribe((data: any) => {
       this.observedRecords.next(data);
-      this.lastSearchType = type;
-      this.lastFilter = filter;
-      this.lastTags = tags ? tags : [];
+      this.lastSearchType = config.type;
+      this.lastFilter = config.filter;
+      this.lastTags = config.tags ? config.tags : [];
+      this.lastVersions = config.versions ? config.versions : null;
       this.parseRecords(data);
       this.updateMetadata();
       this.loading.next(false);
@@ -126,7 +142,9 @@ export class CollectorService {
       filter: this.lastFilter,
       page: newPageNumber,
       type: this.lastSearchType,
-      pageSize: pageSize
+      pageSize: pageSize,
+      tags: this.lastTags,
+      versions: this.lastVersions
     };
     this.router.navigate([componentTypeResolver[this.lastSearchType]], {
       queryParams: queryParams
@@ -144,18 +162,20 @@ export class CollectorService {
       forwardOption: this.forwardOption,
       filter: this.lastFilter,
       lastSearchType: this.lastSearchType,
-      lastTags: this.lastTags
+      lastTags: this.lastTags,
+      lastVersions: this.lastVersions
     });
   }
 
-  nextPage()  {
+  nextPage() {
     if (this.forwardOption) {
       let queryParams: any = {
         filter: this.lastFilter,
         page: this.pageNumber + 1,
         pageSize: this.pageSize,
         type: this.lastSearchType,
-        tags: this.lastTags
+        tags: this.lastTags,
+        versions: this.lastVersions
       };
 
       this.router.navigate([componentTypeResolver[this.lastSearchType]], {
@@ -177,7 +197,8 @@ export class CollectorService {
         page: this.pageNumber - 1,
         pageSize: this.pageSize,
         type: this.lastSearchType,
-        tags: this.lastTags
+        tags: this.lastTags,
+        versions: this.lastVersions
       };
 
       this.router.navigate([componentTypeResolver[this.lastSearchType]], {
@@ -186,14 +207,41 @@ export class CollectorService {
     }
   }
 
-  filterTags(tags) {
+  filterText(filter) {
     this.router.navigate([componentTypeResolver[this.lastSearchType]], {
       queryParams: {
-        filter: "",
+        filter: filter,
         page: 0,
         pageSize: this.pageSize,
         type: this.lastSearchType,
-        tags: tags
+        tags: this.lastTags,
+        versions: this.lastVersions
+      }
+    });
+  }
+
+  filterTags(tags) {
+    this.router.navigate([componentTypeResolver[this.lastSearchType]], {
+      queryParams: {
+        filter: '',
+        page: 0,
+        pageSize: this.pageSize,
+        type: this.lastSearchType,
+        tags: tags,
+        versions: this.lastVersions
+      }
+    });
+  }
+
+  filterVersions(versions) {
+    this.router.navigate([componentTypeResolver[this.lastSearchType]], {
+      queryParams: {
+        filter: this.lastFilter,
+        page: 0,
+        pageSize: this.pageSize,
+        type: this.lastSearchType,
+        tags: this.lastTags,
+        versions: versions
       }
     });
   }
@@ -201,25 +249,26 @@ export class CollectorService {
   selectTag(tagName) {
     this.router.navigate([componentTypeResolver[this.lastSearchType]], {
       queryParams: {
-        filter: "",
+        filter: '',
         page: 0,
         pageSize: this.pageSize,
         type: this.lastSearchType,
-        tags: [tagName]
+        tags: [tagName],
+        versions: this.lastVersions
       }
     });
   }
 
   reloadPage() {
-    this.getFilteredRecords(this.lastFilter, this.pageNumber, this.lastSearchType, this.pageSize, this.lastTags);
-    // this.router.navigate([componentTypeResolver[this.lastSearchType]], {
-    //   queryParams: {
-    //     filter: this.lastFilter,
-    //     page: this.pageNumber,
-    //     pageSize: this.pageSize,
-    //     type: this.lastSearchType
-    //   }
-    // });
+    let config: SearchConfig = {
+      filter: this.lastFilter,
+      page: this.pageNumber,
+      type: this.lastSearchType,
+      pageSize: this.pageSize,
+      tags: this.lastTags,
+      versions: this.lastVersions
+    };
+    this.getFilteredRecords(config);
   }
 
   reportRecord(id, details): Observable<any> {
