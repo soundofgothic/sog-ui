@@ -47,7 +47,7 @@
     </app-versions-combo-box>
   </div>
 
-  <div class="separator"></div>
+  <div *ngIf="displayTags" class="separator no-mobile"></div>
 
   <div *ngIf="displayTags" class="sidenav-item no-mobile">
     <app-combo-box-list [tags]="tags" [selections]="tagsSelections" (onSelectAction)="filterTags($event)">
