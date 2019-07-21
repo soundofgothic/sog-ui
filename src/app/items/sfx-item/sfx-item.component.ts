@@ -1,10 +1,10 @@
 import {Component, ElementRef, Inject, Input, OnInit, ViewChild} from '@angular/core';
-import {CollectorService} from '../../collector.service';
+import {CollectorService} from '../../services/collector.service';
 import {LOCAL_STORAGE} from '@ng-toolkit/universal';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material';
 import {environment} from '../../../environments/environment';
-import {SfxService} from '../../sfx.service';
+import {SfxService} from '../../services/sfx.service';
 
 @Component({
   selector: 'app-sfx-item',

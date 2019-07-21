@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CollectorService, SearchType} from '../collector.service';
+import {CollectorService, SearchType, SearchConfig} from '../../services/collector.service';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -22,14 +22,17 @@ export class ReportsPanelComponent implements OnInit {
       let filter = params.params.filter;
       let pageSize = params.params.pageSize;
       let page = params.params.page;
-      let type = params.params.type;
+      let versions = params.params.versions;
 
-      filter = filter ? filter : '';
-      pageSize = pageSize ? pageSize : this.service.deviceDependsPageSize();
-      page = page ? parseInt(page) : 0;
-      type = SearchType.REPORT;
+      let config : SearchConfig = {
+        filter: filter ? filter : '',
+        pageSize: pageSize ? pageSize : this.service.deviceDependsPageSize(),
+        page: page ? parseInt(page) : 0,
+        type: SearchType.REPORT,
+        versions: Array.isArray(versions) ? versions : versions ? [versions] : []
+      };
 
-      this.service.getFilteredRecords(filter, page, type, pageSize);
+      this.service.getFilteredRecords(config);
     });
 
     this.service.observedRecords.subscribe((data) => {

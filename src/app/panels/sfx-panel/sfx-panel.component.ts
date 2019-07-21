@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {CollectorService, SearchType} from '../../collector.service';
+import {CollectorService, SearchConfig, SearchType} from '../../services/collector.service';
 import {ActivatedRoute} from '@angular/router';
 import {UserService} from '../../access/user.service';
+import {SfxService} from '../../services/sfx.service';
 
 @Component({
   selector: 'app-sfx-panel',
@@ -14,7 +15,7 @@ export class SfxPanelComponent implements OnInit {
   protected sfxType: SearchType;
   protected extendOption: boolean;
 
-  constructor(protected service: CollectorService, protected route: ActivatedRoute, protected userService: UserService) {
+  constructor(protected service: CollectorService, protected route: ActivatedRoute, protected userService: UserService, protected sfxService: SfxService) {
     this.sfxType = SearchType.SFX;
   }
 
@@ -27,20 +28,25 @@ export class SfxPanelComponent implements OnInit {
       let pageSize = params.params.pageSize;
       let page = params.params.page;
       let tags = params.params.tags;
-      tags = Array.isArray(tags) ? tags : tags ? [tags] : [];
+      let versions = params.params.versions;
 
+      let config: SearchConfig = {
+        filter: filter ? filter : '',
+        pageSize: pageSize ? pageSize : this.service.deviceDependsPageSize(),
+        page: page ? parseInt(page) : 0,
+        type: this.sfxType,
+        tags: Array.isArray(tags) ? tags : tags ? [tags] : [],
+        versions: Array.isArray(versions) ? versions : versions ? [versions] : []
+      };
 
-      filter = filter ? filter : '';
-      pageSize = pageSize ? pageSize : this.service.deviceDependsPageSize();
-      page = page ? parseInt(page) : 0;
-      let type = this.sfxType;
-
-      this.service.getFilteredRecords(filter, page, type, pageSize, tags);
+      this.service.getFilteredRecords(config);
     });
 
     this.service.observedRecords.subscribe((data) => {
       this.records = data.records;
     });
+
+    this.sfxService.updateTagsList();
   }
 
 }

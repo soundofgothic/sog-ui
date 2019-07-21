@@ -1,13 +1,11 @@
 import {WINDOW} from '@ng-toolkit/universal';
 import {AfterViewChecked, ChangeDetectorRef, Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CollectorService, componentTypeResolver, SearchType} from '../../collector.service';
+import {CollectorService, SearchType} from '../../services/collector.service';
 import {UserService} from '../../access/user.service';
 import {MatSnackBar} from '@angular/material';
-import {SfxService} from '../../sfx.service';
+import {SfxService} from '../../services/sfx.service';
 import {combineLatest} from 'rxjs';
-import {toArray, take} from 'rxjs/operators';
-import {d} from '@angular/core/src/render3';
 
 
 @Component({
@@ -45,8 +43,13 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   public reportLink = false;
 
   public tags: any[];
+  public tagsSelections: any[];
+
   public tagsSelectionModel: any = {};
   public displayTags: boolean;
+
+  public sidenavToggled = false;
+  public versionSelections: any[];
 
   ngOnInit() {
     this.userService.logged().then((status) => this.reportLink = status);
@@ -64,31 +67,23 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
       this.filter = data.filter;
       this.lastSearchType = data.lastSearchType;
       this.displayTags = [SearchType.SFX_E, SearchType.SFX].includes(data.lastSearchType);
+      this.versionSelections = data.lastVersions;
+      this.value = data.lastSearchType === SearchType.SOURCE ? "" : data.filter;
+
 
       if (this.displayTags) {
         this.tags = tagList;
-        tagList.map(e => this.tagsSelectionModel[e._id] = {selected: data.lastTags.includes(e._id)});
+        this.tagsSelections = data.lastTags;
+        // tagList.map(e => this.tagsSelectionModel[e._id] = {selected: data.lastTags.includes(e._id)});
       }
+
     });
 
     this.sfxService.updateTagsList();
   }
 
   search() {
-    let type = this.collectionService.lastSearchType;
-    let queryParams: any = {
-      filter: this.value,
-      page: 0,
-      type: type
-    };
-
-    if (this.pageSizeSelected) {
-      queryParams.pageSize = this.pageSizeSelected;
-    }
-
-    this.router.navigate([componentTypeResolver[type]], {
-      queryParams: queryParams
-    });
+    this.collectionService.filterText(this.value);
   }
 
   ngAfterViewChecked(): void {
@@ -106,14 +101,20 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
     this.window.scrollTo(0, 0);
   }
 
-  filterTags() {
-    let filters = this.tags.map(e => e._id).filter(e => this.tagsSelectionModel[e] && this.tagsSelectionModel[e].selected);
-    this.collectionService.filterTags(filters);
+  filterTags(tags) {
+    this.collectionService.filterTags(tags.selections);
+  }
+
+  filterVersions(versions) {
+    this.collectionService.filterVersions(versions.selections);
   }
 
   onPageSizeChange($event) {
     this.collectionService.updatePageSize($event);
   }
 
+  toggleSidePanel() {
+    this.sidenavToggled = !this.sidenavToggled;
+  }
 
 }

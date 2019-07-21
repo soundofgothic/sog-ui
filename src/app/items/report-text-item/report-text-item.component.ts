@@ -1,12 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ItemComponent} from '../item/item.component';
+import {TextItemComponent} from '../text-item/text-item.component';
 
 @Component({
   selector: 'app-report-item',
-  templateUrl: './report-item.component.html',
-  styleUrls: ['./report-item.component.css']
+  templateUrl: './report-text-item.component.html',
+  styleUrls: ['./report-text-item.component.css']
 })
-export class ReportItemComponent extends ItemComponent implements OnInit {
+export class ReportTextItemComponent extends TextItemComponent implements OnInit {
   @Input() qty: any;
   @Input() details: any;
 

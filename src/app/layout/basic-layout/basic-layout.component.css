@@ -54,7 +54,7 @@
 }
 
 .logo {
-  text-align: center;
+  text-align: right;
   letter-spacing: 0.05em;
   font-size: 25px;
 }
@@ -98,6 +98,7 @@
 .router-link {
   text-decoration: none;
   color: inherit;
+  margin-right: 5px;
 }
 
 .text-item-small{
@@ -200,6 +201,10 @@ form {
   margin-left: 35px;
 }
 
+.mobile-only {
+  display: none;
+}
+
 .tag-container input {
   position: absolute;
   opacity: 0;
@@ -275,6 +280,12 @@ form {
   font-family: DefaultFont;
 }
 
+.separator {
+  width: 100%;
+  height: 2px;
+  background-color: #2e2e2e;
+}
+
 select {
   background-color: transparent;
   color: white;
@@ -343,6 +354,60 @@ option {
   .no-mobile {
     display: none;
   }
+
+  .sidenav-block {
+    visibility: hidden;
+    opacity: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+    background-color: rgba(136, 136, 136, 0.6);
+    transition: 0.4s;
+  }
+
+  .sidenav-block.visible {
+    opacity: 1;
+    visibility: visible;
+    transition: 0.8s;
+  }
+
+
+  .tag-mobile-panel {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+
+
+  .mobile-expand-panel {
+    position: absolute;
+    height: 100vh;
+    width: 70vw;
+    left: -100%;
+    top: 0;
+
+    background-color: rgba(97, 74, 78, 0.8);
+    z-index: 2000;
+    transition: 1s;
+  }
+
+  .mobile-expand-panel.visible {
+    left: 0;
+    /*transform: translate(0, -50%);*/
+  }
+
+
+  .mobile-only {
+    display: inline-block;
+    position: absolute;
+    left: 10px;
+  }
+
 
 
 }
