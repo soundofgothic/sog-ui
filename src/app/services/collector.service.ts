@@ -271,31 +271,5 @@ export class CollectorService {
     this.getFilteredRecords(config);
   }
 
-  reportRecord(id, details): Observable<any> {
-    const url = '/report/' + id;
-    return this.httpClient.post(url, {details: details}).pipe(tap((status) => {
-      this.local_storage[id] = 'reported';
-    }));
-  }
 
-  modifyRecord(id, text): Observable<any> {
-    const url = '/reports/resolve';
-    return this.httpClient.post(url, {id: id, text: text}).pipe(tap((status) => {
-      this.reloadPage();
-    }));
-  }
-
-  cancelReports(id): Observable<any> {
-    const url = '/reports/cancel';
-    return this.httpClient.post(url, {id: id}).pipe(tap((status) => {
-      this.reloadPage();
-    }));
-  }
-
-  deleteRecord(id): Observable<any> {
-    const url = '/reports/delete';
-    return this.httpClient.post(url, {id: id}).pipe(tap((status) => {
-      this.reloadPage();
-    }));
-  }
 }

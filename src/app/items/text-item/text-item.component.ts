@@ -4,6 +4,7 @@ import {CollectorService, SearchType} from '../../services/collector.service';
 import {Router} from '@angular/router';
 import {LOCAL_STORAGE} from '@ng-toolkit/universal';
 import {MatSnackBar} from '@angular/material';
+import {ReportService} from '../../services/report.service';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class TextItemComponent implements OnInit {
   romanNumerals = ['I', 'II', 'III'];
 
   constructor(protected collectorService: CollectorService,
+              protected reportService: ReportService,
               @Inject(LOCAL_STORAGE) private local_storage: any,
               private router: Router,
               protected snackBar: MatSnackBar) {
@@ -60,7 +62,7 @@ export class TextItemComponent implements OnInit {
 
   commitReport() {
     this.loading = true;
-    this.collectorService.reportRecord(this.id, this.reportDetails).subscribe((data) => {
+    this.reportService.reportRecord(this.id, this.reportDetails).subscribe((data) => {
       this.reportMode = false;
       this.loading = false;
       this.reportSent = true;

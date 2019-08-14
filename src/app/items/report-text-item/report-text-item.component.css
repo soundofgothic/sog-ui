@@ -14,6 +14,31 @@ audio {
   vertical-align: middle;
 }
 
+.source-modifier {
+  font-size: 12px;
+  /*margin-left: 10px;*/
+}
+
+.mobile-only {
+  display: none;
+}
+
+.meta-info form {
+  display: inline-block;
+  width: 50%;
+}
+
+.source-modifier input[type=text] {
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  outline: 0;
+  font-size: 12px;
+  font-family: DefaultFont;
+  margin-left: 10px;
+  width: 100%;
+}
+
 .report-form input[type=text] {
   border-top: 0;
   border-left: 0;
@@ -165,6 +190,10 @@ audio {
     height: 1px;
     width: 100%;
     background-color: black;
+  }
+
+  .mobile-only {
+    display: block;
   }
 
 

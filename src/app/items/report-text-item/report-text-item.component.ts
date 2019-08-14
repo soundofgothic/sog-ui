@@ -12,20 +12,28 @@ export class ReportTextItemComponent extends TextItemComponent implements OnInit
 
   modifyText(text) {
     if (text) {
-      this.collectorService.modifyRecord(this.id, text).subscribe(() => {
+      this.reportService.modifyRecord(this.id, text).subscribe(() => {
+        this.snackBar.open('Zmodyfikowano wpis: ' + this.text, ':)', {duration: 3000});
+      });
+    }
+  }
+
+  modifyFilename(filename) {
+    if(filename) {
+      this.reportService.modifyFilename(this.id, filename).subscribe(() => {
         this.snackBar.open('Zmodyfikowano wpis: ' + this.text, ':)', {duration: 3000});
       });
     }
   }
 
   cancelReports() {
-    this.collectorService.cancelReports(this.id).subscribe((status) => {
+    this.reportService.cancelReports(this.id).subscribe((status) => {
       this.snackBar.open('Anuluowano zgłoszenie dla wpisu: ' + this.text, ':)', {duration: 3000});
     });
   }
 
   deleteRecord() {
-    this.collectorService.deleteRecord(this.id).subscribe((status) => {
+    this.reportService.deleteRecord(this.id).subscribe((status) => {
       this.snackBar.open('Usunięto wpis: ' + this.text, ':)', {duration: 3000});
     });
   }
