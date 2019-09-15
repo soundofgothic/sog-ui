@@ -1,7 +1,7 @@
 <div class="sidenav">
   <div class="sidenav-item">
     <div class="logo">
-      <span (click)="toggleSidePanel()" class="mobile-only mobile-toggler"><i class="fa fa-bars"></i></span>
+      <span (click)="toggleSidePanel()" class="mobile-only hamburger-icon mobile-toggler"><i class="fa fa-bars"></i></span>
       <a class="router-link" routerLink="/" routerLinkActive="active-link">
         SoundOfGothic
       </a>
@@ -65,7 +65,6 @@
 
 </div>
 
-
 <div class="main">
   <div class="loader" [ngClass]="(loading) ? 'loading' : ''">
 
@@ -98,7 +97,7 @@
   </div>
 </div>
 
-<div class="sidenav-block mobile-only" (click)="toggleSidePanel()" [ngClass]="sidenavToggled ? 'visible' : '' ">
+<div class="sidenav-block" (click)="toggleSidePanel()" [ngClass]="sidenavToggled ? 'visible' : '' ">
   <div class="mobile-expand-panel sidenav-item" [ngClass]="sidenavToggled ? 'visible' : '' ">
     <div *ngIf="displayTags" class="tag-mobile-panel">
       <div class="versions-mobile-panel">
@@ -116,8 +115,6 @@
         </app-versions-combo-box>
       </div>
     </div>
-
-
   </div>
 </div>
 

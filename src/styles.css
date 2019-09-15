@@ -18,3 +18,19 @@ audio::-webkit-media-controls-current-time-display, audio::-webkit-media-control
   color: white;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  /*position: relative;*/
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body, html{
+  margin:0;
+  padding:0;
+  width: 100%;
+}
