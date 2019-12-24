@@ -213,7 +213,7 @@ export class CollectorService {
         filter: filter,
         page: 0,
         pageSize: this.pageSize,
-        type: this.lastSearchType,
+        type: this.lastSearchType === SearchType.SOURCE ? SearchType.TEXT : this.lastSearchType,
         tags: this.lastTags,
         versions: this.lastVersions
       }
