@@ -14,9 +14,12 @@ const routes: Routes = [
     children: [
       {path: '', component: TextsPanelComponent},
       {path: 'text', component: TextsPanelComponent},
-      {path: 'reports', component: ReportsPanelComponent, canActivate: [AuthGuard]},
       {path: 'sfx', component: SfxPanelComponent},
-      {path: 'sfx/extended', component: SfxPanelExtendedComponent, canActivate: [AuthGuard]}
+      {path: 'reports', canActivate: [AuthGuard], children: [
+          {path: 'text', component: ReportsPanelComponent},
+          {path: 'sfx', component: SfxPanelExtendedComponent}
+          {path: '**', redirectTo: '', pathMatch: 'full'}
+        ]}
     ]
   },
   {path: '**', redirectTo: '', pathMatch: 'full'}

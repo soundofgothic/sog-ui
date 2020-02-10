@@ -9,8 +9,12 @@
   font-style: normal;
 }
 
+body {
+  background-color: #e9ebe5;
+}
+
 audio::-webkit-media-controls-panel {
-  background-color: #888888;
+  background-color: #72461F;
 }
 
 audio::-webkit-media-controls-current-time-display, audio::-webkit-media-controls-time-remaining-display

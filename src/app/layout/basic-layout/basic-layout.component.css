@@ -4,7 +4,7 @@
   left: 0;
   top: 0;
   position: fixed;
-  background-color: #614a4e;
+  background-color: #4C1103;
   overflow-x: hidden;
   transition: 0.5s;
   z-index: 1;
@@ -101,6 +101,11 @@
   margin-right: 5px;
 }
 
+.router-link-report {
+  text-decoration: none;
+  color: inherit;
+}
+
 .text-item-small{
   font-size: 0.7em;
 }
@@ -111,12 +116,14 @@
   overflow: hidden;
 }
 
+
+
 /* Main content */
 .main {
   margin-left: 300px; /* Same as the width of the sidenav */
   font-size: 20px; /* Increased text to enable scrolling */
   padding: 0 10px;
-  position: relative
+  position: relative;
 }
 
 
@@ -128,6 +135,10 @@
 .collapsed {
   overflow: hidden;
   list-style-type: none;
+}
+
+.reports-title {
+  font-size: 12px;
 }
 
 .sound_search {

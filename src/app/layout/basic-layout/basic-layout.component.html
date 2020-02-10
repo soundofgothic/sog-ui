@@ -9,8 +9,11 @@
   </div>
 
   <div *ngIf="reportLink" class="sidenav-item link">
-    <a class="router-link" routerLink="/reports" routerLinkActive="active-link">
-      Zgłoszenia
+    <span class="reports-title">Zgłoszenia</span>
+    <a class="router-link-report" routerLink="/reports/text" routerLinkActive="active-link">
+      Dialogi
+    </a>|<a class="router-link-report" routerLink="/reports/sfx" routerLinkActive="active-link">
+      Dźwięki
     </a>
   </div>
 
