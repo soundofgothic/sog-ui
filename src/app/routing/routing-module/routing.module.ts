@@ -17,7 +17,7 @@ const routes: Routes = [
       {path: 'sfx', component: SfxPanelComponent},
       {path: 'reports', canActivate: [AuthGuard], children: [
           {path: 'text', component: ReportsPanelComponent},
-          {path: 'sfx', component: SfxPanelExtendedComponent}
+          {path: 'sfx', component: SfxPanelExtendedComponent},
           {path: '**', redirectTo: '', pathMatch: 'full'}
         ]}
     ]
