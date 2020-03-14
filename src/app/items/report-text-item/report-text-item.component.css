@@ -37,7 +37,6 @@ audio {
   font-family: DefaultFont;
   margin-left: 10px;
   width: 100%;
-  background-color: #e9ebe5;
 }
 
 .report-form input[type=text] {
@@ -48,7 +47,6 @@ audio {
   font-size: 20px;
   font-family: DefaultFont;
   width: 75%;
-  background-color: #e9ebe5;
 
 }
 
@@ -153,8 +151,8 @@ audio {
 .filesource {
   font-size: 10px;
   text-decoration: none;
-  color: #70777A;
-  /*text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
+  color: yellow;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   cursor: pointer;
 }
 

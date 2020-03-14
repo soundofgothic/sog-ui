@@ -3,7 +3,7 @@ import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse,
 import {environment} from '../environments/environment';
 import {Observable, throwError} from 'rxjs';
 import {MatSnackBar} from '@angular/material';
-import {catchError, tap} from 'rxjs/operators';
+import {catchError} from 'rxjs/operators';
 import {LOCAL_STORAGE} from '@ng-toolkit/universal';
 
 
@@ -29,24 +29,20 @@ export class Interceptor implements HttpInterceptor {
     }
 
     return next.handle(request).pipe(catchError(err => {
-      if (err instanceof HttpErrorResponse) {
-        if (err.status === 401) {
-          console.log('User not logged in');
+      if (err instanceof HttpErrorResponse && err.status !== 401) {
+        if (err.error.msg) {
+          this.snackBar.open(err.error.msg, ':c', {duration: 3000});
         } else {
-          if (err.error.msg) {
-            this.snackBar.open(err.error.msg, ':c', {duration: 3000});
-          } else {
-            this.snackBar.open('Coś poszło nie tak', ':c', {duration: 3000});
-          }
+          this.snackBar.open('Coś poszło nie tak', ':c', {duration: 3000});
         }
-        return throwError(err);
       }
+      return throwError(err);
     }));
   }
 
   getToken(): string {
     try {
-      let currentUser = JSON.parse(this.local_storage.getItem('currentUser'));
+      const currentUser = JSON.parse(this.local_storage.getItem('currentUser'));
       if (currentUser && currentUser.token) {
         return currentUser.token;
       } else {
@@ -57,7 +53,6 @@ export class Interceptor implements HttpInterceptor {
     }
     return '';
   }
-
 }
 
 export const interceptorProvider = {

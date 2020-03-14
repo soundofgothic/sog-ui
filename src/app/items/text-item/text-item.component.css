@@ -4,7 +4,7 @@ audio {
 }
 
 .report {
-  color: #72461F;
+  color: red;
   font-size: 8px;
   cursor: pointer;
 }
@@ -75,7 +75,8 @@ audio {
 .filesource {
   font-size: 10px;
   text-decoration: none;
-  color: #70777A;
+  color: yellow;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
 .clickable {

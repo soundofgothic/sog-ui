@@ -17,7 +17,7 @@ export enum SearchType {
 }
 
 const typeResolver = ['/', '/source', '/reports', '/sfx', '/sfx'];
-export const componentTypeResolver = ['text', 'text', 'reports', 'sfx', 'sfx/extended'];
+export const componentTypeResolver = ['text', 'text', 'reports', 'sfx', 'reports/sfx'];
 
 export interface SearchConfig {
   filter: string,
@@ -87,8 +87,7 @@ export class CollectorService {
     this.loading.next(true);
 
     this.httpClient.get(url, options).pipe(catchError(err => {
-      // sometimes error doesnt mean wish to login
-      // this.router.navigate(['/login'], {queryParams: {returnUrl: this.router.url}});
+
       return throwError(err);
     })).subscribe((data: any) => {
       this.observedRecords.next(data);
@@ -183,11 +182,6 @@ export class CollectorService {
       });
     }
 
-    // let acousticGuitar = new Pizzicato.Sound('https://sounds.soundofgothic.pl/assets/gsounds/INFO_SLD_8_WICHTIGEPERSONEN_15_00.WAV', function() {
-    //   // Sound loaded!
-    //   acousticGuitar.play();
-    // });
-
   }
 
   previousPage() {
@@ -221,6 +215,7 @@ export class CollectorService {
   }
 
   filterTags(tags) {
+    console.log(this.lastSearchType);
     this.router.navigate([componentTypeResolver[this.lastSearchType]], {
       queryParams: {
         filter: '',

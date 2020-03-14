@@ -121,7 +121,7 @@ audio {
   list-style: none;
   display: inline-block;
   margin: 0 5px 0 5px;
-  background-color: #70777A;
+  background-color: #614a4e;
   color: white;
   padding: 5px;
   font-size: 10px;
@@ -188,6 +188,7 @@ audio {
     width: 100%;
     background-color: black;
   }
+
   .no-mobile {
     display: none;
   }

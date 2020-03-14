@@ -49,10 +49,8 @@ export class UserService {
           return false;
         }
       } catch (e) {
-        console.log(e);
         return false;
       }
-
     }
   }
 
