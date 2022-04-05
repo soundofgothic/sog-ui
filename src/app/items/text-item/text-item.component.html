@@ -10,11 +10,13 @@
         <span>Zaproponuj nowy tekst: </span>
         <input type="text" [(ngModel)]="reportDetails" name="reportDetails">
         <input type="submit">
-        <i class="far fa-window-close" (click)="reportMode=false"></i>
+        <i class="far fa-share" (click)="reportMode=false"></i>
       </form>
     </span>
     <ng-template #displayMode>
-      {{text}}
+      <a class="router-link-report" [routerLink]="'/record/' + version + '/' + filename">
+        <i class="fas fa-share"></i> {{text}}
+      </a>
     </ng-template>
     <div class="meta-info">
       <a (click)="searchBySource()" class="filesource" [ngClass]="filesource ? 'clickable' : ''">

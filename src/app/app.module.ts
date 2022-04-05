@@ -23,6 +23,7 @@ import {SfxPanelExtendedComponent} from './panels/sfx-panel-extended/sfx-panel-e
 import {SfxItemExtendedComponent} from './items/sfx-item-extended/sfx-item-extended.component';
 import { TagsComboBoxComponent } from './layout/tags-combo-box/tags-combo-box.component';
 import { VersionsComboBoxComponent } from './layout/versions-combo-box/versions-combo-box.component';
+import {RecordPanelComponent} from './panels/record-panel/record-panel/record-panel.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { VersionsComboBoxComponent } from './layout/versions-combo-box/versions-
     AppComponent,
     BasicLayoutComponent,
     TextsPanelComponent,
+    RecordPanelComponent,
     TextItemComponent,
     ReportsPanelComponent,
     ReportTextItemComponent,

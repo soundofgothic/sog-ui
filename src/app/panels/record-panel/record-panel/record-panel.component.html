@@ -1,0 +1,35 @@
+<div>
+  <h2>
+    {{name}}
+  </h2>
+  <ng-template [ngIf]="record">
+    <h1>
+      {{record.text}}
+    </h1>
+    <audio *ngIf="record && !recordLoading" id="filename" controls preload="none">
+      <source src="{{filename()}}" type="audio/wav">
+    </audio>
+
+    <h3>Zobacz nagrania z tego samego skryptu:</h3>
+
+    <div class="records" *ngFor="let record of records">
+      <app-item [text]="record.text"
+                [filename]="record.filename"
+                [filesource]="record.source"
+                [version]="record.g"
+                [id]="record._id"
+      ></app-item>
+    </div>
+
+    <div class="sidenav-item centered">
+      <span *ngIf="backDisplay" (click)="back()" class="icon-item-left"> <i class="fa fa-arrow-left"></i> </span>
+      <span>{{recordCount}} - {{upTo}} / {{totalRecordCount}}</span>
+      <span *ngIf="forwardDisplay" (click)="forward()" class="icon-item-right"> <i class="fa fa-arrow-right"></i> </span>
+      <select (ngModelChange)="onPageSizeChange($event)" [ngModel]="pageSizeSelected">
+        <option *ngFor="let option of pageSizeOptions" value="{{option}}">{{option}}</option>
+      </select>
+    </div>
+
+  </ng-template>
+
+</div>
