@@ -35,9 +35,6 @@ export class TextItemComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.local_storage[this.id] == 'reported') {
-      // this.reportSent = true;
-    }
   }
 
   parseFilename(filename: String): String {
@@ -47,7 +44,6 @@ export class TextItemComponent implements OnInit {
     } else {
       return environment.soundsAssetsUrl + '/assets/g3sounds/' + filename;
     }
-
   }
 
   searchBySource() {

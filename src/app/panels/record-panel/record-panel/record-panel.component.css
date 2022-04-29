@@ -1,0 +1,72 @@
+
+h3, h2, h1 {
+  font-family: DefaultFont;
+  font-weight: normal;
+}
+
+
+.centered {
+  text-align: center;
+}
+
+.centered span {
+  margin: 10px;
+}
+
+.page-bar {
+  visibility: hidden;
+}
+
+select {
+  background-color: #2f2f2f;
+  color: white;
+  border: 0;
+  margin-left: 10px;
+  font-size: 16px;
+  vertical-align: middle;
+  -moz-appearance: menuarrow;
+  font-family: DefaultFont;
+  outline: 0;
+}
+
+option {
+  outline: 0;
+  color: white;
+  background-color: #614a4e;
+}
+
+.audio-item {
+  position: relative;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+i.fa-share-alt {
+  font-size: 2.5em;
+  margin-left: 20px;
+  color: #b44545;
+}
+
+i.fa-share-alt:hover {
+  cursor: pointer;
+  color: #ef1010;
+}
+
+@media (min-width:900px) {
+  header {
+    height: 30vh;
+  }
+  .page-bar {
+    visibility: visible;
+  }
+
+  .audio-item {
+    position: relative;
+    vertical-align: middle;
+    display: inline-block;
+    margin-top: 0;
+  }
+}

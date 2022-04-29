@@ -1,6 +1,6 @@
 import {WINDOW, LOCAL_STORAGE} from '@ng-toolkit/universal';
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
-import {BehaviorSubject, Observable, Subject, throwError} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, Subscribable, throwError} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import {isPlatformBrowser} from '@angular/common';
@@ -33,9 +33,14 @@ export interface SearchConfig {
 })
 export class CollectorService {
 
+  public record: Subject<any> = new Subject<any>();
+  public recordSnapshot: any;
+  public gSnapshot: any;
+
   public observedRecords: Subject<any> = new BehaviorSubject<any>({});
-  public observedMetadata: Subject<any> = new Subject();
+  public observedMetadata: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   public loading: Subject<boolean> = new BehaviorSubject<any>(false);
+  public recordLoading = new BehaviorSubject<boolean>(false);
 
   public lastSearchType: SearchType = SearchType.TEXT;
   public lastFilter = '';
@@ -49,6 +54,7 @@ export class CollectorService {
   private pageNumber: number;
   private backOption = false;
   private forwardOption = false;
+  private recordMode = false;
 
   constructor(@Inject(WINDOW) private window: Window,
               @Inject(LOCAL_STORAGE) private local_storage: any,
@@ -98,6 +104,17 @@ export class CollectorService {
       this.parseRecords(data);
       this.updateMetadata();
       this.loading.next(false);
+    });
+  }
+
+  getGNameRecord(version: number, filename: string) {
+    const url = `/record/${version}/${filename}`;
+    this.recordLoading.next(true);
+    this.httpClient.get(url).pipe(catchError(err => throwError(err))).subscribe(data => {
+      this.recordSnapshot = data;
+      this.gSnapshot = version;
+      this.record.next(data);
+      this.recordLoading.next(false);
     });
   }
 
@@ -168,36 +185,60 @@ export class CollectorService {
 
   nextPage() {
     if (this.forwardOption) {
-      let queryParams: any = {
-        filter: this.lastFilter,
-        page: this.pageNumber + 1,
-        pageSize: this.pageSize,
-        type: this.lastSearchType,
-        tags: this.lastTags,
-        versions: this.lastVersions
-      };
 
-      this.router.navigate([componentTypeResolver[this.lastSearchType]], {
-        queryParams: queryParams
-      });
+      if (this.recordMode) {
+        this.getFilteredRecords({
+          filter: this.recordSnapshot.source,
+          type: SearchType.SOURCE,
+          page: this.pageNumber + 1,
+          pageSize: this.pageSize,
+          versions: [this.gSnapshot]
+        });
+      } else {
+        const queryParams: any = {
+          filter: this.lastFilter,
+          page: this.pageNumber + 1,
+          pageSize: this.pageSize,
+          type: this.lastSearchType,
+          tags: this.lastTags,
+          versions: this.lastVersions
+        };
+
+        this.router.navigate([componentTypeResolver[this.lastSearchType]], {
+          queryParams: queryParams
+        });
+      }
     }
 
   }
 
   previousPage() {
     if (this.backOption) {
-      let queryParams: any = {
-        filter: this.lastFilter,
-        page: this.pageNumber - 1,
-        pageSize: this.pageSize,
-        type: this.lastSearchType,
-        tags: this.lastTags,
-        versions: this.lastVersions
-      };
 
-      this.router.navigate([componentTypeResolver[this.lastSearchType]], {
-        queryParams: queryParams
-      });
+      if (this.recordMode) {
+        this.getFilteredRecords({
+          filter: this.recordSnapshot.source,
+          type: SearchType.SOURCE,
+          page: this.pageNumber - 1,
+          pageSize: this.pageSize,
+          versions: [this.gSnapshot]
+        });
+      } else {
+        const queryParams: any = {
+          filter: this.lastFilter,
+          page: this.pageNumber - 1,
+          pageSize: this.pageSize,
+          type: this.lastSearchType,
+          tags: this.lastTags,
+          versions: this.lastVersions
+        };
+
+        this.router.navigate([componentTypeResolver[this.lastSearchType]], {
+          queryParams: queryParams
+        });
+      }
+
+
     }
   }
 
@@ -252,6 +293,10 @@ export class CollectorService {
         versions: this.lastVersions
       }
     });
+  }
+
+  setRecordMode(value: boolean) {
+    this.recordMode = value;
   }
 
   reloadPage() {

@@ -7,6 +7,7 @@ import {ReportsPanelComponent} from '../../panels/reports-panel/reports-panel.co
 import {AuthGuard} from '../../access/auth.guard';
 import {SfxPanelComponent} from '../../panels/sfx-panel/sfx-panel.component';
 import {SfxPanelExtendedComponent} from '../../panels/sfx-panel-extended/sfx-panel-extended.component';
+import {RecordPanelComponent} from '../../panels/record-panel/record-panel/record-panel.component';
 
 const routes: Routes = [
   {
@@ -15,11 +16,14 @@ const routes: Routes = [
       {path: '', component: TextsPanelComponent},
       {path: 'text', component: TextsPanelComponent},
       {path: 'sfx', component: SfxPanelComponent},
-      {path: 'reports', canActivate: [AuthGuard], children: [
+      {path: 'record/:g/:name', component: RecordPanelComponent},
+      {
+        path: 'reports', canActivate: [AuthGuard], children: [
           {path: 'text', component: ReportsPanelComponent},
           {path: 'sfx', component: SfxPanelExtendedComponent},
           {path: '**', redirectTo: '', pathMatch: 'full'}
-        ]}
+        ]
+      }
     ]
   },
   {path: '**', redirectTo: '', pathMatch: 'full'}

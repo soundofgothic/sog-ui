@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, Injector, OnInit, Optional} from '@angular/core';
 import {CollectorService, SearchConfig, SearchType} from '../../services/collector.service';
 import {ActivatedRoute, UrlSegment} from '@angular/router';
 
@@ -13,6 +13,7 @@ export class TextsPanelComponent implements OnInit {
   }
 
   public records: any;
+
 
   ngOnInit() {
     this.route.queryParamMap.subscribe((params: any) => {

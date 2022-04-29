@@ -30,32 +30,36 @@
     <span (click)="search()" class="icon-item"> <i class="fa fa-search"></i> </span>
   </div>
 
-  <div class="sidenav-item centered">
-    <span *ngIf="backDisplay" (click)="back()" class="icon-item-left"> <i class="fa fa-arrow-left"></i> </span>
-    <span>{{recordCount}} - {{upTo}} / {{totalRecordCount}}</span>
-    <span *ngIf="forwardDisplay" (click)="forward()" class="icon-item-right"> <i class="fa fa-arrow-right"></i> </span>
-    <select (ngModelChange)="onPageSizeChange($event)" [(ngModel)]="pageSizeSelected">
-      <option *ngFor="let option of pageSizeOptions" value="{{option}}">{{option}}</option>
-    </select>
-  </div>
+  <ng-template [ngIf]="display_navigation">
 
-  <div class="sidenav-item sidenav-panel no-mobile">
-    <app-info-panel-component>
-    </app-info-panel-component>
-  </div>
+    <div class="sidenav-item centered">
+      <span *ngIf="backDisplay" (click)="back()" class="icon-item-left"> <i class="fa fa-arrow-left"></i> </span>
+      <span>{{recordCount}} - {{upTo}} / {{totalRecordCount}}</span>
+      <span *ngIf="forwardDisplay" (click)="forward()" class="icon-item-right"> <i class="fa fa-arrow-right"></i> </span>
+      <select (ngModelChange)="onPageSizeChange($event)" [(ngModel)]="pageSizeSelected">
+        <option *ngFor="let option of pageSizeOptions" value="{{option}}">{{option}}</option>
+      </select>
+    </div>
+
+    <div class="sidenav-item sidenav-panel no-mobile">
+      <app-info-panel-component>
+      </app-info-panel-component>
+    </div>
+
+    <div class="sidenav-item no-mobile">
+      <app-versions-combo-box [selections]="versionSelections" (onSelectAction)="filterVersions($event)">
+      </app-versions-combo-box>
+    </div>
+
+    <div *ngIf="displayTags" class="separator no-mobile"></div>
+
+    <div *ngIf="displayTags" class="sidenav-item no-mobile">
+      <app-combo-box-list [tags]="tags" [selections]="tagsSelections" (onSelectAction)="filterTags($event)">
+      </app-combo-box-list>
+    </div>
+  </ng-template>
 
 
-  <div class="sidenav-item no-mobile">
-    <app-versions-combo-box [selections]="versionSelections" (onSelectAction)="filterVersions($event)">
-    </app-versions-combo-box>
-  </div>
-
-  <div *ngIf="displayTags" class="separator no-mobile"></div>
-
-  <div *ngIf="displayTags" class="sidenav-item no-mobile">
-    <app-combo-box-list [tags]="tags" [selections]="tagsSelections" (onSelectAction)="filterTags($event)">
-    </app-combo-box-list>
-  </div>
 
   <div class="sidenav-item sidenav-item-bottom right icons-set">
     <a href="https://github.com/soundofgothic" class="project-link">

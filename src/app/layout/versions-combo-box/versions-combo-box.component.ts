@@ -5,20 +5,14 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angula
   templateUrl: './versions-combo-box.component.html',
   styleUrls: ['./versions-combo-box.component.css']
 })
-export class VersionsComboBoxComponent implements OnInit, OnChanges {
+export class VersionsComboBoxComponent implements OnChanges {
 
   @Input('selections') selections;
   @Output() onSelectAction = new EventEmitter<any>();
-  protected selectionModel = [];
+  protected selectionModel = [{selected: true}, {selected: true}, {selected: true}];
   public versions = [0, 1, 2];
   public romaNumerals = ['I', 'II', 'III'];
   constructor() { }
-
-  ngOnInit() {
-    for(let v of this.versions) {
-      this.selectionModel.push({selected: true});
-    }
-  }
 
   ngOnChanges() {
     for(let key in this.selectionModel) {
@@ -31,7 +25,7 @@ export class VersionsComboBoxComponent implements OnInit, OnChanges {
 
   setSelections(sels) {
     for(let sel of sels.map(s => parseInt(s) - 1)) {
-      this.selectionModel[sel].selected = true;
+      this.selectionModel[sel] = {selected: true};
     }
   }
 
