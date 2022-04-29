@@ -256,7 +256,6 @@ export class CollectorService {
   }
 
   filterTags(tags) {
-    console.log(this.lastSearchType);
     this.router.navigate([componentTypeResolver[this.lastSearchType]], {
       queryParams: {
         filter: '',

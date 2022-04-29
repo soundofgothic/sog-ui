@@ -57,7 +57,7 @@ i.fa-share-alt:hover {
 
 @media (min-width:900px) {
   header {
-    height: 30vh;
+    min-height: 30vh;
   }
   .page-bar {
     visibility: visible;
