@@ -79,7 +79,6 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
               type: SearchType.SOURCE,
               page: this.page,
               pageSize: 10,
-              versions: [this.g],
             });
           }
         }),
@@ -123,7 +122,6 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
       type: SearchType.SOURCE,
       page: this.page,
       pageSize: pageSize,
-      versions: [this.g]
     });
   }
 
