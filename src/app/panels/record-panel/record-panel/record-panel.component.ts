@@ -1,9 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {combineLatest, Subscription} from 'rxjs';
 import {CollectorService, componentTypeResolver, SearchType} from '../../../services/collector.service';
 import {environment} from '../../../../environments/environment';
 import {first} from 'rxjs/operators';
+import {Meta, Title} from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-record-panel',
@@ -31,7 +33,11 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
   public pageSizeOptions: number[] = [10, 50, 100];
 
 
-  constructor(private route: ActivatedRoute, private collectorService: CollectorService) {
+  constructor(private route: ActivatedRoute,
+              private collectorService: CollectorService,
+              private meta: Meta,
+              private title: Title
+  ) {
   }
 
   ngOnInit() {
@@ -46,8 +52,17 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
       this.subs.push(
         this.collectorService.record.pipe(first()).subscribe(v => {
           this.record = v;
+          if (v) {
+            this.meta.addTag({
+              name: 'description', content: this.record.text
+            });
+            this.title.setTitle(this.record.text);
+          }
           // tslint:disable-next-line:no-unused-expression
-          if (this.record && (!this.records || this.records.length === 0 || (this.records.length > 0 && this.records[0].source !== this.record.source))) {
+          const metadata = this.collectorService.observedMetadata.getValue();
+
+          if (this.g < 3 && this.record && (!metadata || (metadata.lastSearchType !== SearchType.SOURCE || metadata.filter !== this.record.source || metadata.pageNumber !== this.page || metadata.pageSize !== 10))) {
+            this.page = 0;
             this.collectorService.getFilteredRecords({
               filter: this.record.source,
               type: SearchType.SOURCE,
@@ -62,38 +77,31 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
     }));
 
     this.collectorService.observedMetadata.subscribe(data => {
-      this.recordCount = data.recordCount;
-      this.totalRecordCount = data.totalRecordCount;
-      this.upTo = data.upToIndex;
-      this.page = data.pageNumber;
-      this.backDisplay = data.backOption;
-      this.forwardDisplay = data.forwardOption;
-      this.pageSizeSelected = data.pageSize;
+      if (data) {
+        this.recordCount = data.recordCount;
+        this.totalRecordCount = data.totalRecordCount;
+        this.upTo = data.upToIndex;
+        this.page = data.pageNumber;
+        this.backDisplay = data.backOption;
+        this.forwardDisplay = data.forwardOption;
+        this.pageSizeSelected = data.pageSize;
+      }
     });
+
+    this.collectorService.setRecordMode(true);
   }
 
   ngOnDestroy(): void {
     this.subs.forEach(sub => sub.unsubscribe());
+    this.collectorService.setRecordMode(false);
   }
 
   back() {
-    this.collectorService.getFilteredRecords({
-      filter: this.record.source,
-      type: SearchType.SOURCE,
-      page: --this.page,
-      pageSize: 10,
-      versions: [this.g]
-    });
+    this.collectorService.previousPage();
   }
 
   forward() {
-    this.collectorService.getFilteredRecords({
-      filter: this.record.source,
-      type: SearchType.SOURCE,
-      page: ++this.page,
-      pageSize: 10,
-      versions: [this.g]
-    });
+    this.collectorService.nextPage();
   }
 
   onPageSizeChange(pageSize) {

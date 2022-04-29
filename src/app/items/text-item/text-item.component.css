@@ -3,6 +3,15 @@ audio {
   font-size: 10px;
 }
 
+.no-decoration {
+  text-decoration: none;
+  color: black;
+}
+
+.no-decoration:visited {
+  color: #2f2f2f;
+}
+
 .report {
   color: red;
   font-size: 8px;

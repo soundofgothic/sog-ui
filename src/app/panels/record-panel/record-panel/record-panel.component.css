@@ -1,0 +1,45 @@
+
+h3, h2, h1 {
+  font-family: DefaultFont;
+  font-weight: normal;
+}
+
+
+.centered {
+  text-align: center;
+}
+
+.centered span {
+  margin: 10px;
+}
+
+.page-bar {
+  visibility: hidden;
+}
+
+select {
+  background-color: #2f2f2f;
+  color: white;
+  border: 0;
+  margin-left: 10px;
+  font-size: 16px;
+  vertical-align: middle;
+  -moz-appearance: menuarrow;
+  font-family: DefaultFont;
+  outline: 0;
+}
+
+option {
+  outline: 0;
+  color: white;
+  background-color: #614a4e;
+}
+
+@media (min-width:900px) {
+  header {
+    height: 30vh;
+  }
+  .page-bar {
+    visibility: visible;
+  }
+}
