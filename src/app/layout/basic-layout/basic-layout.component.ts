@@ -85,6 +85,7 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
       }
     });
     this.sfxService.updateTagsList();
+    this.router.events.subscribe(event => console.log(event));
   }
 
   search() {
