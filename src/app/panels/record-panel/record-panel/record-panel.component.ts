@@ -1,5 +1,5 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {combineLatest, Subscription} from 'rxjs';
 import {CollectorService, componentTypeResolver, SearchType} from '../../../services/collector.service';
 import {environment} from '../../../../environments/environment';
@@ -34,6 +34,7 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
 
 
   constructor(private route: ActivatedRoute,
+              private router: Router,
               private collectorService: CollectorService,
               private meta: Meta,
               private title: Title
@@ -53,9 +54,19 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
         this.collectorService.record.pipe(first()).subscribe(v => {
           this.record = v;
           if (v) {
-            this.meta.addTag({
+
+            this.meta.updateTag({
               name: 'description', content: this.record.text
             });
+
+            this.meta.addTag({
+              property: 'og:description', content: this.record.text
+            });
+
+            this.meta.addTag({
+              property: 'og:title', content: this.record.text
+            });
+
             this.title.setTitle(this.record.text);
           }
           // tslint:disable-next-line:no-unused-expression
@@ -126,6 +137,10 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
         return environment.soundsAssetsUrl + '/assets/g3sounds/' + filename;
       }
     }
+  }
+
+  share() {
+    window.prompt("Skopiuj do schowka: Ctrl+C, Enter", window.location.href);
   }
 
 }
