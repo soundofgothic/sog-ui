@@ -4,6 +4,29 @@ h3, h2, h1 {
   font-weight: normal;
 }
 
+h1 {
+  font-size: 1.5em;
+  padding: 0.5em;
+  background-color: #614a4e;
+  color: white;
+  border-radius: 10px;
+  margin: 10px;
+  overflow: auto;
+}
+
+h2 {
+  font-size: 1em;
+  padding: 0.5em;
+  text-align: right;
+  width: 100%;
+  overflow: auto;
+}
+
+h3 {
+  font-size: 1em;
+  padding: 0.5em;
+
+}
 
 .centered {
   text-align: center;
@@ -68,5 +91,11 @@ i.fa-share-alt:hover {
     vertical-align: middle;
     display: inline-block;
     margin-top: 0;
+  }
+
+  h1 {
+    margin-left: 0;
+    margin-right: 0;
+
   }
 }

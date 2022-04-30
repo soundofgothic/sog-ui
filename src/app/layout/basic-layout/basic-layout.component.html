@@ -30,7 +30,6 @@
     <span (click)="search()" class="icon-item"> <i class="fa fa-search"></i> </span>
   </div>
 
-  <ng-template [ngIf]="display_navigation">
 
     <div class="sidenav-item centered">
       <span *ngIf="backDisplay" (click)="back()" class="icon-item-left"> <i class="fa fa-arrow-left"></i> </span>
@@ -57,7 +56,6 @@
       <app-combo-box-list [tags]="tags" [selections]="tagsSelections" (onSelectAction)="filterTags($event)">
       </app-combo-box-list>
     </div>
-  </ng-template>
 
 
 

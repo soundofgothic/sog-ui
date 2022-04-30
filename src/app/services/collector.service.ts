@@ -153,18 +153,29 @@ export class CollectorService {
   }
 
   updatePageSize(pageSize) {
-    let newPageNumber = Math.floor(this.pageNumber * this.pageSize / pageSize);
-    let queryParams: any = {
-      filter: this.lastFilter,
-      page: newPageNumber,
-      type: this.lastSearchType,
-      pageSize: pageSize,
-      tags: this.lastTags,
-      versions: this.lastVersions
-    };
-    this.router.navigate([componentTypeResolver[this.lastSearchType]], {
-      queryParams: queryParams
-    });
+    const newPageNumber = Math.floor(this.pageNumber * this.pageSize / pageSize);
+    if (this.recordMode) {
+      this.getFilteredRecords({
+        filter: this.recordSnapshot.source,
+        type: SearchType.SOURCE,
+        page: newPageNumber,
+        pageSize: pageSize,
+      });
+    } else {
+      const queryParams: any = {
+        filter: this.lastFilter,
+        page: newPageNumber,
+        type: this.lastSearchType,
+        pageSize: pageSize,
+        tags: this.lastTags,
+        versions: this.lastVersions
+      };
+      this.router.navigate([componentTypeResolver[this.lastSearchType]], {
+        queryParams: queryParams
+      });
+    }
+
+
   }
 
   updateMetadata() {
