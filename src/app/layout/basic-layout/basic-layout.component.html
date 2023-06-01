@@ -50,6 +50,17 @@
       </app-versions-combo-box>
     </div>
 
+    <div class="separator no-mobile"></div>
+
+    <div class="sidenav-item no-mobile">
+      <app-voices-combo-box (onSelectAction)="filterVoices($event)">
+      </app-voices-combo-box>
+    </div>
+
+    <div (click)="toggleSidePanel()" class="sidenav-item centered">
+      Więcej <i class="fa fa-arrow-right"></i>
+    </div>
+
     <div *ngIf="displayTags" class="separator no-mobile"></div>
 
     <div *ngIf="displayTags" class="sidenav-item no-mobile">
@@ -123,4 +134,21 @@
   </div>
 </div>
 
-
+<div class="sidenav-block no-mobile" (click)="toggleSidePanel()" [ngClass]="true ? 'visible' : '' ">
+  <div class="mobile-expand-panel sidenav-item" [ngClass]="true ? 'visible' : '' ">
+    <div class="search-grid">
+      <div class="grid-1">
+        <h1>NPC</h1>
+        <app-npc-combo-box></app-npc-combo-box>
+      </div>
+      <div class="grid-2">
+        <h2>Gildia</h2>
+        <app-npc-combo-box></app-npc-combo-box>
+      </div>
+      <div class="grid-3">
+        <h2>Skrypt</h2>
+        <app-npc-combo-box></app-npc-combo-box>
+      </div>
+      </div>
+  </div>
+</div>

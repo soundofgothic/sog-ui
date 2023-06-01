@@ -23,20 +23,22 @@ export class TextsPanelComponent implements OnInit {
       let page = params.params.page;
       let type = params.params.type;
       let versions = params.params.versions;
+      let voices = params.params.voices;
 
       let config: SearchConfig = {
         filter: filter ? filter : '',
         pageSize: pageSize ? pageSize : this.service.deviceDependsPageSize(),
-        page: page ? parseInt(page) : 0,
+        page: page ? parseInt(page) : 1,
         type: type ? parseInt(type) : SearchType.TEXT,
-        versions: Array.isArray(versions) ? versions : versions ? [versions] : []
+        versions: Array.isArray(versions) ? versions : versions ? [versions] : [],
+        voices: Array.isArray(voices) ? voices : voices ? [voices] : []
       };
 
       this.service.getFilteredRecords(config);
     });
 
     this.service.observedRecords.subscribe((data) => {
-      this.records = data.records;
+      this.records = data.results;
     });
   }
 

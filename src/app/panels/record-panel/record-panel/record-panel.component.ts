@@ -5,6 +5,7 @@ import {CollectorService, componentTypeResolver, SearchType} from '../../../serv
 import {environment} from '../../../../environments/environment';
 import {first} from 'rxjs/operators';
 import {Meta, Title} from '@angular/platform-browser';
+import { Recording } from 'src/app/services/domain';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
   private subs: Array<Subscription> = [];
   public name: string;
   public g: number;
-  public record: any;
+  public record: Recording;
   public recordLoading: boolean;
 
   public records: any;
@@ -44,7 +45,7 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.collectorService.recordLoading.subscribe(v => this.recordLoading = v);
     this.collectorService.observedRecords.subscribe((data) => {
-      this.records = data.records;
+      this.records = data.results;
     });
     this.collectorService.loading.pipe(first()).subscribe(v => this.loading = v);
     this.subs.push(combineLatest(this.route.params, this.route.queryParamMap).subscribe(([params, queryParams]) => {
@@ -56,26 +57,26 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
           if (v) {
 
             this.meta.updateTag({
-              name: 'description', content: this.record.text
+              name: 'description', content: this.record.transcript
             });
 
             this.meta.addTag({
-              property: 'og:description', content: this.record.text
+              property: 'og:description', content: this.record.transcript
             });
 
             this.meta.addTag({
-              property: 'og:title', content: this.record.text
+              property: 'og:title', content: this.record.transcript
             });
 
-            this.title.setTitle(this.record.text);
+            this.title.setTitle(this.record.transcript);
           }
           // tslint:disable-next-line:no-unused-expression
           const metadata = this.collectorService.observedMetadata.getValue();
 
-          if (this.g < 3 && this.record && (!metadata || (metadata.lastSearchType !== SearchType.SOURCE || metadata.filter !== this.record.source || metadata.pageNumber !== this.page || metadata.pageSize !== 10))) {
+          if (this.g < 3 && this.record && (!metadata || (metadata.lastSearchType !== SearchType.SOURCE || metadata.filter !== this.record.sourceFile.name || metadata.pageNumber !== this.page || metadata.pageSize !== 10))) {
             this.page = 0;
             this.collectorService.getFilteredRecords({
-              filter: this.record.source,
+              filter: this.record.sourceFile.name,
               type: SearchType.SOURCE,
               page: this.page,
               pageSize: 10,
@@ -118,7 +119,7 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
     this.page = Math.floor(this.page * this.pageSizeSelected / pageSize);
     this.pageSizeSelected = pageSize;
     this.collectorService.getFilteredRecords({
-      filter: this.record.source,
+      filter: this.record.sourceFile.name,
       type: SearchType.SOURCE,
       page: this.page,
       pageSize: pageSize,
@@ -126,9 +127,9 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
   }
 
   filename(): String {
-    if (this.record.g) {
-      let filename = this.record.filename;
-      if (+this.record.g < 3) {
+    if (this.record.gameID) {
+      let filename = this.record.sourceFile.name;
+      if (+this.record.gameID < 3) {
         filename = filename.toUpperCase() + '.WAV';
         return environment.soundsAssetsUrl + '/assets/gsounds/' + filename;
       } else {

@@ -40,7 +40,7 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   public value: string;
   public loading: boolean = false;
   public filter: string;
-  public lastSearchType: string;
+  public lastSearchType: SearchType;
 
   public pageSizeOptions: number[] = [10, 50, 100];
   public pageSizeSelected: number;
@@ -85,7 +85,6 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
       }
     });
     this.sfxService.updateTagsList();
-    this.router.events.subscribe(event => console.log(event));
   }
 
   search() {
@@ -98,7 +97,6 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   }
 
   back() {
-
     this.collectionService.previousPage();
     this.window.scrollTo(0, 0);
   }
@@ -116,11 +114,20 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
     this.collectionService.filterVersions(versions.selections);
   }
 
+  filterVoices(voices) { 
+    this.collectionService.filterVoices(voices);
+  }
+
+  filterNPCs(npcs) {
+    console.log(npcs);
+  }
+
   onPageSizeChange($event) {
     this.collectionService.updatePageSize($event);
   }
 
   toggleSidePanel() {
+    console.log('toggle');
     this.sidenavToggled = !this.sidenavToggled;
   }
 

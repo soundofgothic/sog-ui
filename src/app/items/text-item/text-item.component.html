@@ -15,12 +15,21 @@
     </span>
     <ng-template #displayMode>
       <a class="no-decoration" [routerLink]="'/record/' + version + '/' + filename">
-        <i class="fas fa-share"></i> {{text}}
+        <i class="fas fa-share"></i> {{record.transcript}}
       </a>
     </ng-template>
     <div class="meta-info">
       <a (click)="searchBySource()" class="filesource" [ngClass]="filesource ? 'clickable' : ''">
-        {{filesource ? "Plik: " + filesource : filename }}
+        Plik: {{ record.sourceFile.name }}
+      </a>
+      <a *ngIf="record.npcID" (click)="searchBySource()" class="npc" [ngClass]="filesource ? 'clickable' : ''">
+        NPC: {{ record.npc.name }}
+      </a>
+      <a (click)="searchBySource()" class="actor" [ngClass]="filesource ? 'clickable' : ''">
+        Aktor: {{ record.voice.name }}
+      </a>
+      <a *ngIf="record.guildID" (click)="searchBySource()" class="guild" [ngClass]="filesource ? 'clickable' : ''">
+        Gilda: {{ record.guild.name }}
       </a>
       <span class="version">
         {{"Gothic " + romanNumerals[version - 1]}}

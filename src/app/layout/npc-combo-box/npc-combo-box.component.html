@@ -1,0 +1,9 @@
+<div class="scroll-pane">
+  <label *ngFor="let npc of npcs" class="tag-container">
+    <input (change)="onSelect(npc, $event)" type="checkbox" name="{{npc.id}}" [ngModel]="npc.selected">
+    <span class="tag-text">
+      {{npc.name}}
+    </span>
+    <span class="checkmark"></span>
+  </label>
+</div>

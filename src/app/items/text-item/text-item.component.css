@@ -81,11 +81,44 @@ audio {
   width: 100%;
 }
 
+.meta-info a {
+  margin: 3px;
+}
+
 .filesource {
+  background-color: #2f2f2f;
+  padding: 2px 5px;
+  border-radius: 5px;
+  color: #fff;
   font-size: 10px;
   text-decoration: none;
-  color: yellow;
-  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.npc {
+  background-color: #6e3333;
+  padding: 2px 5px;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 10px;
+  text-decoration: none;
+}
+
+.actor {
+  background-color: #6e3333;
+  padding: 2px 5px;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 10px;
+  text-decoration: none;
+}
+
+.guild {
+  background-color: #6e3333;
+  padding: 2px 5px;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 10px;
+  text-decoration: none;
 }
 
 .clickable {

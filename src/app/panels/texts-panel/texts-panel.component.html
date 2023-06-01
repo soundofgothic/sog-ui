@@ -1,8 +1,9 @@
 <div class="records" *ngFor="let record of records">
-  <app-item [text]="record.text"
-            [filename]="record.filename"
-            [filesource]="record.source"
-            [version]="record.g"
-            [id]="record._id"
+  <app-item [text]="record.transcript"
+            [filename]="record.wave"
+            [filesource]="record.sourceFile.name"
+            [version]="record.gameID"
+            [id]="record.id"
+            [record]="record"
   ></app-item>
 </div>

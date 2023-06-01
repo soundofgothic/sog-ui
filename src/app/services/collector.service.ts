@@ -5,6 +5,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import {isPlatformBrowser} from '@angular/common';
 import {catchError, tap} from 'rxjs/operators';
+import { RecordingsResponse } from './domain';
 
 declare var Pizzicato: any;
 
@@ -16,7 +17,7 @@ export enum SearchType {
   SFX_E
 }
 
-const typeResolver = ['/', '/source', '/reports', '/sfx', '/sfx'];
+const typeResolver = ['/recordings', '/recordings', '/reports', '/sfx', '/sfx'];
 export const componentTypeResolver = ['text', 'text', 'reports', 'sfx', 'reports/sfx'];
 
 export interface SearchConfig {
@@ -25,8 +26,27 @@ export interface SearchConfig {
   type?: SearchType,
   pageSize?: number,
   tags?: string[],
-  versions?: number[]
+  versions?: number[],
+  voices?: number[],
+  sourceFileIDs?: number[]
 }
+
+export interface Metadata {
+  recordCount: number,
+  totalRecordCount: number,
+  pageSize: number,
+  upToIndex: number,
+  pageNumber: number,
+  backOption: boolean,
+  forwardOption: boolean,
+  filter: string,
+  lastSearchType: SearchType,
+  lastTags: string[],
+  lastVersions: string[],
+  voices: number[],
+}
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -37,8 +57,8 @@ export class CollectorService {
   public recordSnapshot: any;
   public gSnapshot: any;
 
-  public observedRecords: Subject<any> = new BehaviorSubject<any>({});
-  public observedMetadata: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  public observedRecords: Subject<RecordingsResponse> = new BehaviorSubject<any>({});
+  public observedMetadata: BehaviorSubject<Metadata> = new BehaviorSubject<Metadata>(null);
   public loading: Subject<boolean> = new BehaviorSubject<any>(false);
   public recordLoading = new BehaviorSubject<boolean>(false);
 
@@ -46,6 +66,7 @@ export class CollectorService {
   public lastFilter = '';
   private lastTags = [];
   private lastVersions = [];
+  private lastVoices = [];
 
   private recordCount: number;
   private totalRecordCount: number;
@@ -59,48 +80,36 @@ export class CollectorService {
   constructor(@Inject(WINDOW) private window: Window,
               @Inject(LOCAL_STORAGE) private local_storage: any,
               @Inject(PLATFORM_ID) private platformId: Object,
-              private route: ActivatedRoute,
               private httpClient: HttpClient, private router: Router) {
 
   }
 
   getFilteredRecords(config: SearchConfig): any {
-    let queryParams = new HttpParams()
-      .set('pageSize', config.pageSize + '')
-      .set('page', config.page + '')
-      .set('filter', config.filter);
-
-
-    if (config.type === SearchType.SFX_E) {
-      queryParams = queryParams.set('sortField', 'reported');
-    }
-
-    if (config.tags) {
-      queryParams = queryParams.append('tags', config.tags.join(', '));
-    }
-
-    if (config.versions) {
-      queryParams = queryParams.append('g', config.versions.join(', '));
-    }
-
-
+    let queryParams = new HttpParams({
+      fromObject: {
+        pageSize: config.pageSize + '',
+        page: config.page + '',
+        ...(config.filter && {filter: config.filter}),
+        ...(config.tags && {tags: config.tags}),
+        ...(config.versions && {gameID: config.versions.map(v => v + '')}),
+        ...(config.voices && {voiceID: config.voices.map(v => v + '')}),
+        ...(config.type === SearchType.SFX_E && {sortField: 'reported'})
+      }
+    })
     const options = {
       params: queryParams
     };
-
     const url = typeResolver[config.type];
-
     this.loading.next(true);
-
-    this.httpClient.get(url, options).pipe(catchError(err => {
-
+    this.httpClient.get<RecordingsResponse>(url, options).pipe(catchError(err => {
       return throwError(err);
-    })).subscribe((data: any) => {
+    })).subscribe((data) => {
       this.observedRecords.next(data);
       this.lastSearchType = config.type;
       this.lastFilter = config.filter;
-      this.lastTags = config.tags ? config.tags : [];
-      this.lastVersions = config.versions ? config.versions : null;
+      this.lastTags = config.tags || [];
+      this.lastVersions = config.versions || null;
+      this.lastVoices = config.voices || null;
       this.parseRecords(data);
       this.updateMetadata();
       this.loading.next(false);
@@ -108,7 +117,7 @@ export class CollectorService {
   }
 
   getGNameRecord(version: number, filename: string) {
-    const url = `/record/${version}/${filename}`;
+    const url = `/recordings/${version}/${filename}`;
     this.recordLoading.next(true);
     this.httpClient.get(url).pipe(catchError(err => throwError(err))).subscribe(data => {
       this.recordSnapshot = data;
@@ -119,12 +128,12 @@ export class CollectorService {
   }
 
 
-  parseRecords(data: any) {
-    this.recordCount = (data.recordsOnPage > 0) ? data.pageNumber * data.defaultPageSize + 1 : 0;
-    this.totalRecordCount = data.recordCountTotal;
-    this.pageSize = data.defaultPageSize;
-    this.upToIndex = Math.max(this.recordCount - 1 + data.recordsOnPage, 0);
-    this.pageNumber = data.pageNumber;
+  parseRecords(data: RecordingsResponse) {
+    this.recordCount = (data.results.length > 0) ? (data.page - 1) * data.pageSize + 1 : 0;
+    this.totalRecordCount = data.total;
+    this.pageSize = data.pageSize;
+    this.upToIndex = Math.max(this.recordCount - 1 + data.results.length, 0);
+    this.pageNumber = data.page;
     this.backOption = (this.recordCount > 1);
     this.forwardOption = (this.upToIndex < this.totalRecordCount);
   }
@@ -153,13 +162,17 @@ export class CollectorService {
   }
 
   updatePageSize(pageSize) {
-    const newPageNumber = Math.floor(this.pageNumber * this.pageSize / pageSize);
+    console.log(this.lastVersions)
+
+    const newPageNumber = 1 + Math.floor((this.pageNumber - 1) * this.pageSize / pageSize);
     if (this.recordMode) {
       this.getFilteredRecords({
         filter: this.recordSnapshot.source,
         type: SearchType.SOURCE,
         page: newPageNumber,
         pageSize: pageSize,
+        versions: this.lastVersions,
+        voices: this.lastVoices
       });
     } else {
       const queryParams: any = {
@@ -168,7 +181,8 @@ export class CollectorService {
         type: this.lastSearchType,
         pageSize: pageSize,
         tags: this.lastTags,
-        versions: this.lastVersions
+        versions: this.lastVersions,
+        voices: this.lastVoices,
       };
       this.router.navigate([componentTypeResolver[this.lastSearchType]], {
         queryParams: queryParams
@@ -190,20 +204,21 @@ export class CollectorService {
       filter: this.lastFilter,
       lastSearchType: this.lastSearchType,
       lastTags: this.lastTags,
-      lastVersions: this.lastVersions
+      lastVersions: this.lastVersions,
+      voices: this.lastVoices,
     });
   }
 
   nextPage() {
     if (this.forwardOption) {
-
       if (this.recordMode) {
         this.getFilteredRecords({
           filter: this.recordSnapshot.source,
           type: SearchType.SOURCE,
           page: this.pageNumber + 1,
           pageSize: this.pageSize,
-          versions: [this.gSnapshot]
+          versions: [this.gSnapshot],
+          voices: this.lastVoices
         });
       } else {
         const queryParams: any = {
@@ -212,7 +227,8 @@ export class CollectorService {
           pageSize: this.pageSize,
           type: this.lastSearchType,
           tags: this.lastTags,
-          versions: this.lastVersions
+          versions: this.lastVersions,
+          voices: this.lastVoices,
         };
 
         this.router.navigate([componentTypeResolver[this.lastSearchType]], {
@@ -232,7 +248,8 @@ export class CollectorService {
           type: SearchType.SOURCE,
           page: this.pageNumber - 1,
           pageSize: this.pageSize,
-          versions: [this.gSnapshot]
+          versions: [this.gSnapshot],
+          voices: this.lastVoices
         });
       } else {
         const queryParams: any = {
@@ -241,7 +258,8 @@ export class CollectorService {
           pageSize: this.pageSize,
           type: this.lastSearchType,
           tags: this.lastTags,
-          versions: this.lastVersions
+          versions: this.lastVersions,
+          voices: this.lastVoices,
         };
 
         this.router.navigate([componentTypeResolver[this.lastSearchType]], {
@@ -257,11 +275,12 @@ export class CollectorService {
     this.router.navigate([componentTypeResolver[this.lastSearchType]], {
       queryParams: {
         filter: filter,
-        page: 0,
+        page: 1,
         pageSize: this.pageSize,
         type: this.lastSearchType === SearchType.SOURCE ? SearchType.TEXT : this.lastSearchType,
         tags: this.lastTags,
-        versions: this.lastVersions
+        versions: this.lastVersions,
+        voices: this.lastVoices,
       }
     });
   }
@@ -270,11 +289,12 @@ export class CollectorService {
     this.router.navigate([componentTypeResolver[this.lastSearchType]], {
       queryParams: {
         filter: '',
-        page: 0,
+        page: 1,
         pageSize: this.pageSize,
         type: this.lastSearchType,
         tags: tags,
-        versions: this.lastVersions
+        versions: this.lastVersions,
+        voices: this.lastVoices,
       }
     });
   }
@@ -283,11 +303,26 @@ export class CollectorService {
     this.router.navigate([componentTypeResolver[this.lastSearchType]], {
       queryParams: {
         filter: this.lastFilter,
-        page: 0,
+        page: 1,
         pageSize: this.pageSize,
         type: this.lastSearchType,
         tags: this.lastTags,
-        versions: versions
+        versions: versions,
+        voices: this.lastVoices,
+      }
+    });
+  }
+
+  filterVoices(voices) {
+    this.router.navigate([componentTypeResolver[this.lastSearchType]], {
+      queryParams: {
+        filter: this.lastFilter,
+        page: 1,
+        pageSize: this.pageSize,
+        type: this.lastSearchType,
+        tags: this.lastTags,
+        versions: this.lastVersions,
+        voices: voices,
       }
     });
   }
@@ -296,11 +331,26 @@ export class CollectorService {
     this.router.navigate([componentTypeResolver[this.lastSearchType]], {
       queryParams: {
         filter: '',
-        page: 0,
+        page: 1,
         pageSize: this.pageSize,
         type: this.lastSearchType,
         tags: [tagName],
-        versions: this.lastVersions
+        versions: this.lastVersions,
+        voices: this.lastVoices,
+      }
+    });
+  }
+
+  selectVoices(voices) {
+    this.router.navigate([componentTypeResolver[this.lastSearchType]], {
+      queryParams: {
+        filter: '',
+        page: 1,
+        pageSize: this.pageSize,
+        type: this.lastSearchType,
+        tags: this.lastTags,
+        versions: this.lastVersions,
+        voices: voices
       }
     });
   }
@@ -316,7 +366,8 @@ export class CollectorService {
       type: this.lastSearchType,
       pageSize: this.pageSize,
       tags: this.lastTags,
-      versions: this.lastVersions
+      versions: this.lastVersions,
+      voices: this.lastVoices,
     };
     this.getFilteredRecords(config);
   }
