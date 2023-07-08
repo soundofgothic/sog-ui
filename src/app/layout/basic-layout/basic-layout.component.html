@@ -1,7 +1,11 @@
 <div class="sidenav">
   <div class="sidenav-item">
     <div class="logo">
-      <span (click)="toggleSidePanel()" class="mobile-only hamburger-icon mobile-toggler"><i class="fa fa-bars"></i></span>
+      <span
+        (click)="toggleSidePanel()"
+        class="mobile-only hamburger-icon mobile-toggler"
+        ><i class="fa fa-bars"></i
+      ></span>
       <a class="router-link" routerLink="/" routerLinkActive="active-link">
         SoundOfGothic
       </a>
@@ -10,9 +14,17 @@
 
   <div *ngIf="reportLink" class="sidenav-item link">
     <span class="reports-title">Zgłoszenia</span>
-    <a class="router-link-report" routerLink="/reports/text" routerLinkActive="active-link">
-      Dialogi
-    </a>|<a class="router-link-report" routerLink="/reports/sfx" routerLinkActive="active-link">
+    <a
+      class="router-link-report"
+      routerLink="/reports/text"
+      routerLinkActive="active-link"
+    >
+      Dialogi </a
+    >|<a
+      class="router-link-report"
+      routerLink="/reports/sfx"
+      routerLinkActive="active-link"
+    >
       Dźwięki
     </a>
   </div>
@@ -25,69 +37,89 @@
 
   <div class="sidenav-item sidenav-item-selected">
     <form class="sound_form" (ngSubmit)="search()">
-      <input [(ngModel)]="value" name="value" class="sound_search" type="text">
+      <input
+        [(ngModel)]="value"
+        name="value"
+        class="sound_search"
+        type="text"
+      />
     </form>
-    <span (click)="search()" class="icon-item"> <i class="fa fa-search"></i> </span>
+    <span (click)="search()" class="icon-item">
+      <i class="fa fa-search"></i>
+    </span>
   </div>
 
+  <div class="sidenav-item centered">
+    <span *ngIf="backDisplay" (click)="back()" class="icon-item-left">
+      <i class="fa fa-arrow-left"></i>
+    </span>
+    <span>{{ recordCount }} - {{ upTo }} / {{ totalRecordCount }}</span>
+    <span *ngIf="forwardDisplay" (click)="forward()" class="icon-item-right">
+      <i class="fa fa-arrow-right"></i>
+    </span>
+    <select
+      (ngModelChange)="onPageSizeChange($event)"
+      [(ngModel)]="pageSizeSelected"
+    >
+      <option *ngFor="let option of pageSizeOptions" value="{{ option }}">
+        {{ option }}
+      </option>
+    </select>
+  </div>
 
-    <div class="sidenav-item centered">
-      <span *ngIf="backDisplay" (click)="back()" class="icon-item-left"> <i class="fa fa-arrow-left"></i> </span>
-      <span>{{recordCount}} - {{upTo}} / {{totalRecordCount}}</span>
-      <span *ngIf="forwardDisplay" (click)="forward()" class="icon-item-right"> <i class="fa fa-arrow-right"></i> </span>
-      <select (ngModelChange)="onPageSizeChange($event)" [(ngModel)]="pageSizeSelected">
-        <option *ngFor="let option of pageSizeOptions" value="{{option}}">{{option}}</option>
-      </select>
-    </div>
+  <div class="sidenav-item sidenav-panel no-mobile">
+    <app-info-panel-component> </app-info-panel-component>
+  </div>
 
-    <div class="sidenav-item sidenav-panel no-mobile">
-      <app-info-panel-component>
-      </app-info-panel-component>
-    </div>
+  <div class="sidenav-item no-mobile">
+    <app-versions-combo-box
+      [selections]="versionSelections"
+      (onSelectAction)="filterVersions($event)"
+    >
+    </app-versions-combo-box>
+  </div>
 
-    <div class="sidenav-item no-mobile">
-      <app-versions-combo-box [selections]="versionSelections" (onSelectAction)="filterVersions($event)">
-      </app-versions-combo-box>
-    </div>
+  <div class="separator no-mobile"></div>
 
-    <div class="separator no-mobile"></div>
+  <div class="sidenav-item no-mobile">
+    <app-combo-box
+      [items]="voiceFilters"
+      (onSelectAction)="filterVoices($event)"
+    >
+    </app-combo-box>
+  </div>
 
-    <div class="sidenav-item no-mobile">
-      <app-voices-combo-box (onSelectAction)="filterVoices($event)">
-      </app-voices-combo-box>
-    </div>
+  <div (click)="toggleSidePanel()" class="sidenav-item centered">
+    Więcej <i class="fa fa-arrow-right"></i>
+  </div>
 
-    <div (click)="toggleSidePanel()" class="sidenav-item centered">
-      Więcej <i class="fa fa-arrow-right"></i>
-    </div>
+  <div *ngIf="displayTags" class="separator no-mobile"></div>
 
-    <div *ngIf="displayTags" class="separator no-mobile"></div>
-
-    <div *ngIf="displayTags" class="sidenav-item no-mobile">
-      <app-combo-box-list [tags]="tags" [selections]="tagsSelections" (onSelectAction)="filterTags($event)">
-      </app-combo-box-list>
-    </div>
-
-
+  <div *ngIf="displayTags" class="sidenav-item no-mobile">
+    <app-combo-box-list
+      [tags]="tags"
+      [selections]="tagsSelections"
+      (onSelectAction)="filterTags($event)"
+    >
+    </app-combo-box-list>
+  </div>
 
   <div class="sidenav-item sidenav-item-bottom right icons-set">
     <a href="https://github.com/soundofgothic" class="project-link">
       <i class="fab fa-github"></i>
     </a>
-    <a class="project-link" href="https://www.facebook.com/Sound-of-Gothic-1996703900457878/">
+    <a
+      class="project-link"
+      href="https://www.facebook.com/Sound-of-Gothic-1996703900457878/"
+    >
       <i class="fab fa-facebook-square"></i>
     </a>
   </div>
-
 </div>
 
 <div class="main">
-  <div class="loader" [ngClass]="(loading) ? 'loading' : ''">
-
-    <div class="loading-gif">
-      G
-    </div>
-
+  <div class="loader" [ngClass]="loading ? 'loading' : ''">
+    <div class="loading-gif">G</div>
   </div>
 
   <router-outlet></router-outlet>
@@ -95,60 +127,103 @@
 
 <div class="sidenav mobile">
   <div class="sidenav-item centered">
-    <span *ngIf="backDisplay" (click)="back()" class="icon-item-left"> <i class="fa fa-arrow-left"></i> </span>
-    <span>{{recordCount}} - {{upTo}} / {{totalRecordCount}}</span>
-    <span *ngIf="forwardDisplay" (click)="forward()" class="icon-item-right"> <i class="fa fa-arrow-right"></i> </span>
+    <span *ngIf="backDisplay" (click)="back()" class="icon-item-left">
+      <i class="fa fa-arrow-left"></i>
+    </span>
+    <span>{{ recordCount }} - {{ upTo }} / {{ totalRecordCount }}</span>
+    <span *ngIf="forwardDisplay" (click)="forward()" class="icon-item-right">
+      <i class="fa fa-arrow-right"></i>
+    </span>
   </div>
   <div class="sidenav-item sidenav-panel">
-    <app-info-panel-component>
-    </app-info-panel-component>
+    <app-info-panel-component> </app-info-panel-component>
   </div>
   <div class="sidenav-item centered icons-set">
     <a href="https://github.com/soundofgothic" class="project-link">
       <i class="fab fa-github"></i>
     </a>
-    <a class="project-link" href="https://www.facebook.com/Sound-of-Gothic-1996703900457878/">
+    <a
+      class="project-link"
+      href="https://www.facebook.com/Sound-of-Gothic-1996703900457878/"
+    >
       <i class="fab fa-facebook-square"></i>
     </a>
   </div>
 </div>
 
-<div class="sidenav-block mobile" (click)="toggleSidePanel()" [ngClass]="sidenavToggled ? 'visible' : '' ">
-  <div class="mobile-expand-panel sidenav-item" [ngClass]="sidenavToggled ? 'visible' : '' ">
+<div
+  class="sidenav-block mobile"
+  (click)="toggleSidePanel()"
+  [ngClass]="sidenavToggled ? 'visible' : ''"
+>
+  <div
+    class="mobile-expand-panel sidenav-item"
+    [ngClass]="sidenavToggled ? 'visible' : ''"
+  >
     <div *ngIf="displayTags" class="tag-mobile-panel">
       <div class="versions-mobile-panel">
-        <app-versions-combo-box [selections]="versionSelections" (onSelectAction)="filterVersions($event)">
+        <app-versions-combo-box
+          [selections]="versionSelections"
+          (onSelectAction)="filterVersions($event)"
+        >
         </app-versions-combo-box>
       </div>
       <div class="separator"></div>
-      <app-combo-box-list [tags]="tags" [selections]="tagsSelections" (onSelectAction)="filterTags($event)">
+      <app-combo-box-list
+        [tags]="tags"
+        [selections]="tagsSelections"
+        (onSelectAction)="filterTags($event)"
+      >
       </app-combo-box-list>
     </div>
 
     <div *ngIf="!displayTags" class="tag-mobile-panel">
       <div class="versions-mobile-panel">
-        <app-versions-combo-box [selections]="versionSelections" (onSelectAction)="filterVersions($event)">
+        <app-versions-combo-box
+          [selections]="versionSelections"
+          (onSelectAction)="filterVersions($event)"
+        >
         </app-versions-combo-box>
       </div>
     </div>
   </div>
 </div>
 
-<div class="sidenav-block no-mobile" (click)="toggleSidePanel()" [ngClass]="true ? 'visible' : '' ">
-  <div class="mobile-expand-panel sidenav-item" [ngClass]="true ? 'visible' : '' ">
+<div
+  class="sidenav-block no-mobile"
+  (click)="toggleSidePanel()"
+  [ngClass]="true ? 'visible' : ''"
+>
+  <div
+    class="mobile-expand-panel sidenav-item"
+    [ngClass]="true ? 'visible' : ''"
+  >
     <div class="search-grid">
       <div class="grid-1">
         <h1>NPC</h1>
-        <app-npc-combo-box></app-npc-combo-box>
+        <app-combo-box
+          [items]="npcFilters"
+          (onSelectAction)="filterNPCs($event)"
+          (onSearchAction)="searchNPCs($event)"
+        >
+        </app-combo-box>
       </div>
       <div class="grid-2">
         <h2>Gildia</h2>
-        <app-npc-combo-box></app-npc-combo-box>
+        <app-combo-box
+          [items]="npcFilters"
+          (onSelectAction)="filterNPCs($event)"
+        >
+        </app-combo-box>
       </div>
       <div class="grid-3">
         <h2>Skrypt</h2>
-        <app-npc-combo-box></app-npc-combo-box>
+        <app-combo-box
+        [items]="npcFilters"
+        (onSelectAction)="filterNPCs($event)"
+      >
+      </app-combo-box>
       </div>
-      </div>
+    </div>
   </div>
 </div>

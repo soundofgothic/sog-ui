@@ -25,8 +25,7 @@ import { TagsComboBoxComponent } from './layout/tags-combo-box/tags-combo-box.co
 import { VersionsComboBoxComponent } from './layout/versions-combo-box/versions-combo-box.component';
 import {RecordPanelComponent} from './panels/record-panel/record-panel/record-panel.component';
 import { PlayButtonComponent } from './items/play-button/play-button.component';
-import { VoicesComboBoxComponent } from './layout/voices-combo-box/voices-combo-box.component';
-import { NpcComboBoxComponent } from './layout/npc-combo-box/npc-combo-box.component';
+import { ComboBoxComponent } from './layout/combo-box/combo-box.component';
 
 
 @NgModule({
@@ -46,8 +45,7 @@ import { NpcComboBoxComponent } from './layout/npc-combo-box/npc-combo-box.compo
     TagsComboBoxComponent,
     VersionsComboBoxComponent,
     PlayButtonComponent,
-    VoicesComboBoxComponent,
-    NpcComboBoxComponent,
+    ComboBoxComponent,
   ],
   imports: [
     CommonModule,

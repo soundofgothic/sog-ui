@@ -23,11 +23,12 @@ export const componentTypeResolver = ['text', 'text', 'reports', 'sfx', 'reports
 export interface SearchConfig {
   filter: string,
   page?: number,
-  type?: SearchType,
+  type: SearchType,
   pageSize?: number,
   tags?: string[],
   versions?: number[],
   voices?: number[],
+  npcs?: number[],
   sourceFileIDs?: number[]
 }
 
@@ -62,11 +63,10 @@ export class CollectorService {
   public loading: Subject<boolean> = new BehaviorSubject<any>(false);
   public recordLoading = new BehaviorSubject<boolean>(false);
 
-  public lastSearchType: SearchType = SearchType.TEXT;
-  public lastFilter = '';
-  private lastTags = [];
-  private lastVersions = [];
-  private lastVoices = [];
+  public lastSearchConfig: BehaviorSubject<SearchConfig> = new BehaviorSubject<SearchConfig>({
+    filter: '',
+    type: SearchType.TEXT,
+  });
 
   private recordCount: number;
   private totalRecordCount: number;
@@ -93,7 +93,8 @@ export class CollectorService {
         ...(config.tags && {tags: config.tags}),
         ...(config.versions && {gameID: config.versions.map(v => v + '')}),
         ...(config.voices && {voiceID: config.voices.map(v => v + '')}),
-        ...(config.type === SearchType.SFX_E && {sortField: 'reported'})
+        ...(config.type === SearchType.SFX_E && {sortField: 'reported'}),
+        ...(config.npcs && {npcID: config.npcs.map(n => n + '')}),
       }
     })
     const options = {
@@ -105,11 +106,7 @@ export class CollectorService {
       return throwError(err);
     })).subscribe((data) => {
       this.observedRecords.next(data);
-      this.lastSearchType = config.type;
-      this.lastFilter = config.filter;
-      this.lastTags = config.tags || [];
-      this.lastVersions = config.versions || null;
-      this.lastVoices = config.voices || null;
+      this.lastSearchConfig.next(config);
       this.parseRecords(data);
       this.updateMetadata();
       this.loading.next(false);
@@ -162,8 +159,6 @@ export class CollectorService {
   }
 
   updatePageSize(pageSize) {
-    console.log(this.lastVersions)
-
     const newPageNumber = 1 + Math.floor((this.pageNumber - 1) * this.pageSize / pageSize);
     if (this.recordMode) {
       this.getFilteredRecords({

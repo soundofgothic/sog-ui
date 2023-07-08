@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VoicesComboBoxComponent } from './voices-combo-box.component';
+import { ComboBoxComponent } from './combo-box.component';
 
-describe('VoicesComboBoxComponent', () => {
-  let component: VoicesComboBoxComponent;
-  let fixture: ComponentFixture<VoicesComboBoxComponent>;
+describe('ComboBoxComponent', () => {
+  let component: ComboBoxComponent;
+  let fixture: ComponentFixture<ComboBoxComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ VoicesComboBoxComponent ]
+      declarations: [ ComboBoxComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(VoicesComboBoxComponent);
+    fixture = TestBed.createComponent(ComboBoxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

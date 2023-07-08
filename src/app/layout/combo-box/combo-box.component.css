@@ -1,0 +1,75 @@
+.tag-container {
+  display: block;
+  width: 100%;
+  position: relative;
+  /*padding-left: 35px;*/
+}
+
+.combo-search-icon {
+  width: 25px;
+  height: 25px;
+}
+
+.combo-form {
+  padding-bottom: 10px;
+}
+
+.combo-search {
+  background-color: #888888;
+  outline: none;
+  border: none;
+  line-height: 30px;
+  width: 200px;
+  color: aliceblue;
+}
+
+.tag-text {
+  margin-left: 35px;
+}
+
+.tag-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #888888;
+}
+
+.tag-container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.tag-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.scroll-pane {
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-left: 5px;
+}
+
+.tag-container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}

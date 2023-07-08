@@ -1,37 +1,35 @@
-import {Component, Inject, Injector, OnInit, Optional} from '@angular/core';
-import {CollectorService, SearchConfig, SearchType} from '../../services/collector.service';
-import {ActivatedRoute, UrlSegment} from '@angular/router';
+import { Component, Inject, Injector, OnInit, Optional } from "@angular/core";
+import {
+  CollectorService,
+  SearchConfig,
+  SearchType,
+} from "../../services/collector.service";
+import { ActivatedRoute, UrlSegment } from "@angular/router";
+import { URLParams, URLParamsService } from "src/app/services/urlparams.service";
 
 @Component({
-  selector: 'app-collector',
-  templateUrl: './texts-panel.component.html',
-  styleUrls: ['./texts-panel.component.css']
+  selector: "app-collector",
+  templateUrl: "./texts-panel.component.html",
+  styleUrls: ["./texts-panel.component.css"],
 })
 export class TextsPanelComponent implements OnInit {
-  constructor(private service: CollectorService,
-              private route: ActivatedRoute) {
-  }
+  constructor(
+    private service: CollectorService,
+    private urlParams: URLParamsService,
+  ) {}
 
   public records: any;
 
-
   ngOnInit() {
-    this.route.queryParamMap.subscribe((params: any) => {
-
-      let filter = params.params.filter;
-      let pageSize = params.params.pageSize;
-      let page = params.params.page;
-      let type = params.params.type;
-      let versions = params.params.versions;
-      let voices = params.params.voices;
-
+    this.urlParams.current.subscribe((params: URLParams) => {
       let config: SearchConfig = {
-        filter: filter ? filter : '',
-        pageSize: pageSize ? pageSize : this.service.deviceDependsPageSize(),
-        page: page ? parseInt(page) : 1,
-        type: type ? parseInt(type) : SearchType.TEXT,
-        versions: Array.isArray(versions) ? versions : versions ? [versions] : [],
-        voices: Array.isArray(voices) ? voices : voices ? [voices] : []
+        filter: params.filter || "",
+        pageSize: params.pageSize || this.service.deviceDependsPageSize(),
+        page: params.page || 1,
+        type: params.type || SearchType.TEXT,
+        versions: params.versions || [],
+        voices: params.voices || [],
+        npcs: params.npcs || [],
       };
 
       this.service.getFilteredRecords(config);
@@ -41,5 +39,4 @@ export class TextsPanelComponent implements OnInit {
       this.records = data.results;
     });
   }
-
 }

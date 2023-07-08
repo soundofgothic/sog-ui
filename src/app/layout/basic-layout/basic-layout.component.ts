@@ -1,30 +1,48 @@
-import {WINDOW} from '@ng-toolkit/universal';
-import {AfterViewChecked, ChangeDetectorRef, Component, Inject, OnInit} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, NavigationStart, Router} from '@angular/router';
-import {CollectorService, SearchType} from '../../services/collector.service';
-import {UserService} from '../../access/user.service';
-import {MatSnackBar} from '@angular/material';
-import {SfxService} from '../../services/sfx.service';
-import {combineLatest} from 'rxjs';
-
+import { WINDOW } from "@ng-toolkit/universal";
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+} from "@angular/core";
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  NavigationStart,
+  ParamMap,
+  Router,
+} from "@angular/router";
+import { CollectorService, SearchType } from "../../services/collector.service";
+import { UserService } from "../../access/user.service";
+import { MatSnackBar } from "@angular/material";
+import { SfxService } from "../../services/sfx.service";
+import { combineLatest } from "rxjs";
+import { VoiceService } from "src/app/services/voice.service";
+import { NPC, NPCsResponse, Voice, VoicesResponse } from "src/app/services/domain";
+import { NPCService } from "src/app/services/npc.service";
+import { URLParams, URLParamsService } from "src/app/services/urlparams.service";
 
 @Component({
-  selector: 'app-basic-layout',
-  templateUrl: './basic-layout.component.html',
-  styleUrls: ['./basic-layout.component.css']
+  selector: "app-basic-layout",
+  templateUrl: "./basic-layout.component.html",
+  styleUrls: ["./basic-layout.component.css"],
 })
 export class BasicLayoutComponent implements OnInit, AfterViewChecked {
-
-  constructor(@Inject(WINDOW) private window: Window, private collectionService: CollectorService,
-              private route: ActivatedRoute,
-              private router: Router,
-              private cdRef: ChangeDetectorRef,
-              private userService: UserService,
-              private sfxService: SfxService,
-              private snackbar: MatSnackBar) {
-    this.router.events.subscribe(e => {
+  constructor(
+    @Inject(WINDOW) private window: Window,
+    private collectionService: CollectorService,
+    private router: Router,
+    private cdRef: ChangeDetectorRef,
+    private userService: UserService,
+    private sfxService: SfxService,
+    private voicesService: VoiceService,
+    private npcsService: NPCService,
+    private urlParams: URLParamsService,
+  ) {
+    this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
-        this.display_navigation = !e.url.startsWith('/record');
+        this.display_navigation = !e.url.startsWith("/record");
       }
     });
   }
@@ -59,10 +77,31 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   public display_navigation = false;
   public pageTypeList = true;
 
-  ngOnInit() {
-    this.userService.logged().then((status) => this.reportLink = status);
+  public voiceFilters: (Voice & { selected: boolean, displayName: string })[];
+  public npcFilters: (NPC & { selected: boolean, displayName: string })[];
 
-    combineLatest(this.collectionService.observedMetadata, this.sfxService.tagsList).subscribe(([data, tagList]) => {
+  ngOnInit() {
+    this.userService.logged().then((status) => (this.reportLink = status));
+
+    // -- voice filters
+    type voiceTuple = [any, VoicesResponse];
+    combineLatest([this.urlParams.current, this.voicesService.observedVoices]).subscribe(([_1, _2]: voiceTuple) => {
+      const params = _1 as URLParams;
+      const voices = _2 as VoicesResponse;
+      this.voiceFilters = voices.map(voice => { return { ...voice, selected: params.voices.includes(voice.id), displayName: voice.name } })
+    });
+    // -- npc filters
+    type npcTuple = [any, NPC[]];
+    combineLatest([this.urlParams.current, this.npcsService.observedNPCs]).subscribe(([_1, _2]: npcTuple) => {
+      const params = _1 as URLParams;
+      const npcs = _2 as NPC[];
+      this.npcFilters = npcs.map(npc => { return { ...npc, selected: params.npcs.includes(npc.id), displayName: npc.name } })
+    });
+
+    combineLatest(
+      this.collectionService.observedMetadata,
+      this.sfxService.tagsList
+    ).subscribe(([data, tagList]) => {
       if (data) {
         this.recordCount = data.recordCount;
         this.totalRecordCount = data.totalRecordCount;
@@ -74,17 +113,24 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
         this.pageSizeSelected = data.pageSize;
         this.filter = data.filter;
         this.lastSearchType = data.lastSearchType;
-        this.displayTags = [SearchType.SFX_E, SearchType.SFX].includes(data.lastSearchType);
+        this.displayTags = [SearchType.SFX_E, SearchType.SFX].includes(
+          data.lastSearchType
+        );
         this.versionSelections = data.lastVersions;
-        this.value = data.lastSearchType === SearchType.SOURCE ? '' : data.filter;
+        this.value =
+          data.lastSearchType === SearchType.SOURCE ? "" : data.filter;
         if (this.displayTags) {
           this.tags = tagList;
           this.tagsSelections = data.lastTags;
-          // tagList.map(e => this.tagsSelectionModel[e._id] = {selected: data.lastTags.includes(e._id)});
         }
       }
     });
+    
     this.sfxService.updateTagsList();
+    this.voicesService.Load();
+    this.urlParams.current.subscribe((params: URLParams) => {
+      this.npcsService.getFilteredNPCs({ voices: params.voices });
+    });
   }
 
   search() {
@@ -92,7 +138,9 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    this.collectionService.loading.subscribe(status => this.loading = status);
+    this.collectionService.loading.subscribe(
+      (status) => (this.loading = status)
+    );
     this.cdRef.detectChanges();
   }
 
@@ -114,12 +162,16 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
     this.collectionService.filterVersions(versions.selections);
   }
 
-  filterVoices(voices) { 
+  filterVoices(voices) {
     this.collectionService.filterVoices(voices);
   }
 
   filterNPCs(npcs) {
-    console.log(npcs);
+    
+  }
+
+  searchNPCs(npc: string) {
+    this.npcsService.getFilteredNPCs({ filter: npc });
   }
 
   onPageSizeChange($event) {
@@ -127,8 +179,6 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   }
 
   toggleSidePanel() {
-    console.log('toggle');
     this.sidenavToggled = !this.sidenavToggled;
   }
-
 }

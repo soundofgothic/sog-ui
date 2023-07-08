@@ -1,0 +1,18 @@
+<div class="scroll-pane">
+  <form class="combo-form">
+    <i class="fa fa-search combo-search-icon"></i>
+    <input (input)="onSearch($event)" name="value" class="combo-search" type="text" />
+  </form>
+  <label *ngFor="let item of items" class="tag-container">
+    <input
+      (change)="onSelect(item, $event)"
+      type="checkbox"
+      name="{{ item.id }}"
+      [ngModel]="item.selected"
+    />
+    <span class="tag-text">
+      {{ item.displayName }}
+    </span>
+    <span class="checkmark"></span>
+  </label>
+</div>

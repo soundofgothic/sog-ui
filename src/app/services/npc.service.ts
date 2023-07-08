@@ -7,15 +7,16 @@ import { CollectorService, Metadata } from "./collector.service";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 
 type NPCMetadata = {
-  lastPage: number;
   total: number;
-  perPage: number;
+  loadOptions: NPCLoadOptions;
 };
 
 type NPCLoadOptions = {
   page?: number;
   pageSize?: number;
   voices?: number[];
+  gameIDs?: number[];
+  filter?: string;
 };
 
 const defaultLoadOptions: NPCLoadOptions = {
@@ -29,28 +30,34 @@ const defaultLoadOptions: NPCLoadOptions = {
 export class NPCService {
   public loading = new BehaviorSubject<boolean>(false);
 
-  public observedMetadata: Subject<NPCMetadata> =
+  public observedMetadata: BehaviorSubject<NPCMetadata> =
     new BehaviorSubject<NPCMetadata>(null);
   public observedNPCs: Subject<NPC[]> = new BehaviorSubject<NPC[]>([]);
 
   constructor(private httpClient: HttpClient) {}
 
   public getFilteredNPCs(opts: NPCLoadOptions) {
-    opts = { ...defaultLoadOptions, ...opts };
+    const prev = this.observedMetadata.getValue();
+    opts = {
+      ...defaultLoadOptions,
+      ...(prev && prev.loadOptions),
+      ...opts,
+    };
     this.loading.next(true);
     const params = new HttpParams({
       fromObject: {
         page: opts.page.toString(),
         limit: opts.pageSize.toString(),
-        ...(opts.voices && { voices: opts.voices.join(",") }),
+        ...(opts.filter && { filter: opts.filter }),
+        ...(opts.voices && { voiceID: opts.voices.join(",") }),
+        ...(opts.gameIDs && { gameID: opts.gameIDs.join(",") }),
       },
     });
     this.httpClient.get<NPCsResponse>("/npcs", { params }).subscribe((data) => {
       this.observedNPCs.next(data.results);
       this.observedMetadata.next({
-        lastPage: opts.page,
+        loadOptions: opts,
         total: data.total,
-        perPage: opts.pageSize,
       });
       this.loading.next(false);
     });
