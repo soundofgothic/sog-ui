@@ -5,6 +5,7 @@ import { NPC, NPCsResponse } from "./domain";
 import { VoiceService } from "./voice.service";
 import { CollectorService, Metadata } from "./collector.service";
 import { ActivatedRoute, ParamMap } from "@angular/router";
+import { URLParamsService } from "./urlparams.service";
 
 type NPCMetadata = {
   total: number;
@@ -17,6 +18,8 @@ type NPCLoadOptions = {
   voices?: number[];
   gameIDs?: number[];
   filter?: string;
+  guildIDs?: number[];
+  ids?: number[];
 };
 
 const defaultLoadOptions: NPCLoadOptions = {
@@ -34,7 +37,21 @@ export class NPCService {
     new BehaviorSubject<NPCMetadata>(null);
   public observedNPCs: Subject<NPC[]> = new BehaviorSubject<NPC[]>([]);
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    private httpClient: HttpClient,
+    private urlParams: URLParamsService
+  ) {
+    this.urlParams.current.subscribe((params) => {
+      const opts: NPCLoadOptions = {
+        filter: params.filter,
+        gameIDs: params.versions,
+        voices: params.voices,
+        guildIDs: params.guilds,
+        ids: params.npcs,
+      };
+      this.getFilteredNPCs(opts);
+    });
+  }
 
   public getFilteredNPCs(opts: NPCLoadOptions) {
     const prev = this.observedMetadata.getValue();
@@ -51,6 +68,8 @@ export class NPCService {
         ...(opts.filter && { filter: opts.filter }),
         ...(opts.voices && { voiceID: opts.voices.join(",") }),
         ...(opts.gameIDs && { gameID: opts.gameIDs.join(",") }),
+        ...(opts.guildIDs && { guildID: opts.guildIDs.join(",") }),
+        ...(opts.ids && { id: opts.ids.join(",") })
       },
     });
     this.httpClient.get<NPCsResponse>("/npcs", { params }).subscribe((data) => {

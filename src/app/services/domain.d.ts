@@ -1,18 +1,4 @@
-export type RecordingsResponse = {
-  total: number;
-  page: number;
-  pageSize: number;
-  results: Recording[];
-};
 
-export type VoicesResponse = Array<Voice>
-
-export type NPCsResponse = {
-  total: number;
-  page: number;
-  pageSize: number;
-  results: NPC[];
-}
 
 export type Recording = {
   id: number;
@@ -38,6 +24,7 @@ export type SourceFile = {
   name: string;
   type: "guild" | "svm" | "mission";
   gameID: number;
+  count: number;
 };
 
 export type Guild = {
@@ -46,6 +33,7 @@ export type Guild = {
   inGameID: number;
   inGameAlias: string;
   gameID: number;
+  count: number;
 };
 
 export type NPC = {
@@ -56,9 +44,29 @@ export type NPC = {
   gameID: number;
   voiceID: number;
   guildID: number;
+  count: number
 };
 
 export type Voice = {
   id: number;
   name: string;
+  count: number;
 };
+
+
+export type PagedResponse<T> = {
+  total: number;
+  page: number;
+  pageSize: number;
+  results: T[];
+};
+
+export type RecordingsResponse = PagedResponse<Recording>;
+
+export type VoicesResponse = Array<Voice>
+
+export type NPCsResponse = PagedResponse<NPC>;
+
+export type GuildsResponse = PagedResponse<Guild>;
+
+export type SourceFileResponse = PagedResponse<SourceFile>;

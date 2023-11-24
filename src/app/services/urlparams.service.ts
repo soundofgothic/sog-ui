@@ -7,9 +7,12 @@ export type URLParams = {
   page?: number;
   pageSize?: number;
   versions?: number[];
+  type?: number;
+
   voices?: number[];
   npcs?: number[];
-  type?: number; 
+  guilds?: number[];
+  scripts?: number[];
 }
 
 @Injectable({
@@ -26,6 +29,9 @@ export class URLParamsService {
       let versions = params.getAll('versions');
       let voices = params.getAll('voices');
       let npcs = params.getAll('npcs');
+      let guilds = params.getAll('guilds');
+      let scripts = params.getAll('scripts');
+
       let type = params.get('type');
       let filter = params.get('filter');
 
@@ -37,6 +43,8 @@ export class URLParamsService {
         ...(type && { type: parseInt(type) }),
         ...(filter && { filter: filter }),
         ...(npcs && { npcs: npcs.map(n => parseInt(n)) }),
+        ...(guilds && { guilds: guilds.map(g => parseInt(g)) }),
+        ...(scripts && { scripts: scripts.map(s => parseInt(s)) }),
       };
 
       this.current.next(config);

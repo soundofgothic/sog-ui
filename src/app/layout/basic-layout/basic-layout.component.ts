@@ -19,9 +19,11 @@ import { MatSnackBar } from "@angular/material";
 import { SfxService } from "../../services/sfx.service";
 import { combineLatest } from "rxjs";
 import { VoiceService } from "src/app/services/voice.service";
-import { NPC, NPCsResponse, Voice, VoicesResponse } from "src/app/services/domain";
+import { Guild, NPC, NPCsResponse, SourceFile, Voice, VoicesResponse } from "src/app/services/domain";
 import { NPCService } from "src/app/services/npc.service";
 import { URLParams, URLParamsService } from "src/app/services/urlparams.service";
+import { GuildService } from "src/app/services/guild.service";
+import { ScriptsService } from "src/app/services/scripts.service";
 
 @Component({
   selector: "app-basic-layout",
@@ -37,8 +39,10 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
     private userService: UserService,
     private sfxService: SfxService,
     private voicesService: VoiceService,
+    private guildService: GuildService,
     private npcsService: NPCService,
     private urlParams: URLParamsService,
+    private scriptsService: ScriptsService,
   ) {
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
@@ -79,23 +83,39 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
 
   public voiceFilters: (Voice & { selected: boolean, displayName: string })[];
   public npcFilters: (NPC & { selected: boolean, displayName: string })[];
+  public guildFilters: (Guild & { selected: boolean, displayName: string })[];
+  public scriptFilters: (SourceFile & { selected: boolean, displayName: string })[];
 
   ngOnInit() {
     this.userService.logged().then((status) => (this.reportLink = status));
 
     // -- voice filters
-    type voiceTuple = [any, VoicesResponse];
+    type voiceTuple = [any, Voice[]];
     combineLatest([this.urlParams.current, this.voicesService.observedVoices]).subscribe(([_1, _2]: voiceTuple) => {
       const params = _1 as URLParams;
-      const voices = _2 as VoicesResponse;
-      this.voiceFilters = voices.map(voice => { return { ...voice, selected: params.voices.includes(voice.id), displayName: voice.name } })
+      const voices = _2 as Voice[];
+      this.voiceFilters = voices.map(voice => { return { ...voice, selected: params.voices.includes(voice.id), displayName: `${voice.name} (${voice.count})` } })
     });
     // -- npc filters
     type npcTuple = [any, NPC[]];
     combineLatest([this.urlParams.current, this.npcsService.observedNPCs]).subscribe(([_1, _2]: npcTuple) => {
       const params = _1 as URLParams;
       const npcs = _2 as NPC[];
-      this.npcFilters = npcs.map(npc => { return { ...npc, selected: params.npcs.includes(npc.id), displayName: npc.name } })
+      this.npcFilters = npcs.map(npc => { return { ...npc, selected: params.npcs.includes(npc.id), displayName: `G${npc.gameID} ${npc.name} (${npc.count})` } })
+    });
+    // -- guild filters
+    type guildTuple = [any, Guild[]];
+    combineLatest([this.urlParams.current, this.guildService.observedGuilds]).subscribe(([_1, _2]: guildTuple) => {
+      const params = _1 as URLParams;
+      const guilds = _2 as Guild[];
+      this.guildFilters = guilds.map(guild => { return { ...guild, selected: params.guilds.includes(guild.id), displayName: `G${guild.gameID} ${guild.name} (${guild.count})` } })
+    });
+
+    type scriptTuple = [any, SourceFile[]];
+    combineLatest([this.urlParams.current, this.scriptsService.observedScripts]).subscribe(([_1, _2]: scriptTuple) => {
+      const params = _1 as URLParams;
+      const guilds = _2 as SourceFile[];
+      this.scriptFilters = guilds.map(script => { return { ...script, selected: params.scripts.includes(script.id), displayName: `G${script.gameID} ${script.name} (${script.count})` } })
     });
 
     combineLatest(
@@ -127,10 +147,6 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
     });
     
     this.sfxService.updateTagsList();
-    this.voicesService.Load();
-    this.urlParams.current.subscribe((params: URLParams) => {
-      this.npcsService.getFilteredNPCs({ voices: params.voices });
-    });
   }
 
   search() {
@@ -166,12 +182,28 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
     this.collectionService.filterVoices(voices);
   }
 
-  filterNPCs(npcs) {
-    
+  filterNPCs(npcs: number[]) {
+    this.collectionService.filterNPCs(npcs);
+  }
+
+  filterGuilds(guilds: number[]) {
+    this.collectionService.filterGuilds(guilds);
+  }
+
+  filterScripts(scripts: number[]) {
+    this.collectionService.filterScripts(scripts);
   }
 
   searchNPCs(npc: string) {
     this.npcsService.getFilteredNPCs({ filter: npc });
+  }
+
+  searchGuilds(guild: string) {
+    this.guildService.getFiltered({ filter: guild });
+  }
+
+  searchScripts(script: string) {
+    this.scriptsService.getFiltered({ filter: script })
   }
 
   onPageSizeChange($event) {

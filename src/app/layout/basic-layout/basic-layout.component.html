@@ -192,11 +192,11 @@
 <div
   class="sidenav-block no-mobile"
   (click)="toggleSidePanel()"
-  [ngClass]="true ? 'visible' : ''"
+  [ngClass]="sidenavToggled ? 'visible' : ''"
 >
   <div
     class="mobile-expand-panel sidenav-item"
-    [ngClass]="true ? 'visible' : ''"
+    [ngClass]="sidenavToggled ? 'visible' : ''"
   >
     <div class="search-grid">
       <div class="grid-1">
@@ -211,16 +211,18 @@
       <div class="grid-2">
         <h2>Gildia</h2>
         <app-combo-box
-          [items]="npcFilters"
-          (onSelectAction)="filterNPCs($event)"
+          [items]="guildFilters"
+          (onSelectAction)="filterGuilds($event)"
+          (onSearchAction)="searchGuilds($event)"
         >
         </app-combo-box>
       </div>
       <div class="grid-3">
         <h2>Skrypt</h2>
         <app-combo-box
-        [items]="npcFilters"
-        (onSelectAction)="filterNPCs($event)"
+        [items]="scriptFilters"
+        (onSelectAction)="filterScripts($event)"
+        (onSearchAction)="searchScripts($event)"
       >
       </app-combo-box>
       </div>

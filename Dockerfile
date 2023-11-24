@@ -1,10 +1,7 @@
-FROM node as node
+FROM node:14
 WORKDIR /app
 COPY . .
 RUN npm install
-RUN npm run-script build -- --prod
-RUN ls /
-FROM nginx:1.15
-COPY --from=node /app/dist/soundofgothic /usr/share/nginx/html
-COPY nginx-custom.conf /etc/nginx/conf.d/ui.conf
-EXPOSE 8080 80
+RUN npm run build:prod
+EXPOSE 8080
+ENTRYPOINT [ "npm", "run", "server" ]

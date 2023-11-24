@@ -30,6 +30,8 @@ export class TextsPanelComponent implements OnInit {
         versions: params.versions || [],
         voices: params.voices || [],
         npcs: params.npcs || [],
+        guilds: params.guilds || [],
+        scripts: params.scripts || [],
       };
 
       this.service.getFilteredRecords(config);
