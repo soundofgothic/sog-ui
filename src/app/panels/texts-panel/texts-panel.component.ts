@@ -5,7 +5,7 @@ import {
   SearchType,
 } from "../../services/collector.service";
 import { ActivatedRoute, UrlSegment } from "@angular/router";
-import { URLParams, URLParamsService } from "src/app/services/urlparams.service";
+import { URLParams, URLParamsService } from "../../services/urlparams.service";
 
 @Component({
   selector: "app-collector",

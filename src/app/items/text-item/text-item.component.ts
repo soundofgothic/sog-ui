@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { LOCAL_STORAGE } from "@ng-toolkit/universal";
 import { MatSnackBar } from "@angular/material";
 import { ReportService } from "../../services/report.service";
-import { Recording } from "src/app/services/domain";
+import { Recording } from "../../services/domain";
 
 @Component({
   selector: "app-item",

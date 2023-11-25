@@ -5,7 +5,7 @@ import {
   SearchConfig,
 } from "../../services/collector.service";
 import { ActivatedRoute } from "@angular/router";
-import { RecordingsResponse } from "src/app/services/domain";
+import { RecordingsResponse } from "../../services/domain";
 
 @Component({
   selector: "app-reports-panel",

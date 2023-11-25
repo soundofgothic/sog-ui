@@ -18,12 +18,12 @@ import { UserService } from "../../access/user.service";
 import { MatSnackBar } from "@angular/material";
 import { SfxService } from "../../services/sfx.service";
 import { combineLatest } from "rxjs";
-import { VoiceService } from "src/app/services/voice.service";
-import { Guild, NPC, NPCsResponse, SourceFile, Voice, VoicesResponse } from "src/app/services/domain";
-import { NPCService } from "src/app/services/npc.service";
-import { URLParams, URLParamsService } from "src/app/services/urlparams.service";
-import { GuildService } from "src/app/services/guild.service";
-import { ScriptsService } from "src/app/services/scripts.service";
+import { VoiceService } from "../../services/voice.service";
+import { Guild, NPC, NPCsResponse, SourceFile, Voice, VoicesResponse } from "../../services/domain";
+import { NPCService } from "../../services/npc.service";
+import { URLParams, URLParamsService } from "../../services/urlparams.service";
+import { GuildService } from "../../services/guild.service";
+import { ScriptsService } from "../../services/scripts.service";
 
 @Component({
   selector: "app-basic-layout",

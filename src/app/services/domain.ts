@@ -12,6 +12,9 @@ export type Recording = {
   npc?: NPC;
   guildID: number | null;
   guild?: Guild;
+
+  voice?: Voice;
+  voiceID: number;
 };
 
 export type Game = {

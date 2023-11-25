@@ -7,7 +7,7 @@ import {
 import { ActivatedRoute } from "@angular/router";
 import { UserService } from "../../access/user.service";
 import { SfxService } from "../../services/sfx.service";
-import { RecordingsResponse } from "src/app/services/domain";
+import { RecordingsResponse } from "../../services/domain";
 
 @Component({
   selector: "app-sfx-panel",

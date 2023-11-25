@@ -5,7 +5,7 @@ import {CollectorService, componentTypeResolver, SearchType} from '../../../serv
 import {environment} from '../../../../environments/environment';
 import {first} from 'rxjs/operators';
 import {Meta, Title} from '@angular/platform-browser';
-import { Recording } from 'src/app/services/domain';
+import { Recording } from '../../../services/domain';
 
 
 @Component({
