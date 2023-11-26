@@ -8,8 +8,19 @@ import 'zone.js/dist/zone-node';
     import * as bodyParser from 'body-parser';
     import * as cors from 'cors';
     import * as compression from 'compression';
-    
-    import {join} from 'path';
+
+    const configs = {
+      browser: {
+        production: true,
+        apiUrl: process.env.BROWSER_API_URL || process.env.API_URL || "https://api.soundofgothic.pl",
+        soundsAssetsUrl: process.env.BROWSER_SOUNDS_ASSETS_URL || process.env.SOUNDS_ASSETS_URL || "https://sounds.soundofgothic.pl",
+      },
+      server: {
+        production: true,
+        apiUrl: process.env.SERVER_API_URL || process.env.API_URL || "https://api.soundofgothic.pl",
+        soundsAssetsUrl: process.env.SERVER_SOUNDS_ASSETS_URL || process.env.SOUNDS_ASSETS_URL || "https://sounds.soundofgothic.pl",
+      }
+    };
     
     enableProdMode();
     
@@ -27,7 +38,11 @@ import 'zone.js/dist/zone-node';
     app.engine('html', ngExpressEngine({
       bootstrap: AppServerModuleNgFactory,
       providers: [
-        provideModuleMap(LAZY_MODULE_MAP)
+        provideModuleMap(LAZY_MODULE_MAP),
+        {
+          provide: "SERVER_CONFIG",
+          useValue: configs.server,
+        },
       ]
     }));
     
@@ -46,6 +61,8 @@ import 'zone.js/dist/zone-node';
     app.get('/*', (req, res) => {
       res.render('index', {req, res}, (err, html) => {
         if (html) {
+          const configScript = `<script>window.CONFIG = ${JSON.stringify(configs.browser)};</script>`;
+          html = html.replace("</head>", `${configScript}</head>`);
           res.send(html);
         } else {
           console.error(err);
