@@ -10,6 +10,7 @@ type VoiceMetadata = {
 };
 
 type VoiceLoadOptions = {
+  filter?: string;
   gameIDs?: number[];
   npcIDs?: number[];
   guildIDs?: number[];

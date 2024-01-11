@@ -1,18 +1,16 @@
-import { Inject, Injectable, Optional, PLATFORM_ID } from "@angular/core";
 import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor,
-  HttpErrorResponse,
   HTTP_INTERCEPTORS,
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
 } from "@angular/common/http";
-import { environment } from "../environments/environment";
-import { Observable, throwError } from "rxjs";
+import { Inject, Injectable, PLATFORM_ID } from "@angular/core";
 import { MatSnackBar } from "@angular/material";
-import { catchError } from "rxjs/operators";
 import { LOCAL_STORAGE } from "@ng-toolkit/universal";
-import { isPlatformBrowser } from "@angular/common";
+import { Observable, throwError } from "rxjs";
+import { catchError } from "rxjs/operators";
 
 @Injectable()
 export class Interceptor implements HttpInterceptor {
@@ -28,8 +26,6 @@ export class Interceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    console.log(this.config); 
-
     if (this.getToken()) {
       request = request.clone({
         setHeaders: {

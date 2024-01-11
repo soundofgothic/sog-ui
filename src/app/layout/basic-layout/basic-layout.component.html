@@ -151,80 +151,102 @@
   </div>
 </div>
 
-<div
-  class="sidenav-block mobile"
-  (click)="toggleSidePanel()"
-  [ngClass]="sidenavToggled ? 'visible' : ''"
->
+<div class="sidenav-block mobile" [ngClass]="sidenavToggled ? 'visible' : ''" #sidenav>
+  <!-- MOBILE "MORE" OPTIONS -->
   <div
     class="mobile-expand-panel sidenav-item"
     [ngClass]="sidenavToggled ? 'visible' : ''"
   >
-    <div *ngIf="displayTags" class="tag-mobile-panel">
-      <div class="versions-mobile-panel">
-        <app-versions-combo-box
-          [selections]="versionSelections"
-          (onSelectAction)="filterVersions($event)"
-        >
-        </app-versions-combo-box>
-      </div>
-      <div class="separator"></div>
-      <app-combo-box-list
-        [tags]="tags"
-        [selections]="tagsSelections"
-        (onSelectAction)="filterTags($event)"
+    <h2>Gra</h2>
+    <app-versions-combo-box
+      [selections]="versionSelections"
+      (onSelectAction)="filterVersions($event)"
+    >
+    </app-versions-combo-box>
+
+    <h2>Głos</h2>
+    <div class="combobox-panel-mobile">
+      <app-combo-box
+        [items]="voiceFilters"
+        (onSelectAction)="filterVoices($event)"
       >
-      </app-combo-box-list>
+      </app-combo-box>
     </div>
 
-    <div *ngIf="!displayTags" class="tag-mobile-panel">
-      <div class="versions-mobile-panel">
-        <app-versions-combo-box
-          [selections]="versionSelections"
-          (onSelectAction)="filterVersions($event)"
-        >
-        </app-versions-combo-box>
-      </div>
+    <h2>NPC</h2>
+    <div class="combobox-panel-mobile">
+      <app-combo-box
+        [items]="npcFilters"
+        (onSelectAction)="filterNPCs($event)"
+        (onSearchAction)="searchNPCs($event)"
+      >
+      </app-combo-box>
     </div>
-  </div>
-</div>
-
-<div
-  class="sidenav-block no-mobile"
-  (click)="toggleSidePanel()"
-  [ngClass]="sidenavToggled ? 'visible' : ''"
->
-  <div
-    class="mobile-expand-panel sidenav-item"
-    [ngClass]="sidenavToggled ? 'visible' : ''"
-  >
-    <div class="search-grid">
-      <div class="grid-1">
-        <h1>NPC</h1>
-        <app-combo-box
-          [items]="npcFilters"
-          (onSelectAction)="filterNPCs($event)"
-          (onSearchAction)="searchNPCs($event)"
-        >
-        </app-combo-box>
-      </div>
-      <div class="grid-2">
-        <h2>Gildia</h2>
-        <app-combo-box
-          [items]="guildFilters"
-          (onSelectAction)="filterGuilds($event)"
-          (onSearchAction)="searchGuilds($event)"
-        >
-        </app-combo-box>
-      </div>
-      <div class="grid-3">
-        <h2>Skrypt</h2>
-        <app-combo-box
+    <h2>Gildia</h2>
+    <div class="combobox-panel-mobile">
+      <app-combo-box
+        [items]="guildFilters"
+        (onSelectAction)="filterGuilds($event)"
+        (onSearchAction)="searchGuilds($event)"
+      >
+      </app-combo-box>
+    </div>
+    <div class="combobox-panel-mobile">
+      <h2>Skrypt</h2>
+      <app-combo-box
         [items]="scriptFilters"
         (onSelectAction)="filterScripts($event)"
         (onSearchAction)="searchScripts($event)"
       >
       </app-combo-box>
+    </div>
+    <div *ngIf="displayTags" class="separator"></div>
+    <app-combo-box-list
+      *ngIf="displayTags"
+      [tags]="tags"
+      [selections]="tagsSelections"
+      (onSelectAction)="filterTags($event)"
+    >
+    </app-combo-box-list>
+  </div>
+
+  <div
+    class="sidenav-block no-mobile"
+    (click)="toggleSidePanel()"
+    [ngClass]="sidenavToggled ? 'visible' : ''"
+  >
+    <div
+      class="mobile-expand-panel sidenav-item"
+      [ngClass]="sidenavToggled ? 'visible' : ''"
+    >
+      <div class="search-grid">
+        <div class="grid-1">
+          <h1>NPC</h1>
+          <app-combo-box
+            [items]="npcFilters"
+            (onSelectAction)="filterNPCs($event)"
+            (onSearchAction)="searchNPCs($event)"
+          >
+          </app-combo-box>
+        </div>
+        <div class="grid-2">
+          <h2>Gildia</h2>
+          <app-combo-box
+            [items]="guildFilters"
+            (onSelectAction)="filterGuilds($event)"
+            (onSearchAction)="searchGuilds($event)"
+          >
+          </app-combo-box>
+        </div>
+        <div class="grid-3">
+          <h2>Skrypt</h2>
+          <app-combo-box
+            [items]="scriptFilters"
+            (onSelectAction)="filterScripts($event)"
+            (onSearchAction)="searchScripts($event)"
+          >
+          </app-combo-box>
+        </div>
       </div>
     </div>
   </div>

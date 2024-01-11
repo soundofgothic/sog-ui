@@ -1,29 +1,33 @@
-import { WINDOW } from "@ng-toolkit/universal";
 import {
   AfterViewChecked,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   Inject,
   OnInit,
+  Renderer2,
+  ViewChild,
 } from "@angular/core";
 import {
-  ActivatedRoute,
   NavigationEnd,
-  NavigationStart,
-  ParamMap,
-  Router,
+  Router
 } from "@angular/router";
-import { CollectorService, SearchType } from "../../services/collector.service";
-import { UserService } from "../../access/user.service";
-import { MatSnackBar } from "@angular/material";
-import { SfxService } from "../../services/sfx.service";
+import { WINDOW } from "@ng-toolkit/universal";
 import { combineLatest } from "rxjs";
-import { VoiceService } from "../../services/voice.service";
-import { Guild, NPC, NPCsResponse, SourceFile, Voice, VoicesResponse } from "../../services/domain";
-import { NPCService } from "../../services/npc.service";
-import { URLParams, URLParamsService } from "../../services/urlparams.service";
+import { UserService } from "../../access/user.service";
+import { CollectorService, SearchType } from "../../services/collector.service";
+import {
+  Guild,
+  NPC,
+  SourceFile,
+  Voice
+} from "../../services/domain";
 import { GuildService } from "../../services/guild.service";
+import { NPCService } from "../../services/npc.service";
 import { ScriptsService } from "../../services/scripts.service";
+import { SfxService } from "../../services/sfx.service";
+import { URLParams, URLParamsService } from "../../services/urlparams.service";
+import { VoiceService } from "../../services/voice.service";
 
 @Component({
   selector: "app-basic-layout",
@@ -43,6 +47,7 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
     private npcsService: NPCService,
     private urlParams: URLParamsService,
     private scriptsService: ScriptsService,
+    private renderer: Renderer2,
   ) {
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
@@ -81,41 +86,82 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   public display_navigation = false;
   public pageTypeList = true;
 
-  public voiceFilters: (Voice & { selected: boolean, displayName: string })[];
-  public npcFilters: (NPC & { selected: boolean, displayName: string })[];
-  public guildFilters: (Guild & { selected: boolean, displayName: string })[];
-  public scriptFilters: (SourceFile & { selected: boolean, displayName: string })[];
+  public voiceFilters: (Voice & { selected: boolean; displayName: string })[];
+  public npcFilters: (NPC & { selected: boolean; displayName: string })[];
+  public guildFilters: (Guild & { selected: boolean; displayName: string })[];
+  public scriptFilters: (SourceFile & {
+    selected: boolean;
+    displayName: string;
+  })[];
+
+  @ViewChild("sidenav") sidenav: ElementRef<HTMLInputElement>;
 
   ngOnInit() {
     this.userService.logged().then((status) => (this.reportLink = status));
 
     // -- voice filters
     type voiceTuple = [any, Voice[]];
-    combineLatest([this.urlParams.current, this.voicesService.observedVoices]).subscribe(([_1, _2]: voiceTuple) => {
+    combineLatest([
+      this.urlParams.current,
+      this.voicesService.observedVoices,
+    ]).subscribe(([_1, _2]: voiceTuple) => {
       const params = _1 as URLParams;
       const voices = _2 as Voice[];
-      this.voiceFilters = voices.map(voice => { return { ...voice, selected: params.voices.includes(voice.id), displayName: `${voice.name} (${voice.count})` } })
+      this.voiceFilters = voices.map((voice) => {
+        return {
+          ...voice,
+          selected: params.voices.includes(voice.id),
+          displayName: `${voice.name} (${voice.count})`,
+        };
+      });
     });
     // -- npc filters
     type npcTuple = [any, NPC[]];
-    combineLatest([this.urlParams.current, this.npcsService.observedNPCs]).subscribe(([_1, _2]: npcTuple) => {
+    combineLatest([
+      this.urlParams.current,
+      this.npcsService.observedNPCs,
+    ]).subscribe(([_1, _2]: npcTuple) => {
       const params = _1 as URLParams;
       const npcs = _2 as NPC[];
-      this.npcFilters = npcs.map(npc => { return { ...npc, selected: params.npcs.includes(npc.id), displayName: `G${npc.gameID} ${npc.name} (${npc.count})` } })
+      this.npcFilters = npcs.map((npc) => {
+        return {
+          ...npc,
+          selected: params.npcs.includes(npc.id),
+          displayName: `G${npc.gameID} ${npc.name} (${npc.count})`,
+        };
+      });
     });
     // -- guild filters
     type guildTuple = [any, Guild[]];
-    combineLatest([this.urlParams.current, this.guildService.observedGuilds]).subscribe(([_1, _2]: guildTuple) => {
+    combineLatest([
+      this.urlParams.current,
+      this.guildService.observedGuilds,
+    ]).subscribe(([_1, _2]: guildTuple) => {
       const params = _1 as URLParams;
       const guilds = _2 as Guild[];
-      this.guildFilters = guilds.map(guild => { return { ...guild, selected: params.guilds.includes(guild.id), displayName: `G${guild.gameID} ${guild.name} (${guild.count})` } })
+      this.guildFilters = guilds.map((guild) => {
+        return {
+          ...guild,
+          selected: params.guilds.includes(guild.id),
+          displayName: `G${guild.gameID} ${guild.name} (${guild.count})`,
+        };
+      });
     });
 
     type scriptTuple = [any, SourceFile[]];
-    combineLatest([this.urlParams.current, this.scriptsService.observedScripts]).subscribe(([_1, _2]: scriptTuple) => {
+    combineLatest([
+      this.urlParams.current,
+      this.scriptsService.observedScripts,
+    ]).subscribe(([_1, _2]: scriptTuple) => {
       const params = _1 as URLParams;
       const guilds = _2 as SourceFile[];
-      this.scriptFilters = guilds.map(script => { return { ...script, selected: params.scripts.includes(script.id), displayName: `G${script.gameID} ${script.name} (${script.count})` } })
+      this.scriptFilters = guilds.map((script) => {
+        return {
+          ...script,
+          selected: params.scripts.includes(script.id),
+          displayName: `G${script.gameID} ${script.name} (${script.count})`,
+        };
+      });
     });
 
     combineLatest(
@@ -145,8 +191,17 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
         }
       }
     });
-    
+
     this.sfxService.updateTagsList();
+
+    // -- listen for clicks outside of the side panel
+    this.renderer.listen("window", "click", (e:Event) => {
+      const target = e.target as HTMLElement;
+
+      if (this.sidenavToggled && this.sidenav.nativeElement.contains(target) && target.tagName !== 'INPUT' && target.tagName !== 'SPAN' ) {
+        this.sidenavToggled = false;
+      } 
+    });
   }
 
   search() {
@@ -203,7 +258,11 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   }
 
   searchScripts(script: string) {
-    this.scriptsService.getFiltered({ filter: script })
+    this.scriptsService.getFiltered({ filter: script });
+  }
+
+  searchVoices(voice: string) {
+    this.voicesService.getFilteredVoices({ filter: voice });
   }
 
   onPageSizeChange($event) {

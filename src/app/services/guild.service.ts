@@ -41,7 +41,6 @@ export class GuildService {
   ) {
     this.urlParams.current.subscribe((params) => {
       const opts: GuildLoadOptions = {
-        filter: params.filter,
         gameIDs: params.versions,
         scriptIDs: params.scripts,
         voiceIDs: params.voices,

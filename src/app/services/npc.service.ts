@@ -16,9 +16,10 @@ type NPCLoadOptions = {
   page?: number;
   pageSize?: number;
   voices?: number[];
-  gameIDs?: number[];
   filter?: string;
+  gameIDs?: number[];
   guildIDs?: number[];
+  scriptIDs?: number[];
   ids?: number[];
 };
 
@@ -43,10 +44,10 @@ export class NPCService {
   ) {
     this.urlParams.current.subscribe((params) => {
       const opts: NPCLoadOptions = {
-        filter: params.filter,
         gameIDs: params.versions,
         voices: params.voices,
         guildIDs: params.guilds,
+        scriptIDs: params.scripts,
         ids: params.npcs,
       };
       this.getFilteredNPCs(opts);
@@ -69,7 +70,8 @@ export class NPCService {
         ...(opts.voices && { voiceID: opts.voices.join(",") }),
         ...(opts.gameIDs && { gameID: opts.gameIDs.join(",") }),
         ...(opts.guildIDs && { guildID: opts.guildIDs.join(",") }),
-        ...(opts.ids && { id: opts.ids.join(",") })
+        ...(opts.ids && { id: opts.ids.join(",") }),
+        ...(opts.scriptIDs && { scriptID: opts.scriptIDs.join(",") }),
       },
     });
     this.httpClient.get<NPCsResponse>("/npcs", { params }).subscribe((data) => {

@@ -65,7 +65,7 @@ import { environment } from "../environments/environment";
     {
       provide: "CONFIG",
       useFactory: (platformId: Object, serverConfig: any) => {
-        return isPlatformBrowser(platformId) ? (window as any).CONFIG : serverConfig;
+        return isPlatformBrowser(platformId) ? (window as any).CONFIG || environment : serverConfig;
       },
       deps: [PLATFORM_ID, [new Optional(), new Inject("SERVER_CONFIG")]],
     }

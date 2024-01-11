@@ -14,3 +14,6 @@ docker:
 docker-push: docker
 	if [ -n "$(CHANGES)" ]; then echo "You have uncommited changes, aborting"; exit 1; fi
 	docker push soundofgothic/ui:$(VERSION)
+
+version:
+	@echo soundofgothic/ui:$(VERSION)

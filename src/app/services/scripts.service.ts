@@ -44,7 +44,6 @@ export class ScriptsService {
   ) {
     this.urlParams.current.subscribe((params) => {
       const opts: ScriptLoadOptions = {
-        filter: params.filter,
         gameIDs: params.versions,
         voiceIDs: params.voices,
         npcIDs: params.npcs,
@@ -70,10 +69,10 @@ export class ScriptsService {
         page: opts.page.toString(),
         limit: opts.pageSize.toString(),
         ...(opts.filter && { filter: opts.filter }),
-        ...(opts.gameIDs && { gameIDs: opts.gameIDs.join(",") }),
-        ...(opts.voiceIDs && { voiceIDs: opts.voiceIDs.join(",") }),
-        ...(opts.npcIDs && { npcIDs: opts.npcIDs.join(",") }),
-        ...(opts.guildIDs && { guildIDs: opts.guildIDs.join(",") }),
+        ...(opts.gameIDs && { gameID: opts.gameIDs.join(",") }),
+        ...(opts.voiceIDs && { voiceID: opts.voiceIDs.join(",") }),
+        ...(opts.npcIDs && { npcID: opts.npcIDs.join(",") }),
+        ...(opts.guildIDs && { guildID: opts.guildIDs.join(",") }),
         ...(opts.ids && { id: opts.ids.join(",") }),
       },
     });

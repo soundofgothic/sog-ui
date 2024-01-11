@@ -347,6 +347,10 @@ option {
 }
 
 .mobile-expand-panel {
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+  overscroll-behavior: contain;
+
   position: absolute;
   height: 100%;
   width: 70vw;
@@ -433,12 +437,6 @@ option {
     display: none;
   }
 
-  .tag-mobile-panel {
-    position: absolute;
-    width: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-  }
 
   .mobile-only {
     display: inline-block;
@@ -449,4 +447,8 @@ option {
     left: 10px;
     position: absolute;
   }
+}
+
+.combobox-panel-mobile {
+  height: 300px;
 }
