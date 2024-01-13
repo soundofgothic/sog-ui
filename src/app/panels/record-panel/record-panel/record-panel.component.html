@@ -1,19 +1,41 @@
 <div>
-
   <ng-template [ngIf]="record">
     <header>
       <div class="audio-item">
-        <audio *ngIf="record && !recordLoading" id="filename" style="vertical-align: bottom" controls preload="none">
-          <source src="{{filename()}}" type="audio/wav">
+        <audio
+          *ngIf="record && !recordLoading"
+          id="filename"
+          style="vertical-align: bottom"
+          controls
+          preload="none"
+        >
+          <source src="{{ filename() }}" type="audio/wav" />
         </audio>
         <i (click)="share()" class="fa fa-share-alt"></i>
-
       </div>
       <h1>
-        {{record.text}}
+        {{ record.transcript }}
       </h1>
       <h2>
-        {{name}}
+        {{ name }}
+      </h2>
+      <h2 class="label">
+        <span> Aktor: </span>
+        <span>
+          {{ record.voice.name }}
+        </span>
+      </h2>
+      <h2 class="label">
+        <span> Plik: </span>
+        <span>
+          {{ record.sourceFile.name }}
+        </span>
+      </h2>
+      <h2 class="label">
+        <span> Gildia: </span>
+        <span>
+          {{ record.guild.name }}
+        </span>
       </h2>
     </header>
 
@@ -21,24 +43,37 @@
       <h3>Zobacz nagrania z tego samego skryptu:</h3>
 
       <div class="records" *ngFor="let record of records">
-        <app-item [text]="record.text"
-                  [filename]="record.filename"
-                  [filesource]="record.source"
-                  [version]="record.g"
-                  [id]="record._id"
+        <app-item
+          [text]="record.transcript"
+          [filename]="record.wave"
+          [filesource]="record.sourceFile.name"
+          [version]="record.gameID"
+          [id]="record.id"
+          [record]="record"
         ></app-item>
       </div>
 
       <div class="page-bar centered">
-        <span *ngIf="backDisplay" (click)="back()" class="icon-item-left"> <i class="fa fa-arrow-left"></i> </span>
-        <span>{{recordCount}} - {{upTo}} / {{totalRecordCount}}</span>
-        <span *ngIf="forwardDisplay" (click)="forward()" class="icon-item-right"> <i class="fa fa-arrow-right"></i> </span>
-        <select (ngModelChange)="onPageSizeChange($event)" [ngModel]="pageSizeSelected">
-          <option *ngFor="let option of pageSizeOptions" value="{{option}}">{{option}}</option>
+        <span *ngIf="backDisplay" (click)="back()" class="icon-item-left">
+          <i class="fa fa-arrow-left"></i>
+        </span>
+        <span>{{ recordCount }} - {{ upTo }} / {{ totalRecordCount }}</span>
+        <span
+          *ngIf="forwardDisplay"
+          (click)="forward()"
+          class="icon-item-right"
+        >
+          <i class="fa fa-arrow-right"></i>
+        </span>
+        <select
+          (ngModelChange)="onPageSizeChange($event)"
+          [ngModel]="pageSizeSelected"
+        >
+          <option *ngFor="let option of pageSizeOptions" value="{{ option }}">
+            {{ option }}
+          </option>
         </select>
       </div>
     </ng-template>
-
   </ng-template>
-
 </div>

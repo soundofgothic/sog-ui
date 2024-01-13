@@ -1,5 +1,6 @@
-
-h3, h2, h1 {
+h3,
+h2,
+h1 {
   font-family: DefaultFont;
   font-weight: normal;
 }
@@ -25,7 +26,6 @@ h2 {
 h3 {
   font-size: 1em;
   padding: 0.5em;
-
 }
 
 .centered {
@@ -78,7 +78,7 @@ i.fa-share-alt:hover {
   color: #ef1010;
 }
 
-@media (min-width:900px) {
+@media (min-width: 900px) {
   header {
     min-height: 30vh;
   }
@@ -96,6 +96,15 @@ i.fa-share-alt:hover {
   h1 {
     margin-left: 0;
     margin-right: 0;
-
   }
+}
+
+.label {
+  float: right;
+  width: min(100%, 600px);
+  margin: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

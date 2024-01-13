@@ -1,20 +1,23 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {combineLatest, Subscription} from 'rxjs';
-import {CollectorService, componentTypeResolver, SearchType} from '../../../services/collector.service';
-import {environment} from '../../../../environments/environment';
-import {first} from 'rxjs/operators';
-import {Meta, Title} from '@angular/platform-browser';
-import { Recording } from '../../../services/domain';
-
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Meta, Title } from "@angular/platform-browser";
+import { ActivatedRoute, Router } from "@angular/router";
+import { URLParamsService } from "@app/services/urlparams.service";
+import { Subscription } from "rxjs";
+import { first } from "rxjs/operators";
+import { environment } from "../../../../environments/environment";
+import {
+  CollectorService,
+  SearchType,
+} from "../../../services/collector.service";
+import { Recording } from "../../../services/domain";
 
 @Component({
-  selector: 'app-record-panel',
-  templateUrl: './record-panel.component.html',
-  styleUrls: ['./record-panel.component.css']
+  selector: "app-record-panel",
+  templateUrl: "./record-panel.component.html",
+  styleUrls: ["./record-panel.component.css"],
+  providers: [URLParamsService],
 })
 export class RecordPanelComponent implements OnInit, OnDestroy {
-
   private subs: Array<Subscription> = [];
   public name: string;
   public g: number;
@@ -33,39 +36,47 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
   public pageSizeSelected: number;
   public pageSizeOptions: number[] = [10, 50, 100];
 
-
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private collectorService: CollectorService,
-              private meta: Meta,
-              private title: Title
-  ) {
-  }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private collectorService: CollectorService,
+    private meta: Meta,
+    private title: Title,
+    private urlParamsService: URLParamsService
+  ) {}
 
   ngOnInit() {
-    this.collectorService.recordLoading.subscribe(v => this.recordLoading = v);
+    this.collectorService.recordLoading.subscribe(
+      (v) => (this.recordLoading = v)
+    );
     this.collectorService.observedRecords.subscribe((data) => {
       this.records = data.results;
     });
-    this.collectorService.loading.pipe(first()).subscribe(v => this.loading = v);
-    this.subs.push(combineLatest(this.route.params, this.route.queryParamMap).subscribe(([params, queryParams]) => {
-      this.name = params['name'];
-      this.g = +params['g'];
+    this.collectorService.loading
+      .pipe(first())
+      .subscribe((v) => (this.loading = v));
+
+    const urlSub = this.urlParamsService.current.subscribe((params) => {
+      this.name = params.recordingName;
+      this.g = params.recordingGame;
+
       this.subs.push(
-        this.collectorService.record.pipe(first()).subscribe(v => {
+        this.collectorService.record.pipe(first()).subscribe((v) => {
           this.record = v;
           if (v) {
-
             this.meta.updateTag({
-              name: 'description', content: this.record.transcript
+              name: "description",
+              content: this.record.transcript,
             });
 
             this.meta.addTag({
-              property: 'og:description', content: this.record.transcript
+              property: "og:description",
+              content: this.record.transcript,
             });
 
             this.meta.addTag({
-              property: 'og:title', content: this.record.transcript
+              property: "og:title",
+              content: this.record.transcript,
             });
 
             this.title.setTitle(this.record.transcript);
@@ -73,21 +84,26 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
           // tslint:disable-next-line:no-unused-expression
           const metadata = this.collectorService.observedMetadata.getValue();
 
-          if (this.g < 3 && this.record && (!metadata || (metadata.lastSearchType !== SearchType.SOURCE || metadata.filter !== this.record.sourceFile.name || metadata.pageNumber !== this.page || metadata.pageSize !== 10))) {
-            this.page = 0;
-            this.collectorService.getFilteredRecords({
-              filter: this.record.sourceFile.name,
-              type: SearchType.SOURCE,
-              page: this.page,
-              pageSize: 10,
-            });
+          if (
+            this.g < 3 &&
+            this.record &&
+            (!metadata ||
+              metadata.lastSearchType !== SearchType.SOURCE ||
+              metadata.filter !== this.record.sourceFile.name ||
+              metadata.pageNumber !== this.page ||
+              metadata.pageSize !== 10)
+          ) {
+            this.page = 1;
+            this.collectorService.loadFamiliarRecordings(this.record);
           }
-        }),
+        })
       );
       this.collectorService.getGNameRecord(this.g, this.name);
-    }));
+    });
 
-    this.collectorService.observedMetadata.subscribe(data => {
+    this.subs.push(urlSub);
+
+    this.collectorService.observedMetadata.subscribe((data) => {
       if (data) {
         this.recordCount = data.recordCount;
         this.totalRecordCount = data.totalRecordCount;
@@ -103,7 +119,7 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subs.forEach(sub => sub.unsubscribe());
+    this.subs.forEach((sub) => sub.unsubscribe());
     this.collectorService.setRecordMode(false);
   }
 
@@ -116,7 +132,7 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
   }
 
   onPageSizeChange(pageSize) {
-    this.page = Math.floor(this.page * this.pageSizeSelected / pageSize);
+    this.page = Math.floor((this.page * this.pageSizeSelected) / pageSize);
     this.pageSizeSelected = pageSize;
     this.collectorService.getFilteredRecords({
       filter: this.record.sourceFile.name,
@@ -130,10 +146,10 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
     if (this.record.gameID) {
       let filename = this.record.sourceFile.name;
       if (+this.record.gameID < 3) {
-        filename = filename.toUpperCase() + '.WAV';
-        return environment.soundsAssetsUrl + '/assets/gsounds/' + filename;
+        filename = filename.toUpperCase() + ".WAV";
+        return environment.soundsAssetsUrl + "/assets/gsounds/" + filename;
       } else {
-        return environment.soundsAssetsUrl + '/assets/g3sounds/' + filename;
+        return environment.soundsAssetsUrl + "/assets/g3sounds/" + filename;
       }
     }
   }
@@ -141,5 +157,4 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
   share() {
     window.prompt("Skopiuj do schowka: Ctrl+C, Enter", window.location.href);
   }
-
 }

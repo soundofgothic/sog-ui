@@ -8,20 +8,12 @@ import {
   Renderer2,
   ViewChild,
 } from "@angular/core";
-import {
-  NavigationEnd,
-  Router
-} from "@angular/router";
+import { NavigationEnd, Router } from "@angular/router";
 import { WINDOW } from "@ng-toolkit/universal";
 import { combineLatest } from "rxjs";
 import { UserService } from "../../access/user.service";
 import { CollectorService, SearchType } from "../../services/collector.service";
-import {
-  Guild,
-  NPC,
-  SourceFile,
-  Voice
-} from "../../services/domain";
+import { Guild, NPC, SourceFile, Voice } from "../../services/domain";
 import { GuildService } from "../../services/guild.service";
 import { NPCService } from "../../services/npc.service";
 import { ScriptsService } from "../../services/scripts.service";
@@ -47,7 +39,7 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
     private npcsService: NPCService,
     private urlParams: URLParamsService,
     private scriptsService: ScriptsService,
-    private renderer: Renderer2,
+    private renderer: Renderer2
   ) {
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
@@ -195,12 +187,18 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
     this.sfxService.updateTagsList();
 
     // -- listen for clicks outside of the side panel
-    this.renderer.listen("window", "click", (e:Event) => {
+    this.renderer.listen("window", "click", (e: Event) => {
       const target = e.target as HTMLElement;
 
-      if (this.sidenavToggled && this.sidenav.nativeElement.contains(target) && target.tagName !== 'INPUT' && target.tagName !== 'SPAN' ) {
+      if (
+        this.sidenavToggled &&
+        this.sidenav.nativeElement.contains(target) &&
+        target.tagName !== "INPUT" &&
+        target.tagName !== "SPAN"
+      ) {
+        console.log("click outside of side panel");
         this.sidenavToggled = false;
-      } 
+      }
     });
   }
 

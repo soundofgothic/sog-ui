@@ -1,17 +1,11 @@
-import { WINDOW, LOCAL_STORAGE } from "@ng-toolkit/universal";
-import { Inject, Injectable, PLATFORM_ID } from "@angular/core";
-import {
-  BehaviorSubject,
-  Observable,
-  Subject,
-  Subscribable,
-  throwError,
-} from "rxjs";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { ActivatedRoute, Router } from "@angular/router";
 import { isPlatformBrowser } from "@angular/common";
-import { catchError, tap } from "rxjs/operators";
-import { RecordingsResponse } from "./domain";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { Inject, Injectable, PLATFORM_ID } from "@angular/core";
+import { Router } from "@angular/router";
+import { LOCAL_STORAGE, WINDOW } from "@ng-toolkit/universal";
+import { BehaviorSubject, Subject, throwError } from "rxjs";
+import { catchError } from "rxjs/operators";
+import { Recording, RecordingsResponse } from "./domain";
 
 export enum SearchType {
   TEXT,
@@ -110,10 +104,12 @@ export class CollectorService {
         ...(config.type === SearchType.SFX_E && { sortField: "reported" }),
         ...(config.npcs && { npcID: config.npcs.map((n) => n + "") }),
         ...(config.guilds && { guildID: config.guilds.map((g) => g + "") }),
-        ...(config.scripts && {sourceFileID: config.scripts.map(s => s + "")})
+        ...(config.scripts && {
+          sourceFileID: config.scripts.map((s) => s + ""),
+        }),
       },
     });
-    
+
     const options = {
       params: queryParams,
     };
@@ -186,12 +182,14 @@ export class CollectorService {
       newConfig = c(newConfig);
     });
 
-    let clearNewConfig = Object.keys(newConfig).filter(key => {
-      if(Array.isArray(newConfig[key])) {
-        return newConfig[key].length > 0
-      } 
-      return newConfig[key]
-    }).reduce((res, key) => (res[key] = newConfig[key], res), {});
+    let clearNewConfig = Object.keys(newConfig)
+      .filter((key) => {
+        if (Array.isArray(newConfig[key])) {
+          return newConfig[key].length > 0;
+        }
+        return newConfig[key];
+      })
+      .reduce((res, key) => ((res[key] = newConfig[key]), res), {});
 
     switch (forceMode) {
       case "stay":
@@ -246,14 +244,17 @@ export class CollectorService {
   updatePageSize(pageSize: number) {
     const newPageNumber =
       1 + Math.floor(((this.pageNumber - 1) * this.pageSize) / pageSize);
-    this.search([
-      this.withLatestConfig(),
-      (a: SearchConfig): SearchConfig => ({
-        ...a,
-        page: newPageNumber,
-        pageSize: pageSize,
-      }),
-    ]);
+    this.search(
+      [
+        this.withLatestConfig(),
+        (a: SearchConfig): SearchConfig => ({
+          ...a,
+          page: newPageNumber,
+          pageSize: pageSize,
+        }),
+      ],
+      this.recordMode ? "stay" : "redirect"
+    );
   }
 
   updateMetadata() {
@@ -275,25 +276,31 @@ export class CollectorService {
 
   nextPage() {
     if (this.forwardOption) {
-      this.search([
-        this.withLatestConfig(),
-        (a: SearchConfig): SearchConfig => ({
-          ...a,
-          page: this.pageNumber + 1,
-        }),
-      ]);
+      this.search(
+        [
+          this.withLatestConfig(),
+          (a: SearchConfig): SearchConfig => ({
+            ...a,
+            page: this.pageNumber + 1,
+          }),
+        ],
+        this.recordMode ? "stay" : "redirect"
+      );
     }
   }
 
   previousPage() {
     if (this.backOption) {
-      this.search([
-        this.withLatestConfig(),
-        (a: SearchConfig): SearchConfig => ({
-          ...a,
-          page: this.pageNumber + 1,
-        }),
-      ]);
+      this.search(
+        [
+          this.withLatestConfig(),
+          (a: SearchConfig): SearchConfig => ({
+            ...a,
+            page: this.pageNumber - 1,
+          }),
+        ],
+        this.recordMode ? "stay" : "redirect"
+      );
     }
   }
 
@@ -379,7 +386,7 @@ export class CollectorService {
         }),
       ],
       "redirect"
-    )
+    );
   }
 
   filterScripts(scripts: number[]) {
@@ -390,9 +397,10 @@ export class CollectorService {
           ...a,
           scripts: scripts,
           page: 1,
-        })
-      ], "redirect"
-    )
+        }),
+      ],
+      "redirect"
+    );
   }
 
   selectTag(tagName: string) {
@@ -422,6 +430,21 @@ export class CollectorService {
         }),
       ],
       "redirect"
+    );
+  }
+
+  loadFamiliarRecordings(recording: Recording) {
+    this.search(
+      [
+        (a: SearchConfig): SearchConfig => ({
+          filter: "",
+          type: SearchType.TEXT,
+          page: 1,
+          pageSize: this.deviceDependsPageSize(),
+          scripts: [recording.sourceFileID],
+        }),
+      ],
+      "stay"
     );
   }
 
