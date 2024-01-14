@@ -68,6 +68,9 @@ export class CollectorService {
     new BehaviorSubject<Metadata>(null);
   public loading: Subject<boolean> = new BehaviorSubject<any>(false);
   public recordLoading = new BehaviorSubject<boolean>(false);
+  public recordMode: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
 
   public lastSearchConfig: BehaviorSubject<SearchConfig> =
     new BehaviorSubject<SearchConfig>({
@@ -82,7 +85,6 @@ export class CollectorService {
   private pageNumber: number;
   private backOption = false;
   private forwardOption = false;
-  private recordMode = false;
 
   constructor(
     @Inject(WINDOW) private window: Window,
@@ -204,7 +206,7 @@ export class CollectorService {
         );
         return;
       default:
-        if (this.recordMode) {
+        if (this.recordMode.value) {
           this.router.navigate(
             [componentTypeResolver[this.lastSearchConfig.value.type]],
             {
@@ -253,7 +255,7 @@ export class CollectorService {
           pageSize: pageSize,
         }),
       ],
-      this.recordMode ? "stay" : "redirect"
+      this.recordMode.value ? "stay" : "redirect"
     );
   }
 
@@ -284,7 +286,7 @@ export class CollectorService {
             page: this.pageNumber + 1,
           }),
         ],
-        this.recordMode ? "stay" : "redirect"
+        this.recordMode.value ? "stay" : "redirect"
       );
     }
   }
@@ -299,7 +301,7 @@ export class CollectorService {
             page: this.pageNumber - 1,
           }),
         ],
-        this.recordMode ? "stay" : "redirect"
+        this.recordMode.value ? "stay" : "redirect"
       );
     }
   }
@@ -347,10 +349,12 @@ export class CollectorService {
     );
   }
 
-  filterVoices(voices: number[]) {
+  filterVoices(voices: number[], withLatestConfig?: boolean) {
+    withLatestConfig = withLatestConfig === undefined ? true : withLatestConfig;
+
     this.search(
       [
-        this.withLatestConfig(),
+        ...(withLatestConfig ? [this.withLatestConfig()] : []),
         (a: SearchConfig): SearchConfig => ({
           ...a,
           voices: voices,
@@ -361,10 +365,12 @@ export class CollectorService {
     );
   }
 
-  filterNPCs(npcs: number[]) {
+  filterNPCs(npcs: number[], withLatestConfig?: boolean) {
+    withLatestConfig = withLatestConfig === undefined ? true : withLatestConfig;
+
     this.search(
       [
-        this.withLatestConfig(),
+        ...(withLatestConfig ? [this.withLatestConfig()] : []),
         (a: SearchConfig): SearchConfig => ({
           ...a,
           npcs: npcs,
@@ -375,10 +381,12 @@ export class CollectorService {
     );
   }
 
-  filterGuilds(guilds: number[]) {
+  filterGuilds(guilds: number[], withLatestConfig?: boolean) {
+    withLatestConfig = withLatestConfig === undefined ? true : withLatestConfig;
+
     this.search(
       [
-        this.withLatestConfig(),
+        ...(withLatestConfig ? [this.withLatestConfig()] : []),
         (a: SearchConfig): SearchConfig => ({
           ...a,
           guilds: guilds,
@@ -389,10 +397,12 @@ export class CollectorService {
     );
   }
 
-  filterScripts(scripts: number[]) {
+  filterScripts(scripts: number[], withLatestConfig?: boolean) {
+    withLatestConfig = withLatestConfig === undefined ? true : withLatestConfig;
+
     this.search(
       [
-        this.withLatestConfig(),
+        ...(withLatestConfig ? [this.withLatestConfig()] : []),
         (a: SearchConfig): SearchConfig => ({
           ...a,
           scripts: scripts,
@@ -418,21 +428,6 @@ export class CollectorService {
     );
   }
 
-  selectVoices(voices: number[]) {
-    this.search(
-      [
-        this.withLatestConfig(),
-        (a: SearchConfig): SearchConfig => ({
-          ...a,
-          voices: voices,
-          filter: "",
-          page: 1,
-        }),
-      ],
-      "redirect"
-    );
-  }
-
   loadFamiliarRecordings(recording: Recording) {
     this.search(
       [
@@ -449,7 +444,7 @@ export class CollectorService {
   }
 
   setRecordMode(value: boolean) {
-    this.recordMode = value;
+    this.recordMode.next(value);
   }
 
   reloadPage() {

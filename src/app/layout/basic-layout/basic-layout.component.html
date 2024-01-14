@@ -71,7 +71,7 @@
     <app-info-panel-component> </app-info-panel-component>
   </div>
 
-  <div class="sidenav-item no-mobile">
+  <div *ngIf="!recordMode" class="sidenav-item no-mobile">
     <app-versions-combo-box
       [selections]="versionSelections"
       (onSelectAction)="filterVersions($event)"
@@ -79,9 +79,9 @@
     </app-versions-combo-box>
   </div>
 
-  <div class="separator no-mobile"></div>
+  <div *ngIf="!recordMode" class="separator no-mobile"></div>
 
-  <div class="sidenav-item no-mobile">
+  <div *ngIf="!recordMode" class="sidenav-item no-mobile">
     <app-combo-box
       [items]="voiceFilters"
       (onSelectAction)="filterVoices($event)"
@@ -89,7 +89,11 @@
     </app-combo-box>
   </div>
 
-  <div (click)="toggleSidePanel()" class="sidenav-item centered">
+  <div
+    *ngIf="!recordMode"
+    (click)="toggleSidePanel()"
+    class="sidenav-item centered"
+  >
     Więcej <i class="fa fa-arrow-right"></i>
   </div>
 

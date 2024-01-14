@@ -19,29 +19,40 @@
       <h2>
         {{ name }}
       </h2>
-      <h2 class="label">
-        <span> Aktor: </span>
-        <span>
-          {{ record.voice.name }}
-        </span>
-      </h2>
-      <h2 class="label">
-        <span> Plik: </span>
-        <span>
-          {{ record.sourceFile.name }}
-        </span>
-      </h2>
-      <h2 class="label">
-        <span> Gildia: </span>
-        <span>
-          {{ record.guild.name }}
-        </span>
-      </h2>
+
+      <div class="sections">
+        <h3>Zobacz nagrania z tego samego skryptu:</h3>
+
+        <div class="section">
+          <h2 class="label">
+            <span> Aktor: </span>
+            <a (click)="selectVoice()">
+              {{ record.voice.name }}
+            </a>
+          </h2>
+          <h2 class="label">
+            <span> Plik: </span>
+            <a (click)="selectScript()">
+              {{ record.sourceFile.name }}
+            </a>
+          </h2>
+          <h2 *ngIf="record.guild" class="label">
+            <span> Gildia: </span>
+            <a (click)="selectGuild()">
+              {{ record.guild.name }}
+            </a>
+          </h2>
+          <h2 *ngIf="record.npc" class="label">
+            <span> NPC </span>
+            <a (click)="selectNPC()">
+              {{ record.npc.name }}
+            </a>
+          </h2>
+        </div>
+      </div>
     </header>
 
     <ng-template [ngIf]="g < 3">
-      <h3>Zobacz nagrania z tego samego skryptu:</h3>
-
       <div class="records" *ngFor="let record of records">
         <app-item
           [text]="record.transcript"

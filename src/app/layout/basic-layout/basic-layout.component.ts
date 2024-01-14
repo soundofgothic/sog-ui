@@ -86,6 +86,8 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
     displayName: string;
   })[];
 
+  public recordMode = false;
+
   @ViewChild("sidenav") sidenav: ElementRef<HTMLInputElement>;
 
   ngOnInit() {
@@ -184,6 +186,10 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
       }
     });
 
+    this.collectionService.recordMode.subscribe(
+      (recordMode) => (this.recordMode = recordMode)
+    );
+
     this.sfxService.updateTagsList();
 
     // -- listen for clicks outside of the side panel
@@ -196,7 +202,6 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
         target.tagName !== "INPUT" &&
         target.tagName !== "SPAN"
       ) {
-        console.log("click outside of side panel");
         this.sidenavToggled = false;
       }
     });

@@ -131,6 +131,22 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
     this.collectorService.nextPage();
   }
 
+  selectVoice() {
+    this.collectorService.filterVoices([this.record.voiceID], false);
+  }
+
+  selectScript() {
+    this.collectorService.filterScripts([this.record.sourceFileID], false);
+  }
+
+  selectGuild() {
+    this.collectorService.filterGuilds([this.record.guildID], false);
+  }
+
+  selectNPC() {
+    this.collectorService.filterNPCs([this.record.npcID], false);
+  }
+
   onPageSizeChange(pageSize) {
     this.page = Math.floor((this.page * this.pageSizeSelected) / pageSize);
     this.pageSizeSelected = pageSize;
