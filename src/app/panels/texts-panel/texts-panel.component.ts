@@ -1,10 +1,10 @@
-import { Component, Inject, Injector, OnInit, Optional } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { Subscription } from "rxjs";
 import {
   CollectorService,
   SearchConfig,
   SearchType,
 } from "../../services/collector.service";
-import { ActivatedRoute, UrlSegment } from "@angular/router";
 import { URLParams, URLParamsService } from "../../services/urlparams.service";
 
 @Component({
@@ -15,13 +15,15 @@ import { URLParams, URLParamsService } from "../../services/urlparams.service";
 export class TextsPanelComponent implements OnInit {
   constructor(
     private service: CollectorService,
-    private urlParams: URLParamsService,
+    private urlParams: URLParamsService
   ) {}
 
   public records: any;
 
+  private subs: Subscription[] = [];
+
   ngOnInit() {
-    this.urlParams.current.subscribe((params: URLParams) => {
+    const urlWatcher = this.urlParams.current.subscribe((params: URLParams) => {
       let config: SearchConfig = {
         filter: params.filter || "",
         pageSize: params.pageSize || this.service.deviceDependsPageSize(),
@@ -37,8 +39,18 @@ export class TextsPanelComponent implements OnInit {
       this.service.getFilteredRecords(config);
     });
 
-    this.service.observedRecords.subscribe((data) => {
-      this.records = data.results;
-    });
+    this.subs.push(urlWatcher);
+
+    const recordsSubscribtion = this.service.observedRecords.subscribe(
+      (data) => {
+        this.records = data.results;
+      }
+    );
+
+    this.subs.push(recordsSubscribtion);
+  }
+
+  ngOnDestroy() {
+    this.subs.forEach((s) => s.unsubscribe());
   }
 }

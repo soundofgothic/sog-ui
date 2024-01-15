@@ -23,7 +23,7 @@ audio {
   vertical-align: middle;
 }
 
-.report-form > input[type=text] {
+.report-form > input[type="text"] {
   border-top: 0;
   border-left: 0;
   border-right: 0;
@@ -41,7 +41,7 @@ audio {
   top: 0;
 }
 
-.report-form > input[type=submit] {
+.report-form > input[type="submit"] {
   margin-left: 10px;
   font-family: DefaultFont;
   border: 0;
@@ -85,40 +85,29 @@ audio {
   margin: 3px;
 }
 
-.filesource {
-  background-color: #2f2f2f;
+.tag {
   padding: 2px 5px;
   border-radius: 5px;
   color: #fff;
   font-size: 10px;
   text-decoration: none;
+  cursor: pointer;
+}
+
+.filesource {
+  background-color: #2f2f2f;
 }
 
 .npc {
   background-color: #6e3333;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #fff;
-  font-size: 10px;
-  text-decoration: none;
 }
 
 .actor {
   background-color: #6e3333;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #fff;
-  font-size: 10px;
-  text-decoration: none;
 }
 
 .guild {
   background-color: #6e3333;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #fff;
-  font-size: 10px;
-  text-decoration: none;
 }
 
 .clickable {
@@ -132,9 +121,7 @@ audio {
   position: relative;
 }
 
-
 @media only screen and (max-width: 600px) {
-
   .item {
     margin: 10px 0;
   }
@@ -154,6 +141,4 @@ audio {
     width: 100%;
     background-color: black;
   }
-
-
 }

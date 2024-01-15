@@ -1,45 +1,47 @@
 <div class="item">
   <div class="audio-item">
     <audio controls preload="none">
-      <source src="{{parseFilename(filename)}}" type="audio/wav">
+      <source src="{{ wavePath() }}" type="audio/wav" />
     </audio>
   </div>
   <div class="text-item">
     <span *ngIf="reportMode; else displayMode">
       <form class="report-form" (ngSubmit)="commitReport()">
         <span>Zaproponuj nowy tekst: </span>
-        <input type="text" [(ngModel)]="reportDetails" name="reportDetails">
-        <input type="submit">
-        <i class="far fa-share" (click)="reportMode=false"></i>
+        <input type="text" [(ngModel)]="reportDetails" name="reportDetails" />
+        <input type="submit" />
+        <i class="far fa-share" (click)="reportMode = false"></i>
       </form>
     </span>
     <ng-template #displayMode>
-      <a class="no-decoration" [routerLink]="'/record/' + version + '/' + filename">
-        <i class="fas fa-share"></i> {{record.transcript}}
+      <a
+        class="no-decoration"
+        [routerLink]="'/record/' + record.gameID + '/' + record.wave"
+      >
+        <i class="fas fa-share"></i> {{ record.transcript }}
       </a>
     </ng-template>
     <div class="meta-info">
-      <a (click)="searchBySource()" class="filesource" [ngClass]="filesource ? 'clickable' : ''">
+      <a (click)="searchBySource()" class="tag filesource">
         Plik: {{ record.sourceFile.name }}
       </a>
-      <a *ngIf="record.npcID" (click)="searchBySource()" class="npc" [ngClass]="filesource ? 'clickable' : ''">
+      <a *ngIf="record.npcID" (click)="searchByNPC()" class="tag npc">
         NPC: {{ record.npc.name }}
       </a>
-      <a (click)="searchBySource()" class="actor" [ngClass]="filesource ? 'clickable' : ''">
+      <a (click)="searchByVoice()" class="tag actor">
         Aktor: {{ record.voice.name }}
       </a>
-      <a *ngIf="record.guildID" (click)="searchBySource()" class="guild" [ngClass]="filesource ? 'clickable' : ''">
+      <a *ngIf="record.guildID" (click)="searchByGuild()" class="tag guild">
         Gilda: {{ record.guild.name }}
       </a>
       <span class="version">
-        {{"Gothic " + romanNumerals[version - 1]}}
-        <br> <span *ngIf="reportSent; else reportOption">Wysłano</span>
+        {{ "Gothic " + romanNumerals[this.record.gameID - 1] }}
+        <br />
+        <span *ngIf="reportSent; else reportOption">Wysłano</span>
         <ng-template #reportOption>
-          <span class="report" (click)="openReport()">
-            Zgłoś błąd
-          </span>
+          <span class="report" (click)="openReport()"> Zgłoś błąd </span>
         </ng-template>
-        <img *ngIf="loading" class="loading" src="/assets/loading.svg">
+        <img *ngIf="loading" class="loading" src="/assets/loading.svg" />
       </span>
     </div>
   </div>

@@ -1,11 +1,11 @@
 import { Component, Inject, Input, OnInit } from "@angular/core";
-import { environment } from "../../../environments/environment";
-import { CollectorService, SearchType } from "../../services/collector.service";
+import { MatSnackBar } from "@angular/material";
 import { Router } from "@angular/router";
 import { LOCAL_STORAGE } from "@ng-toolkit/universal";
-import { MatSnackBar } from "@angular/material";
-import { ReportService } from "../../services/report.service";
+import { environment } from "../../../environments/environment";
+import { CollectorService } from "../../services/collector.service";
 import { Recording } from "../../services/domain";
+import { ReportService } from "../../services/report.service";
 
 @Component({
   selector: "app-item",
@@ -14,12 +14,6 @@ import { Recording } from "../../services/domain";
 })
 export class TextItemComponent implements OnInit {
   @Input() record: Recording;
-
-  @Input() filename: string;
-  @Input() text: string;
-  @Input() filesource: string;
-  @Input() version: any;
-  @Input() id: string;
 
   reportMode = false;
   loading = false;
@@ -38,19 +32,29 @@ export class TextItemComponent implements OnInit {
 
   ngOnInit() {}
 
-  parseFilename(filename: String): String {
-    if (this.version < 3) {
-      filename = filename.toUpperCase() + ".WAV";
-      return environment.soundsAssetsUrl + "/assets/gsounds/" + filename;
-    } else {
-      return environment.soundsAssetsUrl + "/assets/g3sounds/" + filename;
-    }
+  wavePath(): String {
+    return (
+      environment.soundsAssetsUrl +
+      "/assets/gsounds/" +
+      this.record.wave.toUpperCase() +
+      ".WAV"
+    );
   }
 
   searchBySource() {
-    if (this.filesource) {
-      this.collectorService.searchBySource(this.filesource);
-    }
+    this.collectorService.filterScripts([this.record.sourceFileID], false);
+  }
+
+  searchByGuild() {
+    this.collectorService.filterGuilds([this.record.guildID], false);
+  }
+
+  searchByVoice() {
+    this.collectorService.filterVoices([this.record.voiceID], false);
+  }
+
+  searchByNPC() {
+    this.collectorService.filterNPCs([this.record.npcID], false);
   }
 
   openReport() {
@@ -60,7 +64,7 @@ export class TextItemComponent implements OnInit {
   commitReport() {
     this.loading = true;
     this.reportService
-      .reportRecord(this.id, this.reportDetails)
+      .reportRecord(this.record.id, this.reportDetails)
       .subscribe((data) => {
         this.reportMode = false;
         this.loading = false;

@@ -160,7 +160,7 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
 
   filename(): String {
     if (this.record.gameID) {
-      let filename = this.record.sourceFile.name;
+      let filename = this.record.wave;
       if (+this.record.gameID < 3) {
         filename = filename.toUpperCase() + ".WAV";
         return environment.soundsAssetsUrl + "/assets/gsounds/" + filename;

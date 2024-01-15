@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  HostListener,
   Inject,
   OnInit,
   Renderer2,
@@ -89,6 +90,7 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
   public recordMode = false;
 
   @ViewChild("sidenav") sidenav: ElementRef<HTMLInputElement>;
+  @ViewChild("expandPanel") expandPanel: ElementRef<HTMLInputElement>;
 
   ngOnInit() {
     this.userService.logged().then((status) => (this.reportLink = status));
@@ -272,7 +274,19 @@ export class BasicLayoutComponent implements OnInit, AfterViewChecked {
     this.collectionService.updatePageSize($event);
   }
 
-  toggleSidePanel() {
+  toggleSidePanel(e: Event) {
+    if (e && this.expandPanel.nativeElement.contains(e.target as HTMLElement)) {
+      return;
+    }
+
     this.sidenavToggled = !this.sidenavToggled;
+  }
+
+  @HostListener("document:keydown", ["$event"]) onKeydownHandler(
+    event: KeyboardEvent
+  ) {
+    if (event.key === "Escape" && this.sidenavToggled) {
+      this.sidenavToggled = false;
+    }
   }
 }

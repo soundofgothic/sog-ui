@@ -54,14 +54,7 @@
 
     <ng-template [ngIf]="g < 3">
       <div class="records" *ngFor="let record of records">
-        <app-item
-          [text]="record.transcript"
-          [filename]="record.wave"
-          [filesource]="record.sourceFile.name"
-          [version]="record.gameID"
-          [id]="record.id"
-          [record]="record"
-        ></app-item>
+        <app-item [record]="record"></app-item>
       </div>
 
       <div class="page-bar centered">

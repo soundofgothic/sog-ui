@@ -89,13 +89,13 @@
     </app-combo-box>
   </div>
 
-  <div
+  <a
     *ngIf="!recordMode"
     (click)="toggleSidePanel()"
     class="sidenav-item centered"
   >
     Więcej <i class="fa fa-arrow-right"></i>
-  </div>
+  </a>
 
   <div *ngIf="displayTags" class="separator no-mobile"></div>
 
@@ -108,7 +108,7 @@
     </app-combo-box-list>
   </div>
 
-  <div class="sidenav-item sidenav-item-bottom right icons-set">
+  <div class="sidenav-item right icons-set">
     <a href="https://github.com/soundofgothic" class="project-link">
       <i class="fab fa-github"></i>
     </a>
@@ -220,12 +220,12 @@
 </div>
 
 <div
-  id="dupa"
-  class="sidenav-block no-mobile"
-  (click)="toggleSidePanel()"
+  class="sidenav-block no-mobile clicking-block"
+  (click)="toggleSidePanel($event)"
   [ngClass]="sidenavToggled ? 'visible' : ''"
 >
   <div
+    #expandPanel
     class="mobile-expand-panel sidenav-item"
     [ngClass]="sidenavToggled ? 'visible' : ''"
   >
