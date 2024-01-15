@@ -1,8 +1,8 @@
-import { Injectable } from "@angular/core";
-import { RecordingsResponse, Voice, VoicesResponse } from "./domain";
-import { BehaviorSubject, Observable, Subject, throwError } from "rxjs";
 import { HttpClient, HttpParams } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Subject, throwError } from "rxjs";
 import { catchError, finalize } from "rxjs/operators";
+import { Voice, VoicesResponse, isNonEmpty } from "./domain";
 import { URLParamsService } from "./urlparams.service";
 
 type VoiceMetadata = {
@@ -55,10 +55,12 @@ export class VoiceService {
 
     const params = new HttpParams({
       fromObject: {
-        ...(opts.gameIDs && { gameID: opts.gameIDs.join(",") }),
-        ...(opts.npcIDs && { npcID: opts.npcIDs.join(",") }),
-        ...(opts.guildIDs && { guildID: opts.guildIDs.join(",") }),
-        ...(opts.scriptIDs && { scriptID: opts.scriptIDs.join(",") }),
+        ...(isNonEmpty(opts.gameIDs) && { gameID: opts.gameIDs.join(",") }),
+        ...(isNonEmpty(opts.npcIDs) && { npcID: opts.npcIDs.join(",") }),
+        ...(isNonEmpty(opts.guildIDs) && { guildID: opts.guildIDs.join(",") }),
+        ...(isNonEmpty(opts.scriptIDs) && {
+          scriptID: opts.scriptIDs.join(","),
+        }),
       },
     });
 
@@ -72,7 +74,7 @@ export class VoiceService {
       )
       .subscribe((data) => {
         this.observedVoices.next(data);
-        this.observedMetadata.next({loadOptions: opts});
+        this.observedMetadata.next({ loadOptions: opts });
       });
   }
 }

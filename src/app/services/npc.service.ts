@@ -1,10 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Subject, combineLatest } from "rxjs";
-import { NPC, NPCsResponse } from "./domain";
-import { VoiceService } from "./voice.service";
-import { CollectorService, Metadata } from "./collector.service";
-import { ActivatedRoute, ParamMap } from "@angular/router";
+import { BehaviorSubject, Subject } from "rxjs";
+import { NPC, NPCsResponse, isNonEmpty } from "./domain";
 import { URLParamsService } from "./urlparams.service";
 
 type NPCMetadata = {
@@ -66,12 +63,14 @@ export class NPCService {
       fromObject: {
         page: opts.page.toString(),
         limit: opts.pageSize.toString(),
-        ...(opts.filter && { filter: opts.filter }),
-        ...(opts.voices && { voiceID: opts.voices.join(",") }),
-        ...(opts.gameIDs && { gameID: opts.gameIDs.join(",") }),
-        ...(opts.guildIDs && { guildID: opts.guildIDs.join(",") }),
-        ...(opts.ids && { id: opts.ids.join(",") }),
-        ...(opts.scriptIDs && { scriptID: opts.scriptIDs.join(",") }),
+        ...(isNonEmpty(opts.filter) && { filter: opts.filter }),
+        ...(isNonEmpty(opts.voices) && { voiceID: opts.voices.join(",") }),
+        ...(isNonEmpty(opts.gameIDs) && { gameID: opts.gameIDs.join(",") }),
+        ...(isNonEmpty(opts.guildIDs) && { guildID: opts.guildIDs.join(",") }),
+        ...(isNonEmpty(opts.ids) && { id: opts.ids.join(",") }),
+        ...(isNonEmpty(opts.scriptIDs) && {
+          scriptID: opts.scriptIDs.join(","),
+        }),
       },
     });
     this.httpClient.get<NPCsResponse>("/npcs", { params }).subscribe((data) => {

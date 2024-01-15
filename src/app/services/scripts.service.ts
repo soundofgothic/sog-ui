@@ -1,7 +1,7 @@
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
-import { SourceFile, SourceFileResponse } from "./domain";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { SourceFile, SourceFileResponse, isNonEmpty } from "./domain";
 import { URLParamsService } from "./urlparams.service";
 
 type ScriptMetadata = {
@@ -68,12 +68,12 @@ export class ScriptsService {
       fromObject: {
         page: opts.page.toString(),
         limit: opts.pageSize.toString(),
-        ...(opts.filter && { filter: opts.filter }),
-        ...(opts.gameIDs && { gameID: opts.gameIDs.join(",") }),
-        ...(opts.voiceIDs && { voiceID: opts.voiceIDs.join(",") }),
-        ...(opts.npcIDs && { npcID: opts.npcIDs.join(",") }),
-        ...(opts.guildIDs && { guildID: opts.guildIDs.join(",") }),
-        ...(opts.ids && { id: opts.ids.join(",") }),
+        ...(isNonEmpty(opts.filter) && { filter: opts.filter }),
+        ...(isNonEmpty(opts.gameIDs) && { gameID: opts.gameIDs.join(",") }),
+        ...(isNonEmpty(opts.voiceIDs) && { voiceID: opts.voiceIDs.join(",") }),
+        ...(isNonEmpty(opts.npcIDs) && { npcID: opts.npcIDs.join(",") }),
+        ...(isNonEmpty(opts.guildIDs) && { guildID: opts.guildIDs.join(",") }),
+        ...(isNonEmpty(opts.ids) && { id: opts.ids.join(",") }),
       },
     });
 

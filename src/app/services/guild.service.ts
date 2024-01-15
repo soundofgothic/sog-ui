@@ -1,7 +1,7 @@
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Subject } from "rxjs";
-import { Guild, GuildsResponse } from "./domain";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { Guild, GuildsResponse, isNonEmpty } from "./domain";
 import { URLParamsService } from "./urlparams.service";
 
 type GuildMetadata = {
@@ -48,7 +48,7 @@ export class GuildService {
         ids: params.guilds,
       };
       this.getFiltered(opts);
-    })
+    });
   }
 
   public getFiltered(opts: GuildLoadOptions) {
@@ -63,12 +63,14 @@ export class GuildService {
       fromObject: {
         page: opts.page.toString(),
         limit: opts.pageSize.toString(),
-        ...(opts.filter && { filter: opts.filter }),
-        ...(opts.gameIDs && { gameID: opts.gameIDs.join(",") }),
-        ...(opts.voiceIDs && { voiceID: opts.voiceIDs.join(",") }),
-        ...(opts.scriptIDs && { scriptID: opts.scriptIDs.join(",") }),
-        ...(opts.npcIDs && { npcID: opts.npcIDs.join(",") }),
-        ...(opts.ids && { id: opts.ids.join(",") }),
+        ...(isNonEmpty(opts.filter) && { filter: opts.filter }),
+        ...(isNonEmpty(opts.gameIDs) && { gameID: opts.gameIDs.join(",") }),
+        ...(isNonEmpty(opts.voiceIDs) && { voiceID: opts.voiceIDs.join(",") }),
+        ...(isNonEmpty(opts.scriptIDs) && {
+          scriptID: opts.scriptIDs.join(","),
+        }),
+        ...(isNonEmpty(opts.npcIDs) && { npcID: opts.npcIDs.join(",") }),
+        ...(isNonEmpty(opts.ids) && { id: opts.ids.join(",") }),
       },
     });
     this.httpClient

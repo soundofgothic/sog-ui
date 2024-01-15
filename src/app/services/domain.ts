@@ -1,5 +1,3 @@
-
-
 export type Recording = {
   id: number;
   wave: string;
@@ -47,7 +45,7 @@ export type NPC = {
   gameID: number;
   voiceID: number;
   guildID: number;
-  count: number
+  count: number;
 };
 
 export type Voice = {
@@ -55,7 +53,6 @@ export type Voice = {
   name: string;
   count: number;
 };
-
 
 export type PagedResponse<T> = {
   total: number;
@@ -66,10 +63,20 @@ export type PagedResponse<T> = {
 
 export type RecordingsResponse = PagedResponse<Recording>;
 
-export type VoicesResponse = Array<Voice>
+export type VoicesResponse = Array<Voice>;
 
 export type NPCsResponse = PagedResponse<NPC>;
 
 export type GuildsResponse = PagedResponse<Guild>;
 
 export type SourceFileResponse = PagedResponse<SourceFile>;
+
+export function isNonEmpty(v: any) {
+  return (
+    v !== undefined &&
+    v !== null &&
+    v !== "" &&
+    (Array.isArray(v) ? v.length > 0 : false) &&
+    v !== 0
+  );
+}

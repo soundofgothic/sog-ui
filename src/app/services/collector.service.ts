@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { LOCAL_STORAGE, WINDOW } from "@ng-toolkit/universal";
 import { BehaviorSubject, Subject, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { Recording, RecordingsResponse } from "./domain";
+import { Recording, RecordingsResponse, isNonEmpty } from "./domain";
 
 export enum SearchType {
   TEXT,
@@ -99,14 +99,22 @@ export class CollectorService {
       fromObject: {
         pageSize: config.pageSize + "",
         page: config.page + "",
-        ...(config.filter && { filter: config.filter }),
-        ...(config.tags && { tags: config.tags }),
-        ...(config.versions && { gameID: config.versions.map((v) => v + "") }),
-        ...(config.voices && { voiceID: config.voices.map((v) => v + "") }),
+        ...(isNonEmpty(config.filter) && { filter: config.filter }),
+        ...(isNonEmpty(config.tags) && { tags: config.tags }),
+        ...(isNonEmpty(config.versions) && {
+          gameID: config.versions.map((v) => v + ""),
+        }),
+        ...(isNonEmpty(config.voices) && {
+          voiceID: config.voices.map((v) => v + ""),
+        }),
         ...(config.type === SearchType.SFX_E && { sortField: "reported" }),
-        ...(config.npcs && { npcID: config.npcs.map((n) => n + "") }),
-        ...(config.guilds && { guildID: config.guilds.map((g) => g + "") }),
-        ...(config.scripts && {
+        ...(isNonEmpty(config.npcs) && {
+          npcID: config.npcs.map((n) => n + ""),
+        }),
+        ...(isNonEmpty(config.guilds) && {
+          guildID: config.guilds.map((g) => g + ""),
+        }),
+        ...(isNonEmpty(config.scripts) && {
           sourceFileID: config.scripts.map((s) => s + ""),
         }),
       },
