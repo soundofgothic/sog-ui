@@ -1,0 +1,55 @@
+<div *ngIf="show()" class="container">
+  <div class="controls">
+    <h3>Filtry</h3>
+    <a class="clear-button" routerLink="/">Wyczyść</a>
+  </div>
+  <div class="descriptor">
+    <h2 *ngIf="this.voices.length > 0">
+      <span>Aktorzy:</span>
+      <span>
+        <ng-container *ngFor="let voice of voices; index as i">
+          {{ separateByComma(voice.name, i + 1 < voices.length) }}
+        </ng-container>
+      </span>
+    </h2>
+    <h2 *ngIf="this.npcs.length > 0">
+      <span>NPC:</span>
+      <span>
+        <ng-container *ngFor="let npc of npcs; index as i">
+          {{
+            separateByComma(
+              "G" + npc.gameID + " " + npc.name,
+              i + 1 < npcs.length
+            )
+          }}
+        </ng-container>
+      </span>
+    </h2>
+    <h2 *ngIf="this.guilds.length > 0">
+      <span>Gildie:</span>
+      <span>
+        <ng-container *ngFor="let guild of guilds; index as i">
+          {{
+            separateByComma(
+              "G" + guild.gameID + " " + guild.name,
+              i + 1 < guilds.length
+            )
+          }}
+        </ng-container>
+      </span>
+    </h2>
+    <h2 *ngIf="this.scripts.length > 0">
+      <span>Skrypty:</span>
+      <span>
+        <ng-container *ngFor="let script of scripts; index as i">
+          {{
+            separateByComma(
+              "G" + script.gameID + " " + script.name,
+              i + 1 < scripts.length
+            )
+          }}
+        </ng-container>
+      </span>
+    </h2>
+  </div>
+</div>

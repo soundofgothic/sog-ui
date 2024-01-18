@@ -2,12 +2,12 @@
   <div class="sidenav-item">
     <div class="logo">
       <span
-        (click)="toggleSidePanel()"
+        (click)="toggleSidePanel(null)"
         class="mobile-only hamburger-icon mobile-toggler"
         ><i class="fa fa-bars"></i
       ></span>
       <a class="router-link" routerLink="/" routerLinkActive="active-link">
-        SoundOfGothic
+        SoundOfGothic <span class="warning">v2</span>
       </a>
     </div>
   </div>
@@ -30,8 +30,12 @@
   </div>
 
   <div class="sidenav-item link">
-    <a class="router-link" routerLink="/sfx" routerLinkActive="active-link">
-      Dźwięki <span class="warning">(beta)</span>
+    <a
+      class="router-link info"
+      href="https://soundofgothic.pl"
+      routerLinkActive="active-link"
+    >
+      <span class="info">-> (wróć do wersji v1)</span>
     </a>
   </div>
 
@@ -91,7 +95,7 @@
 
   <a
     *ngIf="!recordMode"
-    (click)="toggleSidePanel()"
+    (click)="toggleSidePanel(null)"
     class="sidenav-item centered clickable"
   >
     Więcej <i class="fa fa-arrow-right"></i>
@@ -226,7 +230,7 @@
 >
   <div
     #expandPanel
-    class="mobile-expand-panel sidenav-item"
+    class="expand-panel sidenav-item"
     [ngClass]="sidenavToggled ? 'visible' : ''"
   >
     <div class="search-grid">

@@ -55,7 +55,7 @@
 .logo {
   text-align: right;
   letter-spacing: 0.05em;
-  font-size: 25px;
+  font-size: 23px;
 }
 
 .icon-item {
@@ -243,8 +243,11 @@ form {
 }
 
 .warning {
-  font-size: 10px;
   color: #ff4a4a;
+}
+
+.info {
+  color: #8282f8;
 }
 
 .scroll-pane {
@@ -365,6 +368,26 @@ option {
 }
 
 .mobile-expand-panel.visible {
+  left: 0;
+  /*transform: translate(0, -50%);*/
+}
+
+.expand-panel {
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+
+  position: absolute;
+  height: 100%;
+  width: 70vw;
+  left: -100%;
+  top: 0;
+
+  background-color: rgba(97, 74, 78, 0.8);
+  z-index: 2000;
+  transition: 1s;
+}
+
+.expand-panel.visible {
   left: 0;
   /*transform: translate(0, -50%);*/
 }

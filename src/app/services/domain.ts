@@ -76,7 +76,7 @@ export function isNonEmpty(v: any) {
     v !== undefined &&
     v !== null &&
     v !== "" &&
-    (Array.isArray(v) ? v.length > 0 : false) &&
+    (Array.isArray(v) ? v.length > 0 : true) &&
     v !== 0
   );
 }

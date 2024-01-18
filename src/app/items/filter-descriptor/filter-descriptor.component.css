@@ -1,0 +1,51 @@
+:host {
+  font-family: DefaultFont;
+}
+
+.clear-button {
+  cursor: pointer;
+  color: #c93737;
+  font-size: 13px;
+}
+
+.controls {
+  padding: 10px;
+  margin: 10px;
+}
+
+.controls h3 {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.descriptor {
+  text-align: right;
+  display: block;
+  padding: 10px;
+  margin: 10px;
+  background-color: #f5f5f5;
+  border-radius: 20px;
+
+  font-size: 15px;
+
+  width: max(70%, 600px);
+}
+
+.descriptor h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.descriptor h2:not(:last-of-type) {
+  padding-bottom: 5px;
+  border-bottom: 2px dashed #c93737;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+}
