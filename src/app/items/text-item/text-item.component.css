@@ -23,7 +23,7 @@ audio {
   vertical-align: middle;
 }
 
-.report-form > input[type="text"] {
+.report-form>input[type="text"] {
   border-top: 0;
   border-left: 0;
   border-right: 0;
@@ -41,7 +41,7 @@ audio {
   top: 0;
 }
 
-.report-form > input[type="submit"] {
+.report-form>input[type="submit"] {
   margin-left: 10px;
   font-family: DefaultFont;
   border: 0;
@@ -86,12 +86,14 @@ audio {
 }
 
 .tag {
+  display: inline-block;
   padding: 2px 5px;
   border-radius: 5px;
   color: #fff;
   font-size: 10px;
   text-decoration: none;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .filesource {
@@ -110,15 +112,26 @@ audio {
   background-color: #6e3333;
 }
 
+.game {
+  background-color: #6e3333;
+}
+
 .clickable {
   cursor: pointer;
 }
 
 .version {
   text-align: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 10px;
+
+
+  /* text-align: center;
   float: right;
   font-size: 10px;
-  position: relative;
+  position: relative; */
 }
 
 @media only screen and (max-width: 600px) {

@@ -14,10 +14,7 @@
       </form>
     </span>
     <ng-template #displayMode>
-      <a
-        class="no-decoration"
-        [routerLink]="'/record/' + record.gameID + '/' + record.wave"
-      >
+      <a class="no-decoration" [routerLink]="'/record/' + record.gameID + '/' + record.wave">
         <i class="fas fa-share"></i> {{ record.transcript }}
       </a>
     </ng-template>
@@ -34,15 +31,9 @@
       <a *ngIf="record.guildID" (click)="searchByGuild()" class="tag guild">
         Gilda: {{ record.guild.name }}
       </a>
-      <span class="version">
-        {{ "Gothic " + romanNumerals[this.record.gameID - 1] }}
-        <br />
-        <span *ngIf="reportSent; else reportOption">Wysłano</span>
-        <ng-template #reportOption>
-          <span class="report" (click)="openReport()"> Zgłoś błąd </span>
-        </ng-template>
-        <img *ngIf="loading" class="loading" src="/assets/loading.svg" />
-      </span>
+      <a (click)="searchByGame()" class="tag game">
+        Gra: {{ record.game.name }}
+      </a>
     </div>
   </div>
 </div>

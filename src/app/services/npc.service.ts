@@ -39,7 +39,7 @@ export class NPCService {
     private httpClient: HttpClient,
     private urlParams: URLParamsService
   ) {
-    this.urlParams.current.subscribe((params) => {
+    this.urlParams.currentDistinctNonPage.subscribe((params) => {
       const opts: NPCLoadOptions = {
         gameIDs: params.versions,
         voices: params.voices,

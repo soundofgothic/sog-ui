@@ -28,9 +28,9 @@ export class TextItemComponent implements OnInit {
     @Inject(LOCAL_STORAGE) private local_storage: any,
     private router: Router,
     protected snackBar: MatSnackBar
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   wavePath(): String {
     return (
@@ -55,6 +55,10 @@ export class TextItemComponent implements OnInit {
 
   searchByNPC() {
     this.collectorService.filterNPCs([this.record.npcID], false);
+  }
+
+  searchByGame() {
+    this.collectorService.filterVersions([this.record.gameID], false);
   }
 
   openReport() {

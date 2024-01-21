@@ -32,7 +32,7 @@ export class VoiceService {
     private httpClient: HttpClient,
     private urlParams: URLParamsService
   ) {
-    this.urlParams.current.subscribe((params) => {
+    this.urlParams.currentDistinctNonPage.subscribe((params) => {
       const opts: VoiceLoadOptions = {
         gameIDs: params.versions,
         npcIDs: params.npcs,

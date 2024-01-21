@@ -119,8 +119,10 @@
 /* Main content */
 .main {
   margin-top: 30px;
-  margin-left: 295px; /* Same as the width of the sidenav */
-  font-size: 20px; /* Increased text to enable scrolling */
+  margin-left: 295px;
+  /* Same as the width of the sidenav */
+  font-size: 20px;
+  /* Increased text to enable scrolling */
   padding: 0 10px;
   position: relative;
 }
@@ -228,11 +230,11 @@ form {
   background-color: #888888;
 }
 
-.tag-container:hover input ~ .checkmark {
+.tag-container:hover input~.checkmark {
   background-color: #ccc;
 }
 
-.tag-container input:checked ~ .checkmark:after {
+.tag-container input:checked~.checkmark:after {
   display: block;
 }
 
@@ -272,6 +274,7 @@ form {
   from {
     color: white;
   }
+
   to {
     color: yellow;
   }
@@ -325,6 +328,9 @@ option {
 }
 
 .icons-set {
+  position: absolute;
+  right: 0;
+  bottom: 0;
   letter-spacing: 0.5em;
   font-size: 30px;
 }
@@ -416,6 +422,10 @@ option {
   grid-area: 2 / 2 / 3 / 3;
 }
 
+.h-500 {
+  height: 500px;
+}
+
 @media only screen and (max-width: 900px) {
   .sidenav {
     display: block;
@@ -470,6 +480,10 @@ option {
   .hamburger-icon {
     left: 10px;
     position: absolute;
+  }
+
+  .icons-set {
+    position: relative;
   }
 }
 

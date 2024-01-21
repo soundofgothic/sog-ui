@@ -38,6 +38,10 @@
   gap: 20px;
 }
 
+.descriptor span {
+  padding: 0 10px;
+}
+
 .descriptor h2:not(:last-of-type) {
   padding-bottom: 5px;
   border-bottom: 2px dashed #c93737;
@@ -48,4 +52,31 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: baseline;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .controls {
+    margin: 0;
+    padding: 5px;
+    width: 100%;
+  }
+
+  .controls h3 {
+    font-size: 14px;
+    display: inline;
+    padding-right: 10px;
+  }
+
+  .descriptor {
+    margin: 0;
+    width: 100%;
+  }
+
+  .descriptor h2 {
+    font-size: 1.1em;
+  }
 }

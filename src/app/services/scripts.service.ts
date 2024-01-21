@@ -42,7 +42,7 @@ export class ScriptsService {
     private httpClient: HttpClient,
     private urlParams: URLParamsService
   ) {
-    this.urlParams.current.subscribe((params) => {
+    this.urlParams.currentDistinctNonPage.subscribe((params) => {
       const opts: ScriptLoadOptions = {
         gameIDs: params.versions,
         voiceIDs: params.voices,

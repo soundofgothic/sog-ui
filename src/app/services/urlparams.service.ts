@@ -1,11 +1,15 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { BehaviorSubject, combineLatest } from "rxjs";
+import { BehaviorSubject, Observable, combineLatest } from "rxjs";
+import { distinctUntilChanged, map } from "rxjs/operators";
 
-export type URLParams = {
-  filter?: string;
+export type URLPageParams = {
   page?: number;
   pageSize?: number;
+};
+
+export type URLEssentialParams = {
+  filter?: string;
   versions?: number[];
   type?: number;
 
@@ -18,12 +22,22 @@ export type URLParams = {
   recordingGame?: number;
 };
 
+export type URLParams = URLEssentialParams & URLPageParams;
+
 @Injectable({
   providedIn: "root",
 })
 export class URLParamsService {
   public current: BehaviorSubject<URLParams> = new BehaviorSubject<URLParams>(
     {}
+  );
+
+  public currentDistinctNonPage: Observable<URLEssentialParams> = this.current.pipe(
+    map((params) => {
+      let { page, pageSize, ...rest } = params;
+      return rest;
+    }),
+    distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
   );
 
   constructor(private route: ActivatedRoute) {

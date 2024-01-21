@@ -92,7 +92,7 @@ export class CollectorService {
     @Inject(PLATFORM_ID) private platformId: Object,
     private httpClient: HttpClient,
     private router: Router
-  ) {}
+  ) { }
 
   getFilteredRecords(config: SearchConfig): any {
     let queryParams = new HttpParams({
@@ -343,10 +343,12 @@ export class CollectorService {
     );
   }
 
-  filterVersions(versions: number[]) {
+  filterVersions(versions: number[], withLatestConfig?: boolean) {
+    withLatestConfig = withLatestConfig === undefined ? true : withLatestConfig;
+
     this.search(
       [
-        this.withLatestConfig(),
+        ...(withLatestConfig ? [this.withLatestConfig()] : []),
         (a: SearchConfig): SearchConfig => ({
           ...a,
           versions: versions,

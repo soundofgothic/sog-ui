@@ -39,7 +39,8 @@ export class GuildService {
     private httpClient: HttpClient,
     private urlParams: URLParamsService
   ) {
-    this.urlParams.current.subscribe((params) => {
+    this.urlParams.currentDistinctNonPage.subscribe((params) => {
+      console.log(params);
       const opts: GuildLoadOptions = {
         gameIDs: params.versions,
         scriptIDs: params.scripts,

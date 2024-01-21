@@ -82,6 +82,7 @@ i.fa-share-alt:hover {
   header {
     min-height: 30vh;
   }
+
   .page-bar {
     visibility: visible;
   }
@@ -127,4 +128,12 @@ i.fa-share-alt:hover {
   color: #fff;
   text-decoration: none;
   cursor: pointer;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .sections {
+    flex-direction: column;
+    flex-direction: column-reverse;
+  }
 }
