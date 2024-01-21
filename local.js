@@ -3,7 +3,7 @@
     
     const server = require('./dist/server');
     
-    server.app.listen(port, "127.0.0.1", () => {
+    server.app.listen(port, "0.0.0.0", () => {
         console.log("Listening on: http://localhost:" + port );
     });
     
