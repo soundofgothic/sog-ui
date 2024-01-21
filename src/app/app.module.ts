@@ -24,6 +24,7 @@ import { SfxItemExtendedComponent } from "./items/sfx-item-extended/sfx-item-ext
 import { TagsComboBoxComponent } from "./layout/tags-combo-box/tags-combo-box.component";
 import { VersionsComboBoxComponent } from "./layout/versions-combo-box/versions-combo-box.component";
 import { RecordPanelComponent } from "./panels/record-panel/record-panel/record-panel.component";
+import { environment } from "../environments/environment";
 
 @NgModule({
   declarations: [
@@ -60,7 +61,7 @@ import { RecordPanelComponent } from "./panels/record-panel/record-panel/record-
       provide: "CONFIG",
       useFactory: (platformId: Object, serverConfig: any) => {
         return isPlatformBrowser(platformId)
-          ? (window as any).CONFIG
+          ? (window as any).CONFIG || environment
           : serverConfig;
       },
       deps: [PLATFORM_ID, [new Optional(), new Inject("SERVER_CONFIG")]],

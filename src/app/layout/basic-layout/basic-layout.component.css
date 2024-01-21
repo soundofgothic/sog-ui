@@ -435,3 +435,17 @@ option {
 
 
 }
+
+.promotion {
+  margin-top: 20px;
+}
+
+.promotion h3 {
+  padding: 0;
+  margin: 0;
+}
+
+.promotion a {
+  font-size: 25px;
+  color: white;
+}
