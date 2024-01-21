@@ -13,8 +13,8 @@ audio::-webkit-media-controls-panel {
   background-color: #888888;
 }
 
-audio::-webkit-media-controls-current-time-display, audio::-webkit-media-controls-time-remaining-display
-{
+audio::-webkit-media-controls-current-time-display,
+audio::-webkit-media-controls-time-remaining-display {
   color: white;
 }
 
@@ -29,8 +29,19 @@ body {
   box-sizing: border-box;
 }
 
-body, html{
-  margin:0;
-  padding:0;
+body,
+html {
+  margin: 0;
+  padding: 0;
   width: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+  #bmc-wbtn {
+    display: none !important;
+  }
+
+  #bmc-wbtn+div {
+    display: none !important;
+  }
 }
