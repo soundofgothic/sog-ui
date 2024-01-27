@@ -14,7 +14,10 @@
       </form>
     </span>
     <ng-template #displayMode>
-      <a class="no-decoration" [routerLink]="'/record/' + record.gameID + '/' + record.wave">
+      <a
+        class="no-decoration"
+        [routerLink]="'/record/' + record.gameID + '/' + record.wave"
+      >
         <i class="fas fa-share"></i> {{ record.transcript }}
       </a>
     </ng-template>

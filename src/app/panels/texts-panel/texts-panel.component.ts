@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Recording } from "@app/services/domain";
 import { Subscription } from "rxjs";
 import {
   CollectorService,
@@ -18,7 +19,7 @@ export class TextsPanelComponent implements OnInit {
     private urlParams: URLParamsService
   ) {}
 
-  public records: any;
+  public records: Recording[] = [];
 
   private subs: Subscription[] = [];
 
@@ -52,5 +53,9 @@ export class TextsPanelComponent implements OnInit {
 
   ngOnDestroy() {
     this.subs.forEach((s) => s.unsubscribe());
+  }
+
+  identify(_: any, item: Recording) {
+    return item.id;
   }
 }

@@ -28,9 +28,9 @@ export class TextItemComponent implements OnInit {
     @Inject(LOCAL_STORAGE) private local_storage: any,
     private router: Router,
     protected snackBar: MatSnackBar
-  ) { }
+  ) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   wavePath(): String {
     return (

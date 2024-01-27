@@ -32,4 +32,8 @@ export class ComboBoxComponent {
       this.onSearchAction.emit(value);
     }, 500);
   }
+
+  identify(_: any, item: Model) {
+    return item.id;
+  }
 }
