@@ -1,0 +1,11 @@
+name: Tests
+run-name: ${{ github.repository }} linter and tests
+on:
+  push:
+    branches: ["*"]
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: TODO
+        run: echo "TODO"
