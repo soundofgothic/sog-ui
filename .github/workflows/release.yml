@@ -18,6 +18,7 @@ jobs:
       - name: "Get next tag"
         id: getnexttag
         run: |
+          echo "Please run"
           export TAG_PATTERN=${{ fromJson('{"refs/heads/main": "v1*", "reds/heads/v2/main": "v2*"}')[github.ref_name] }}
           echo nextTag=$(git tag --sort=version:refname | grep -e "$TAG_PATTERN" | tail -1 | awk -F. '{print $1"."$2"."($3+1)}') >> $GITHUB_OUTPUT
       - name: "Print tag"
