@@ -37,6 +37,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: soundofgothic/ui:${{ steps.getnexttag.outputs.nextTag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       - name: "Push tag"
         run: |
           git config --global user.name 'GitHub Actions'
