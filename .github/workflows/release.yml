@@ -1,5 +1,5 @@
 name: Release
-run-name: ${{ github.repository }} image release
+run-name: ${{ github.repository }} v2 image release
 on:
   push:
     branches:
