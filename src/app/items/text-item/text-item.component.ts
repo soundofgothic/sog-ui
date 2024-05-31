@@ -2,7 +2,7 @@ import { Component, Inject, Input, OnInit } from "@angular/core";
 import { MatSnackBar } from "@angular/material";
 import { Router } from "@angular/router";
 import { LOCAL_STORAGE } from "@ng-toolkit/universal";
-import { environment } from "../../../environments/environment";
+import { Environment } from "../../../environments/environment";
 import { CollectorService } from "../../services/collector.service";
 import { Recording } from "../../services/domain";
 import { ReportService } from "../../services/report.service";
@@ -27,17 +27,18 @@ export class TextItemComponent implements OnInit {
     protected reportService: ReportService,
     @Inject(LOCAL_STORAGE) private local_storage: any,
     private router: Router,
-    protected snackBar: MatSnackBar
+    protected snackBar: MatSnackBar,
+    @Inject("CONFIG") private config: Environment
   ) {}
 
   ngOnInit() {}
 
   wavePath(): String {
     return (
-      environment.soundsAssetsUrl +
-      "/assets/gsounds/" +
+      this.config.soundsAssetsUrl +
+      `/assets/g${this.record.gameID}/` +
       this.record.wave.toUpperCase() +
-      ".WAV"
+      ".opus"
     );
   }
 
