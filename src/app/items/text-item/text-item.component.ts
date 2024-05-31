@@ -1,11 +1,11 @@
 import { Component, Inject, Input, OnInit } from "@angular/core";
 import { MatSnackBar } from "@angular/material";
 import { Router } from "@angular/router";
+import { CollectorService } from "@app/services/collector.service";
+import { Recording } from "@app/services/domain";
+import { ReportService } from "@app/services/report.service";
+import { Environment } from "@env/environment.type";
 import { LOCAL_STORAGE } from "@ng-toolkit/universal";
-import { Environment } from "../../../environments/environment";
-import { CollectorService } from "../../services/collector.service";
-import { Recording } from "../../services/domain";
-import { ReportService } from "../../services/report.service";
 
 @Component({
   selector: "app-item",
