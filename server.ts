@@ -1,13 +1,13 @@
-import "zone.js/dist/zone-node";
-import "reflect-metadata";
 import { enableProdMode } from "@angular/core";
 import { ngExpressEngine } from "@nguniversal/express-engine";
 import { provideModuleMap } from "@nguniversal/module-map-ngfactory-loader";
+import "reflect-metadata";
+import "zone.js/dist/zone-node";
 
-import * as express from "express";
 import * as bodyParser from "body-parser";
-import * as cors from "cors";
 import * as compression from "compression";
+import * as cors from "cors";
+import * as express from "express";
 
 enableProdMode();
 
@@ -29,12 +29,12 @@ const configs = {
   browser: {
     production: true,
     apiUrl: process.env.BROWSER_API_URL || process.env.API_URL || "https://api.soundofgothic.pl",
-    soundsAssetsUrl: process.env.BROWSER_SOUNDS_ASSETS_URL || process.env.SOUNDS_ASSETS_URL || "https://sounds.soundofgothic.pl",
+    soundsAssetsUrl: process.env.BROWSER_SOUNDS_ASSETS_URL || process.env.SOUNDS_ASSETS_URL || "https://soundsv2.soundofgothic.pl",
   },
   server: {
     production: true,
     apiUrl: process.env.SERVER_API_URL || process.env.API_URL || "https://api.soundofgothic.pl",
-    soundsAssetsUrl: process.env.SERVER_SOUNDS_ASSETS_URL || process.env.SOUNDS_ASSETS_URL || "https://sounds.soundofgothic.pl",
+    soundsAssetsUrl: process.env.SERVER_SOUNDS_ASSETS_URL || process.env.SOUNDS_ASSETS_URL || "https://soundsv2.soundofgothic.pl",
   }
 };
 
