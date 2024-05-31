@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { Meta, Title } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { URLParamsService } from "@app/services/urlparams.service";
+import { Environment } from "@env/environment.type";
 import { Subscription } from "rxjs";
 import { first } from "rxjs/operators";
-import { environment } from "../../../../environments/environment";
 import {
   CollectorService,
   SearchType,
@@ -42,7 +42,8 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
     private collectorService: CollectorService,
     private meta: Meta,
     private title: Title,
-    private urlParamsService: URLParamsService
+    private urlParamsService: URLParamsService,
+    @Inject("CONFIG") private config: Environment
   ) {}
 
   ngOnInit() {
@@ -160,13 +161,12 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
 
   filename(): String {
     if (this.record.gameID) {
-      let filename = this.record.wave;
-      if (+this.record.gameID < 3) {
-        filename = filename.toUpperCase() + ".WAV";
-        return environment.soundsAssetsUrl + "/assets/gsounds/" + filename;
-      } else {
-        return environment.soundsAssetsUrl + "/assets/g3sounds/" + filename;
-      }
+      return (
+        this.config.soundsAssetsUrl +
+        `/assets/g${this.record.gameID}/` +
+        this.record.wave.toUpperCase() +
+        ".opus"
+      )
     }
   }
 
