@@ -38,7 +38,7 @@ export class TextItemComponent implements OnInit {
       this.config.soundsAssetsUrl +
       `/assets/g${this.record.gameID}/` +
       this.record.wave.toUpperCase() +
-      ".opus"
+      ".m4a"
     );
   }
 

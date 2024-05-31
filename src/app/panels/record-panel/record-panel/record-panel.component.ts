@@ -165,7 +165,7 @@ export class RecordPanelComponent implements OnInit, OnDestroy {
         this.config.soundsAssetsUrl +
         `/assets/g${this.record.gameID}/` +
         this.record.wave.toUpperCase() +
-        ".opus"
+        ".m4a"
       )
     }
   }
